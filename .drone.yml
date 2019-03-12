@@ -1,8 +1,12 @@
 pipeline:
-  build:
+  install:
     image: node:8.12.0
     commands:
       - node --version
       - yarn --version
       - yarn install
-      - yarn test
+
+  testing:
+    image: node:8.12.0
+    commands:
+      - yarn run test
