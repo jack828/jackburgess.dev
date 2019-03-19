@@ -5,8 +5,26 @@ pipeline:
       - node --version
       - yarn --version
       - yarn install
+   when:
+      branch: [ master, develop ]
+      event: [ push, pull_request ]
 
   testing:
     image: node:8.12.0
     commands:
       - yarn run test
+   when:
+      branch: [ master, develop ]
+      event: [ push, pull_request ]
+
+
+  deploy:
+    commands:
+      - cd /var/application/jackburgess.dev
+      - git reset --hard
+      - git checkout $DRONE_COMMIT
+      - yarn install --force
+      - yarn build
+      - pm2 restart --env production
+    when:
+      branch: master
