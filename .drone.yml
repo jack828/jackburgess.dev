@@ -25,5 +25,6 @@ pipeline:
       password: bBWvS&q4TwGa&peZ!SuXRj#LRx*T@o3MR!*2nw2OS2
       repo: jack828/jackburgess.dev
       tag: latest
+      file: Dockerfile
     when:
       branch: master
