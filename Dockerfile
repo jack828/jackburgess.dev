@@ -1,15 +1,12 @@
-FROM node:8.12.0
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+FROM node:8.15.1-alpine
 
-WORKDIR /home/node/app
+WORKDIR /usr/src/app
 
-COPY yarn.lock ./
+COPY package.json yarn.lock ./
 
-USER node
+RUN yarn install --production
 
-RUN yarn install
-
-COPY --chown=node:node . .
+COPY . .
 
 EXPOSE 8080
 
