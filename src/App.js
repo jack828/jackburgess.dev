@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import logo from "./logo.svg";
+import "./App.css";
 
 class App extends Component {
   render() {
@@ -12,9 +12,42 @@ class App extends Component {
             <code>Jack Burgess</code>
           </h2>
 
-          <p>
-            <code>Software Engineer</code>
-          </p>
+          <h3>
+            <code>
+              Software Engineer @{" "}
+              <a
+                href="https://www.clock.co.uk/"
+                target="_blank"
+                rel="noreferrer noopener nofollow"
+              >
+                Clock Limited
+              </a>
+              <br />
+              CTO @{" "}
+              <a
+                href="https://whitethorne.co.uk/"
+                target="_blank"
+                rel="noreferrer noopener nofollow"
+              >
+                Whitethorne Limited
+              </a>
+            </code>
+          </h3>
+
+          <h4>
+            <code>React | NodeJS | React Native</code>
+          </h4>
+
+          <h4>
+            Check out{" "}
+            <a
+              href="https://pubgrub.app/"
+              target="_blank"
+              rel="noreferrer noopener nofollow"
+            >
+              PubGrub
+            </a>
+          </h4>
         </header>
       </div>
     );
