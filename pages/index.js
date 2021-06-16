@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
 const Index = () => (
@@ -10,7 +9,7 @@ const Index = () => (
     </Head>
 
     <main className={styles.main}>
-      <Image
+      <img
         className={styles.profile}
         src="https://gravatar.com/avatar/15f72cea858c4bf90523f32a4c88c862?s=512"
         alt="Profile Picture"
