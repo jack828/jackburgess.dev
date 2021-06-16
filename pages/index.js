@@ -13,7 +13,7 @@ const Index = () => (
     <main className={styles.main}>
       <img
         className={styles.profile}
-        src="https://gravatar.com/avatar/15f72cea858c4bf90523f32a4c88c862?s=512"
+        src="https://gravatar.com/avatar/15f72cea858c4bf90523f32a4c88c862?s=256"
         alt="Profile Picture"
         width={256}
         height={256}
