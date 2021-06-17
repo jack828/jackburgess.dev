@@ -26,7 +26,7 @@ const Index = () => (
         <div className="column is-narrow">
           <p className="is-size-4">
             I like to write lots and lots of
-            <code className={styles.code}>code.</code>
+            <code>code.</code>
           </p>
         </div>
       </div>
