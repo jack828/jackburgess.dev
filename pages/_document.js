@@ -8,6 +8,11 @@ class MyDocument extends Document {
         <Head>
           <link rel="icon" href="/favicon.ico" />
           <meta charset="utf-8" />
+          <link
+            rel="preload"
+            as="font"
+            href="https://fonts.googleapis.com/css?family=Oxygen:400,700&display=swap"
+          />
         </Head>
         <body>
           <Main id="main" />
