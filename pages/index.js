@@ -77,25 +77,33 @@ const Index = () => (
         </a>
       </div>
 
-      <h2>Languages and Tools</h2>
-      <p></p>
-
-      <p>
-        &nbsp;
-        <img
-          align="center"
-          src="https://github-readme-stats.vercel.app/api?username=jack828&show_icons=true&locale=en"
-          alt="jack828"
-        />
-      </p>
-
-      <p>
-        <img
-          align="center"
-          src="https://github-readme-streak-stats.herokuapp.com/?user=jack828&"
-          alt="jack828"
-        />
-      </p>
+      <div className="columns is-centered">
+        <div className="column is-narrow">
+          <h2 className="is-size-4">Languages and Tools</h2>
+          <p></p>
+        </div>
+      </div>
+      <div className="columns is-centered">
+        <div className="column is-narrow">
+          <p>
+            &nbsp;
+            <img
+              align="center"
+              src="https://github-readme-stats.vercel.app/api?username=jack828&show_icons=true&locale=en"
+              alt="jack828"
+            />
+          </p>
+        </div>
+        <div className="column is-narrow">
+          <p>
+            <img
+              align="center"
+              src="https://github-readme-streak-stats.herokuapp.com/?user=jack828&"
+              alt="jack828"
+            />
+          </p>
+        </div>
+      </div>
     </main>
 
     <footer className={styles.footer}>
