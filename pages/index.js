@@ -17,13 +17,13 @@ const Index = () => (
         height={256}
       />
 
-      <div className="columns is-centered">
-        <div className="column is-narrow">
+      <div className="columns is-centered has-text-centered">
+        <div className="column">
           <h1 className="is-size-1">Jack Burgess</h1>
         </div>
       </div>
-      <div className="columns is-centered">
-        <div className="column is-narrow">
+      <div className="columns is-centered has-text-centered">
+        <div className="column">
           <p className="is-size-4">
             I like to write lots and lots of
             <code>code.</code>
@@ -77,31 +77,26 @@ const Index = () => (
         </a>
       </div>
 
-      <div className="columns is-centered">
+      <div className="columns is-centered has-text-centered">
         <div className="column is-narrow">
           <h2 className="is-size-4">Languages and Tools</h2>
           <p></p>
         </div>
       </div>
-      <div className="columns is-centered">
+      <div className="columns is-centered has-text-centered">
         <div className="column is-narrow">
-          <p>
-            &nbsp;
-            <img
-              align="center"
-              src="https://github-readme-stats.vercel.app/api?username=jack828&show_icons=true&locale=en"
-              alt="jack828"
-            />
-          </p>
+          <img
+            align="center"
+            src="https://github-readme-stats.vercel.app/api?username=jack828&show_icons=true&locale=en"
+            alt="jack828"
+          />
         </div>
         <div className="column is-narrow">
-          <p>
-            <img
-              align="center"
-              src="https://github-readme-streak-stats.herokuapp.com/?user=jack828&"
-              alt="jack828"
-            />
-          </p>
+          <img
+            align="center"
+            src="https://github-readme-streak-stats.herokuapp.com/?user=jack828&"
+            alt="jack828"
+          />
         </div>
       </div>
     </main>
