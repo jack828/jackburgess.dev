@@ -79,8 +79,10 @@ const Index = () => (
 
       <div className="columns is-centered has-text-centered">
         <div className="column is-narrow">
-          <h2 className="is-size-4">Languages and Tools</h2>
-          <p></p>
+          <h2 className="is-size-4">GitHub Stats</h2>
+          <p className="is-size-6">
+            Because we all know this is the only thing that is important.
+          </p>
         </div>
       </div>
       <div className="columns is-centered has-text-centered">
