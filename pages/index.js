@@ -84,14 +84,14 @@ const Index = () => (
         </div>
       </div>
       <div className="columns is-centered has-text-centered">
-        <div className="column is-narrow">
+        <div className="column">
           <img
             align="center"
             src="https://github-readme-stats.vercel.app/api?username=jack828&show_icons=true&locale=en"
             alt="jack828"
           />
         </div>
-        <div className="column is-narrow">
+        <div className="column">
           <img
             align="center"
             src="https://github-readme-streak-stats.herokuapp.com/?user=jack828&"
