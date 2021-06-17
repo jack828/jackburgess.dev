@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import classnames from 'classnames'
 import styles from '../styles/Home.module.scss'
 
 const Index = () => (
@@ -16,19 +17,26 @@ const Index = () => (
         height={256}
       />
 
-      <h1 className={styles.title}>Jack Burgess</h1>
+      <div className="columns is-centered">
+        <div className="column is-narrow">
+          <h1 className="is-size-1">Jack Burgess</h1>
+        </div>
+      </div>
+      <div className="columns is-centered">
+        <div className="column is-narrow">
+          <p className="is-size-4">
+            I like to write lots and lots of
+            <code className={styles.code}>code.</code>
+          </p>
+        </div>
+      </div>
 
-      <p className={styles.description}>
-        I like to write lots and lots of
-        <code className={styles.code}>code.</code>
-      </p>
-
-      <div className={styles.grid}>
+      <div className="columns">
         <a
           href="https://github.com/jack828"
           target="_blank"
           rel="noopener noreferrer nofollow"
-          className={styles.card}
+          className={classnames(styles.card, 'column')}
         >
           <h2>GitHub &rarr;</h2>
           <p>Find all my public work on GitHub.</p>
@@ -38,18 +46,20 @@ const Index = () => (
           href="https://clock.co.uk"
           target="_blank"
           rel="noopener noreferrer nofollow"
-          className={styles.card}
+          className={classnames(styles.card, 'column')}
         >
           <h2>Clock &rarr;</h2>
           <p>I work as a Mid-Weight Software Engineer for Clock Limited.</p>
           <p>Check them out!</p>
         </a>
+      </div>
 
+      <div className="columns">
         <a
           href="https://whitethorne.co.uk"
           target="_blank"
           rel="noopener noreferrer nofollow"
-          className={styles.card}
+          className={classnames(styles.card, 'column')}
         >
           <h2>Whitethorne &rarr;</h2>
           <p>I&lsquo;m also CTO for my own company.</p>
@@ -60,16 +70,38 @@ const Index = () => (
           href="https://www.linkedin.com/in/jack-burgess828/"
           target="_blank"
           rel="noopener noreferrer nofollow"
-          className={styles.card}
+          className={classnames(styles.card, 'column')}
         >
           <h2>LinkedIn &rarr;</h2>
           <p>See how professional I am.</p>
         </a>
       </div>
+
+      <h2>Languages and Tools</h2>
+      <p></p>
+
+      <p>
+        &nbsp;
+        <img
+          align="center"
+          src="https://github-readme-stats.vercel.app/api?username=jack828&show_icons=true&locale=en"
+          alt="jack828"
+        />
+      </p>
+
+      <p>
+        <img
+          align="center"
+          src="https://github-readme-streak-stats.herokuapp.com/?user=jack828&"
+          alt="jack828"
+        />
+      </p>
     </main>
 
     <footer className={styles.footer}>
       Powered by tea, marmalade, and curiosity.
+      <br />
+      &lt;/website&gt;
     </footer>
   </div>
 )
