@@ -1,3 +1,5 @@
+@import "../node_modules/bulma/sass/utilities/_all.sass";
+
 .container {
   display: flex;
   flex-direction: column;
@@ -24,8 +26,17 @@
 }
 
 .profile {
+  width: 128px;
   border-radius: 128px;
   align-self: center;
+
+  @media (min-width: $tablet) {
+    width: 192px;
+  }
+
+  @media (min-width: $desktop) {
+    width: 256px;
+  }
 }
 
 .grid {
