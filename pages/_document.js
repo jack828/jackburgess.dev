@@ -8,7 +8,6 @@ class MyDocument extends Document {
         <Head>
           <link rel="icon" href="/favicon.ico" />
           <meta charset="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
         <body>
           <Main id="main" />
