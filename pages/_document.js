@@ -7,7 +7,7 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <link rel="icon" href="/favicon.ico" />
-          <meta charset="utf-8" />
+          <meta charSet="utf-8" />
           <link
             rel="preload"
             as="font"
