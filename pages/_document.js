@@ -18,13 +18,11 @@ class MyDocument extends Document {
           <Main id="main" />
           <NextScript />
           {/* Cloudflare Web Analytics */}
-          {process.env.NODE_ENV === 'production' && (
-            <script
-              defer
-              src="https://static.cloudflareinsights.com/beacon.min.js"
-              data-cf-beacon='{"token": "c7fad099cedb4644a6a6cf81724dbe42"}'
-            />
-          )}
+          <script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon='{"token": "c7fad099cedb4644a6a6cf81724dbe42"}'
+          />
         </body>
       </Html>
     )
