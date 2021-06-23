@@ -1,12 +1,11 @@
 import Container from '../../components/container'
-import MoreStories from '../../components/more-stories'
-import HeroPost from '../../components/hero-post'
-import { getAllPosts } from '../../lib/api'
+import MoreBlogs from '../../components/more-blogs'
+import HeroBlog from '../../components/hero-blog'
+import { getAllBlogs } from '../../lib/api'
 import Head from 'next/head'
 
-export default function Index({ allPosts }) {
-  const heroPost = allPosts[0]
-  const morePosts = allPosts.slice(1)
+export default function Index({ allBlogs }) {
+  const [heroBlog, ...blogs] = allBlogs
   return (
     <>
       <Head>
@@ -14,33 +13,24 @@ export default function Index({ allPosts }) {
       </Head>
       <Container>
         Intro
-        {heroPost && (
-          <HeroPost
-            title={heroPost.title}
-            coverImage={heroPost.coverImage}
-            date={heroPost.date}
-            author={heroPost.author}
-            slug={heroPost.slug}
-            excerpt={heroPost.excerpt}
-          />
-        )}
-        {morePosts.length > 0 && <MoreStories posts={morePosts} />}
+        {heroBlog && <HeroBlog {...heroBlog} />}
+        {blogs.length > 0 && <MoreBlogs blogs={blogs} />}
       </Container>
     </>
   )
 }
 
 export async function getStaticProps() {
-  const allPosts = getAllPosts([
+  const allBlogs = getAllBlogs([
     'title',
+    'sell',
     'date',
     'slug',
     'author',
-    'coverImage',
-    'excerpt'
+    'coverImage'
   ])
 
   return {
-    props: { allPosts }
+    props: { allBlogs }
   }
 }

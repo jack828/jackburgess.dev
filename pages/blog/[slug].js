@@ -1,38 +1,33 @@
 import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
 import Container from '../../components/container'
-import PostBody from '../../components/post-body'
+import BlogBody from '../../components/blog-body'
 import Header from '../../components/header'
-import PostHeader from '../../components/post-header'
-import { getPostBySlug, getAllPosts } from '../../lib/api'
-import PostTitle from '../../components/post-title'
+import BlogHeader from '../../components/blog-header'
+import { getBlogBySlug, getAllBlogs } from '../../lib/api'
+import BlogTitle from '../../components/blog-title'
 import Head from 'next/head'
 import markdownToHtml from '../../lib/markdownToHtml'
 
-export default function Post({ post, morePosts }) {
+export default function Blog({ blog, moreBlogs }) {
   const router = useRouter()
-  if (!router.isFallback && !post?.slug) {
+  if (!router.isFallback && !blog?.slug) {
     return <ErrorPage statusCode={404} />
   }
   return (
     <Container>
       <Header />
       {router.isFallback ? (
-        <PostTitle>Loading…</PostTitle>
+        <BlogTitle>Loading…</BlogTitle>
       ) : (
         <>
           <article className="mb-32">
             <Head>
-              <title>{post.title} | Jack Burgess</title>
-              <meta property="og:image" content={post.ogImage.url} />
+              <title>{blog.title} | Jack Burgess</title>
+              <meta property="og:image" content={blog.ogImage.url} />
             </Head>
-            <PostHeader
-              title={post.title}
-              coverImage={post.coverImage}
-              date={post.date}
-              author={post.author}
-            />
-            <PostBody content={post.content} />
+            <BlogHeader {...blog} />
+            <BlogBody content={blog.content} />
           </article>
         </>
       )}
@@ -41,7 +36,7 @@ export default function Post({ post, morePosts }) {
 }
 
 export async function getStaticProps({ params }) {
-  const post = getPostBySlug(params.slug, [
+  const blog = getBlogBySlug(params.slug, [
     'title',
     'date',
     'slug',
@@ -50,12 +45,12 @@ export async function getStaticProps({ params }) {
     'ogImage',
     'coverImage'
   ])
-  const content = await markdownToHtml(post.content || '')
+  const content = await markdownToHtml(blog.content || '')
 
   return {
     props: {
-      post: {
-        ...post,
+      blog: {
+        ...blog,
         content
       }
     }
@@ -63,13 +58,13 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const posts = getAllPosts(['slug'])
+  const blogs = getAllBlogs(['slug'])
 
   return {
-    paths: posts.map((post) => {
+    paths: blogs.map((blog) => {
       return {
         params: {
-          slug: post.slug
+          slug: blog.slug
         }
       }
     }),
