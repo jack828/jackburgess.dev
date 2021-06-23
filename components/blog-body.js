@@ -1,10 +1,10 @@
-import markdownStyles from './markdown-styles.module.css'
+import markdownStyles from '../styles/markdown.module.scss'
 
 const BlogBody = ({ content }) => {
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="mx-auto">
       <div
-        className={markdownStyles['markdown']}
+        className={markdownStyles.markdown}
         dangerouslySetInnerHTML={{ __html: content }}
       />
     </div>
