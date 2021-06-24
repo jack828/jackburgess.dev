@@ -1,9 +1,22 @@
 import { DateFormatter, CoverImage, BlogTitle } from '../components'
 
-const BlogHeader = ({ title, coverImage, date, published }) => {
+const BlogHeader = ({ title, coverImage, date, published, tags }) => {
   return (
     <>
-      <BlogTitle>{title}</BlogTitle>
+      <div className="level">
+        <div className="level-item level-left">
+          <BlogTitle>{title}</BlogTitle>
+        </div>
+        <div className="level-item level-right">
+          <div className="tags">
+            {tags.map((tag) => (
+              <div key={tag} className="tag is-primary">
+                {tag}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
       {!published && (
         <div className="message is-danger">
           <div className="message-header">

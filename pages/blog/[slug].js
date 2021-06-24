@@ -39,15 +39,7 @@ export default function Blog({ blog, moreBlogs }) {
 }
 
 export async function getStaticProps({ params }) {
-  const blog = getBlogBySlug(params.slug, [
-    'title',
-    'date',
-    'slug',
-    'author',
-    'content',
-    'ogImage',
-    'coverImage'
-  ])
+  const blog = getBlogBySlug(params.slug)
   const content = await markdownToHtml(blog.content || '')
 
   return {
