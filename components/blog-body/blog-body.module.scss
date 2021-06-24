@@ -1,0 +1,76 @@
+@import "../../styles/_variables.scss";
+@import "../../node_modules/bulma/sass/utilities/_all.sass";
+
+.markdown {
+  font-size: $size-5;
+
+  p {
+
+  }
+
+  ol, ul {
+    padding-left: 1rem;
+  }
+
+  ol {
+    list-style: decimal inside none;
+  }
+
+  ul {
+    list-style: disc inside none;
+  }
+
+  blockquote {
+    margin: 1rem 0px;
+    border-left: 4px solid $primary;
+    padding: 0 15px;
+    color: $grey;
+
+    > :first-child {
+      margin-top: 0;
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: $weight-bold;
+  }
+
+  h1 {
+    font-size: $size-2;
+    padding-top: $size-3;
+  }
+
+  h2 {
+    font-size: $size-3;
+    padding-top: $size-4;
+  }
+
+  h3 {
+    font-size: $size-4;
+    padding-top: $size-5;
+  }
+
+  h4 {
+    font-size: $size-5;
+    padding-top: $size-6;
+  }
+
+  h5 {
+    font-size: $size-6;
+    padding-top: $size-7;
+  }
+
+  h6 {
+    font-size: $size-7;
+    padding-top: $size-7;
+  }
+}
