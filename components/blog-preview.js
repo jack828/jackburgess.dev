@@ -28,6 +28,9 @@ const BlogPreview = ({ title, sell, coverImage, date, slug }) => {
                 </div>
               </div>
             </div>
+            <footer className="card-footer">
+              <div className="card-footer-item">{tags.join(' | ')}</div>
+            </footer>
           </div>
         </a>
       </Link>
