@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
+import Layout from '../../components/layout'
 import Container from '../../components/container'
 import BlogBody from '../../components/blog-body'
-import Header from '../../components/header'
 import BlogHeader from '../../components/blog-header'
 import { getBlogBySlug, getAllBlogs } from '../../lib/api'
 import BlogTitle from '../../components/blog-title'
@@ -15,23 +15,24 @@ export default function Blog({ blog, moreBlogs }) {
     return <ErrorPage statusCode={404} />
   }
   return (
-    <Container>
-      <Header />
-      {router.isFallback ? (
-        <BlogTitle>Loading…</BlogTitle>
-      ) : (
-        <>
-          <article className="mb-32">
-            <Head>
-              <title>{blog.title} | Jack Burgess</title>
-              <meta property="og:image" content={blog.ogImage.url} />
-            </Head>
-            <BlogHeader {...blog} />
-            <BlogBody content={blog.content} />
-          </article>
-        </>
-      )}
-    </Container>
+    <Layout>
+      <Container>
+        {router.isFallback ? (
+          <BlogTitle>Loading…</BlogTitle>
+        ) : (
+          <>
+            <article className="mb-32">
+              <Head>
+                <title>{blog.title} | Jack Burgess</title>
+                <meta property="og:image" content={blog.ogImage.url} />
+              </Head>
+              <BlogHeader {...blog} />
+              <BlogBody content={blog.content} />
+            </article>
+          </>
+        )}
+      </Container>
+    </Layout>
   )
 }
 
