@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { DateFormatter } from '../components'
 
-const BlogPreview = ({ title, sell, coverImage, date, slug }) => {
+const BlogPreview = ({ title, sell, coverImage, date, slug, tags }) => {
   return (
     <div className="column">
       <Link as={`/blog/${slug}`} href="/blog/[slug]" passHref>
@@ -9,10 +9,7 @@ const BlogPreview = ({ title, sell, coverImage, date, slug }) => {
           <div className="card">
             <div className="card-image">
               <figure className="image is-16by9">
-                <img
-                  src="https://img.clock.co.uk/1280x720"
-                  alt="Placeholder image"
-                />
+                <img src={coverImage} alt={title} />
               </figure>
             </div>
             <header className="card-header">
