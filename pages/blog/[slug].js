@@ -23,7 +23,7 @@ export default function Blog({ blog, moreBlogs }) {
           <BlogTitle>Loading…</BlogTitle>
         ) : (
           <>
-            <article className="mb-32">
+            <article>
               <Head>
                 <title>{blog.title} | Jack Burgess</title>
                 <meta property="og:image" content={blog.ogImage.url} />

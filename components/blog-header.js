@@ -25,7 +25,7 @@ const BlogHeader = ({ title, coverImage, date, published, tags }) => {
         </div>
       )}
       <div className="mb-8">
-        <CoverImage title={title} src={coverImage} height={620} width={1240} />
+        <CoverImage title={title} src={coverImage} height={720} width={1280} />
       </div>
       <div className="mx-auto">
         <div className="is-size-5">

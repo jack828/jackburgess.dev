@@ -1,28 +1,27 @@
 import classnames from 'classnames'
 import Link from 'next/link'
 
-export default function CoverImage({ title, src, slug, height, width }) {
+const CoverImage = ({ title, src, slug, height, width }) => {
   const image = (
     <img
       src={src}
       alt={`Cover Image for ${title}`}
-      className={classnames('shadow-sm', {
-        'hover:shadow-md transition-shadow duration-200': slug,
-      })}
-      layout="responsive"
+      className={classnames('shadow-sm')}
       width={width}
       height={height}
     />
   )
   return (
-    <div className="">
+    <figure className="image is-16by9">
       {slug ? (
-        <Link as={`/blog/${slug}`} href="/blog/[slug]">
+        <Link as={`/blog/${slug}`} href="/blog/[slug]" passHref>
           <a aria-label={title}>{image}</a>
         </Link>
       ) : (
         image
       )}
-    </div>
+    </figure>
   )
 }
+
+export default CoverImage
