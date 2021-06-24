@@ -1,5 +1,6 @@
 ---json
 {
+  "published": false,
   "title": "Dynamic Routing",
   "sell": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "coverImage": "https://img.clock.co.uk/1280x720",
