@@ -7,13 +7,18 @@ const Navbar = () => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const toggleOpen = () => setOpen((prevState) => !prevState)
+  const isOnHome = router.asPath === '/'
   const isOnBlog = router.asPath.startsWith('/blog')
 
   return (
-    <nav className="navbar" role="navigation" aria-label="main navigation">
+    <nav
+      className="navbar has-shadow is-primary"
+      role="navigation"
+      aria-label="main navigation"
+    >
       <div className="navbar-brand">
         <Link href="/" passHref>
-          <a className="navbar-item">Home</a>
+          <a className="navbar-item">jackburgess.dev</a>
         </Link>
 
         <a
@@ -35,6 +40,11 @@ const Navbar = () => {
         className={classnames('navbar-menu', { 'is-active': open })}
       >
         <div className="navbar-start">
+          <Link href="/" passHref>
+            <a className={classnames('navbar-item', { 'is-active': isOnHome })}>
+              Home
+            </a>
+          </Link>
           <Link href="/blog" passHref>
             <a className={classnames('navbar-item', { 'is-active': isOnBlog })}>
               Blog
