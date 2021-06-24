@@ -1,11 +1,13 @@
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import ErrorPage from 'next/error'
-import Layout from '../../components/layout'
-import Container from '../../components/container'
-import BlogBody from '../../components/blog-body'
-import BlogHeader from '../../components/blog-header'
-import BlogTitle from '../../components/blog-title'
+import {
+  Layout,
+  Container,
+  BlogHeader,
+  BlogBody,
+  BlogTitle
+} from '../../components'
 import { getBlogBySlug, getAllBlogs } from '../../lib/api'
 import markdownToHtml from '../../lib/markdownToHtml'
 

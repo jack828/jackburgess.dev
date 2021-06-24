@@ -1,8 +1,8 @@
 import Head from 'next/head'
-import Footer from '../components/footer'
+import { Footer } from '../components'
 import '../styles/globals.scss'
 
-function App({ Component, pageProps }) {
+const App = ({ Component, pageProps }) => {
   return (
     <>
       <Head>

@@ -1,5 +1,5 @@
-import DateFormatter from '../components/date-formatter'
 import Link from 'next/link'
+import { DateFormatter } from '../components'
 
 const BlogPreview = ({ title, sell, coverImage, date, slug }) => {
   return (

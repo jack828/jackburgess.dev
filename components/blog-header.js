@@ -1,6 +1,4 @@
-import DateFormatter from '../components/date-formatter'
-import CoverImage from '../components/cover-image'
-import BlogTitle from '../components/blog-title'
+import { DateFormatter, CoverImage, BlogTitle } from '../components'
 
 const BlogHeader = ({ title, coverImage, date }) => {
   return (

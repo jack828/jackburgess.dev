@@ -1,9 +1,6 @@
-import Layout from '../../components/layout'
-import Container from '../../components/container'
-import MoreBlogs from '../../components/more-blogs'
-import HeroBlog from '../../components/hero-blog'
-import { getAllBlogs } from '../../lib/api'
 import Head from 'next/head'
+import { Layout, Container, MoreBlogs, HeroBlog } from '../../components'
+import { getAllBlogs } from '../../lib/api'
 
 const Index = ({ allBlogs }) => {
   const [heroBlog, ...blogs] = allBlogs

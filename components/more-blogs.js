@@ -1,4 +1,4 @@
-import BlogPreview from '../components/blog-preview'
+import { BlogPreview } from '../components'
 
 const MoreBlogs = ({ blogs }) => {
   return (

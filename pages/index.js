@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import classnames from 'classnames'
-import Layout from '../components/layout'
-import Container from '../components/container'
+import { Layout, Container } from '../components'
 import styles from '../styles/Home.module.scss'
 
 const Index = () => (
