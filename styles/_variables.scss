@@ -1,19 +1,7 @@
-// Set your brand colors
-// $purple: #8A4D76;
-// $pink: #FA7C91;
-// $brown: #757763;
-// $beige-light: #D0D1CD;
-// $beige-lighter: #EFF0EB;
+// Setbrand colors
+$brand: #0085A9;
 
 // Update Bulma's global variables
 $family-sans-serif: "Oxygen", "Roboto", "Ubuntu", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-// $grey-dark: $brown;
-// $grey-light: $beige-light;
-$primary: #0085A9;
-// $link: $pink;
-
-// Update some of Bulma's component variables
-// $control-border-width: 2px;
-// $input-background-color: $beige-lighter;
-// $input-border-color: transparent;
-// $input-shadow: none;
+$primary: $brand;
+$border: $brand;
