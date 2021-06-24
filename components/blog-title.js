@@ -1,6 +1,6 @@
 const BlogTitle = ({ children }) => {
   return (
-    <h1 className="title pt-4">
+    <h1 className="title is-size-1 pt-4">
       {children}
     </h1>
   )
