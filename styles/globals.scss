@@ -5,3 +5,12 @@
 // @import "bulma/sass/grid/columns.sass";
 
 @import "../node_modules/highlight.js/styles/monokai.css";
+
+html {
+  height: 100%;
+}
+
+body {
+  position: relative;
+  min-height: 100%;
+}

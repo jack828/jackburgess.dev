@@ -1,9 +1,10 @@
-import Container from '../container'
+import classnames from 'classnames'
+import { Container } from '../'
 import styles from './footer.module.scss'
 
 const Footer = () => {
   return (
-    <footer className={styles.footer}>
+    <footer className={classnames(styles.footer, 'mt-4 py-2')}>
       <Container>
         Powered by tea, marmalade, and curiosity.
         <br />
