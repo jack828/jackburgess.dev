@@ -15,7 +15,7 @@ const BlogHeader = ({ title, coverImage, date, published }) => {
         <CoverImage title={title} src={coverImage} height={620} width={1240} />
       </div>
       <div className="mx-auto">
-        <div className="mb-6 is-size-5">
+        <div className="is-size-5">
           <DateFormatter date={date} />
         </div>
       </div>
