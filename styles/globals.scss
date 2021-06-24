@@ -22,3 +22,5 @@ $family-sans-serif: "Oxygen", "Roboto", "Ubuntu", "Helvetica Neue", "Helvetica",
 @import "bulma/bulma.sass";
 // @import "bulma/sass/utilities/_all.sass";
 // @import "bulma/sass/grid/columns.sass";
+
+@import "../node_modules/highlight.js/styles/monokai.css";
