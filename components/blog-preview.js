@@ -26,7 +26,15 @@ const BlogPreview = ({ title, sell, coverImage, date, slug, tags }) => {
               </div>
             </div>
             <footer className="card-footer">
-              <div className="card-footer-item">{tags.join(' | ')}</div>
+              <div className="card-footer-item">
+                <div className="tags">
+                  {tags.map((tag) => (
+                    <div key={tag} className="tag is-primary">
+                      {tag}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </footer>
           </div>
         </a>
