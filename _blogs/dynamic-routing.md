@@ -1,13 +1,14 @@
----
-title: 'Dynamic Routing and Static Generation'
-sell: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-coverImage: 'https://img.clock.co.uk/1280x720'
-date: '2020-03-16T05:35:07.322Z'
-author:
-  name: JJ Kasper
-  picture: 'https://img.clock.co.uk/1280x720'
-ogImage:
-  url: '/assets/blog/dynamic-routing/cover.jpg'
+---json
+{
+  "title": "Dynamic Routing",
+  "sell": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "coverImage": "https://img.clock.co.uk/1280x720",
+  "tags": ["one", "two"],
+  "date": "2020-03-16T05:35:07.322Z",
+  "ogImage": {
+    "url": "/assets/blog/hello-world/cover.jpg"
+  }
+}
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Praesent elementum facilisis leo vel fringilla est ullamcorper eget. At imperdiet dui accumsan sit amet nulla facilities morbi tempus. Praesent elementum facilisis leo vel fringilla. Congue mauris rhoncus aenean vel. Egestas sed tempus urna et pharetra pharetra massa massa ultricies.
