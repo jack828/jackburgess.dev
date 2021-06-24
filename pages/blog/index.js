@@ -14,7 +14,7 @@ const Index = ({ allBlogs }) => {
         <p>
           Sometimes I&lsquo;ll have a good idea and it&lsquo;ll end up here!
         </p>
-        {false && heroBlog && <HeroBlog {...heroBlog} />}
+        {heroBlog && <HeroBlog {...heroBlog} />}
         {blogs.length > 0 && <MoreBlogs blogs={blogs} />}
       </Container>
     </Layout>
