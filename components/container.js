@@ -1,3 +1,11 @@
-export default function Container({ children }) {
-  return <div className="container mx-auto p-5">{children}</div>
+import classnames from 'classnames'
+
+const Container = ({ fluid, children }) => {
+  return (
+    <div className={classnames('container p-5', { 'is-fluid': fluid })}>
+      {children}
+    </div>
+  )
 }
+
+export default Container
