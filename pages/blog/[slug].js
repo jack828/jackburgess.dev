@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 import ErrorPage from 'next/error'
 import Layout from '../../components/layout'
 import Container from '../../components/container'
 import BlogBody from '../../components/blog-body'
 import BlogHeader from '../../components/blog-header'
-import { getBlogBySlug, getAllBlogs } from '../../lib/api'
 import BlogTitle from '../../components/blog-title'
-import Head from 'next/head'
+import { getBlogBySlug, getAllBlogs } from '../../lib/api'
 import markdownToHtml from '../../lib/markdownToHtml'
 
 export default function Blog({ blog, moreBlogs }) {
@@ -27,7 +27,7 @@ export default function Blog({ blog, moreBlogs }) {
                 <meta property="og:image" content={blog.ogImage.url} />
               </Head>
               <BlogHeader {...blog} />
-              <BlogBody content={blog.content} />
+              <BlogBody {...blog} />
             </article>
           </>
         )}

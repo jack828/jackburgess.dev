@@ -1,15 +1,20 @@
 import { useState } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import classnames from 'classnames'
 
 const Navbar = () => {
+  const router = useRouter()
   const [open, setOpen] = useState(false)
   const toggleOpen = () => setOpen((prevState) => !prevState)
+  const isOnBlog = router.asPath.startsWith('/blog')
+
   return (
     <nav className="navbar" role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
-        <a className="navbar-item" href="/">
-          Home
-        </a>
+        <Link href="/" passHref>
+          <a className="navbar-item">Home</a>
+        </Link>
 
         <a
           role="button"
@@ -30,7 +35,11 @@ const Navbar = () => {
         className={classnames('navbar-menu', { 'is-active': open })}
       >
         <div className="navbar-start">
-          <a className="navbar-item">Blogs</a>
+          <Link href="/blog" passHref>
+            <a className={classnames('navbar-item', { 'is-active': isOnBlog })}>
+              Blog
+            </a>
+          </Link>
         </div>
 
         <div className="navbar-end">
