@@ -6,6 +6,10 @@
 
 @import "../node_modules/highlight.js/styles/monokai.css";
 
+html {
+  overflow-y: auto;
+}
+
 #__next {
   display: flex;
   min-height: 100vh;
