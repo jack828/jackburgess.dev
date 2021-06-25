@@ -1,9 +1,21 @@
+import classnames from 'classnames'
 import Link from 'next/link'
 import { DateFormatter } from '../components'
 
-const BlogPreview = ({ title, sell, coverImage, date, slug, tags }) => {
+const BlogPreview = ({
+  blog: { title, sell, coverImage, date, slug, tags },
+  large,
+  medium,
+  small
+}) => {
   return (
-    <div className="column">
+    <div
+      className={classnames('column', {
+        'is-full': large,
+        'is-half': medium,
+        'is-one-quarter': small
+      })}
+    >
       <Link as={`/blog/${slug}`} href="/blog/[slug]" passHref>
         <a>
           <div className="card">
