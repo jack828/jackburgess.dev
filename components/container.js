@@ -1,8 +1,13 @@
 import classnames from 'classnames'
 
-const Container = ({ fluid, children }) => {
+const Container = ({ fluid, noPadding, children }) => {
   return (
-    <div className={classnames('container p-5', { 'is-fluid': fluid })}>
+    <div
+      className={classnames('container', {
+        'is-fluid': fluid,
+        'p-5': !noPadding
+      })}
+    >
       {children}
     </div>
   )
