@@ -1,5 +1,11 @@
 import Head from 'next/head'
-import { Layout, Container, MoreBlogs, HeroBlog } from '../../components'
+import {
+  Layout,
+  Container,
+  BlogTitle,
+  MoreBlogs,
+  HeroBlog
+} from '../../components'
 import { getAllBlogs } from '../../lib/api'
 
 const Index = ({ allBlogs }) => {
@@ -10,7 +16,7 @@ const Index = ({ allBlogs }) => {
         <title>Jack Burgess | Blog</title>
       </Head>
       <Container>
-        <h1 className="title pt-4">Blogs</h1>
+        <BlogTitle>Blogs</BlogTitle>
         <p>
           Sometimes I&lsquo;ll have a good idea and it&lsquo;ll end up here!
         </p>
@@ -19,7 +25,7 @@ const Index = ({ allBlogs }) => {
             It appears I haven&lsquo;t written anything yet…
           </p>
         )}
-        {heroBlog && <HeroBlog {...heroBlog} />}
+        {heroBlog && <HeroBlog blog={heroBlog} />}
         {blogs.length > 0 && <MoreBlogs blogs={blogs} />}
       </Container>
     </Layout>

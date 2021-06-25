@@ -16,16 +16,12 @@ const BlogPreview = ({ title, sell, coverImage, date, slug, tags }) => {
               <p className="card-header-title">{title}</p>
             </header>
             <div className="card-content">
-              <div className="content">
-                {sell}
-                <br />
-
-                <div className="has-text-right">
-                  <DateFormatter date={date} />
-                </div>
-              </div>
+              <div className="content">{sell}</div>
             </div>
             <footer className="card-footer">
+              <div className="card-footer-item">
+                <DateFormatter date={date} />
+              </div>
               <div className="card-footer-item">
                 <div className="tags">
                   {tags.map((tag) => (
