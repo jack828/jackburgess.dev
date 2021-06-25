@@ -33,15 +33,10 @@ const Index = ({ allBlogs }) => {
 }
 
 export async function getStaticProps() {
-  const allBlogs = getAllBlogs([
-    'title',
-    'sell',
-    'date',
-    'slug',
-    'tags',
-    'author',
-    'coverImage'
-  ])
+  const allBlogs = getAllBlogs({
+    fields: ['title', 'sell', 'date', 'slug', 'tags', 'author', 'coverImage'],
+    limit: 3
+  })
 
   return {
     props: { allBlogs }

@@ -53,7 +53,7 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const blogs = getAllBlogs(['slug'])
+  const blogs = getAllBlogs({ fields: ['slug'] })
 
   return {
     paths: blogs.map((blog) => {
