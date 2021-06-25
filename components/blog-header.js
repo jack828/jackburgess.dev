@@ -3,18 +3,14 @@ import { DateFormatter, CoverImage, BlogTitle } from '../components'
 const BlogHeader = ({ title, coverImage, date, published, tags }) => {
   return (
     <>
-      <div className="level">
-        <div className="level-item level-left">
-          <BlogTitle>{title}</BlogTitle>
-        </div>
-        <div className="level-item level-right">
-          <div className="tags">
-            {tags.map((tag) => (
-              <div key={tag} className="tag is-primary">
-                {tag}
-              </div>
-            ))}
-          </div>
+      <BlogTitle>{title}</BlogTitle>
+      <div className="pb-4">
+        <div className="tags">
+          {tags.map((tag) => (
+            <div key={tag} className="tag is-primary">
+              {tag}
+            </div>
+          ))}
         </div>
       </div>
       {!published && (
