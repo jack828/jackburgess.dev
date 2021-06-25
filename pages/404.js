@@ -10,13 +10,11 @@ const NotFound = () => (
         <title>Not Found | Jack Burgess</title>
       </Head>
 
-      <div className="columns is-justify-content-center is-align-items-center pt-4">
-        <div
-          className={classnames(styles.errorCode, 'column has-text-centered')}
-        >
+      <div className="columns is-align-items-center pt-4">
+        <div className={classnames(styles.errorCode, 'column has-text-right')}>
           <p className="title">404</p>
         </div>
-        <div className="column has-text-centered">
+        <div className="column has-text-left">
           <p className="subtitle">We couldn&lsquo;t find a page there.</p>
         </div>
       </div>
