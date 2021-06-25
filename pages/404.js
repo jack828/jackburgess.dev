@@ -12,10 +12,7 @@ const NotFound = () => (
 
       <div className="columns is-justify-content-center is-align-items-center pt-4">
         <div
-          className={classnames(
-            styles.errorCode,
-            'column has-text-centered'
-          )}
+          className={classnames(styles.errorCode, 'column has-text-centered')}
         >
           <p className="title">404</p>
         </div>
