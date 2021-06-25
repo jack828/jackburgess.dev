@@ -1,10 +1,12 @@
-// import styles from './blog-body.module.scss'
+import classnames from 'classnames'
+import styles from './blog-body.module.scss'
 
 const BlogBody = ({ content }) => {
   return (
-    <div className="mx-auto">
-      <div className="content" dangerouslySetInnerHTML={{ __html: content }} />
-    </div>
+    <div
+      className={classnames(styles.markdown, 'content')}
+      dangerouslySetInnerHTML={{ __html: content }}
+    />
   )
 }
 
