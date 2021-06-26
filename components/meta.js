@@ -6,9 +6,16 @@ const Meta = ({ title, description, image }) => {
       <title>
         {title ? `${title} | Jack Burgess` : 'Jack Burgess | Software Engineer'}
       </title>
+      <meta name="description" content={description} />
       <meta
-        name="description"
-        content={description}
+        property="og:image"
+        content={
+          image
+            ? image.startsWith('https://')
+              ? image
+              : `https://jackburgess.dev/${image}`
+            : 'https://jackburgess.dev/profile-picture.jpeg'
+        }
       />
       <link
         rel="apple-touch-icon"
@@ -41,10 +48,5 @@ const Meta = ({ title, description, image }) => {
     </Head>
   )
 }
-// <meta property="og:image" content={HOME_OG_IMAGE_URL} />
-// <meta
-// name="description"
-// content={`A statically generated blog example using Next.js and ${CMS_NAME}.`}
-// />
-//
+
 export default Meta
