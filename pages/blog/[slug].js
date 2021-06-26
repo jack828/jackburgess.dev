@@ -18,7 +18,7 @@ export default function Blog({ blog, moreBlogs }) {
   }
   return (
     <Layout>
-      <Container fluid>
+      <Container>
         {router.isFallback ? (
           <BlogTitle>Loading…</BlogTitle>
         ) : (
