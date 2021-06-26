@@ -5,7 +5,9 @@ const HeroBlog = ({ blog }) => {
     <section>
       <h2 className="title pt-4">Latest Blog</h2>
       <div className="columns">
-        <BlogPreview blog={blog} large />
+        <div className="column is-full">
+          <BlogPreview blog={blog} />
+        </div>
       </div>
     </section>
   )
