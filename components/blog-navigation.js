@@ -24,11 +24,17 @@ const BlogNavigation = ({ blogs: [prevBlog, nextBlog] = [] }) => {
       </div>
       <div className="columns">
         {prevBlog ? (
-          <BlogPreview blog={prevBlog} medium />
+          <div className="column is-half">
+            <BlogPreview blog={prevBlog} />
+          </div>
         ) : (
-          <div className="column is-half" />
+          <div className="column is-half p-0" />
         )}
-        {nextBlog && <BlogPreview blog={nextBlog} medium />}
+        {nextBlog && (
+          <div className="column is-half">
+            <BlogPreview blog={nextBlog} />
+          </div>
+        )}
       </div>
     </section>
   )
