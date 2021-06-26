@@ -1,14 +1,11 @@
-import Head from 'next/head'
 import classnames from 'classnames'
-import { Layout, Container } from '../components'
+import { Layout, Container, Meta } from '../components'
 import styles from '../styles/404.module.scss'
 
 const NotFound = () => (
   <Layout>
     <Container fluid>
-      <Head>
-        <title>Not Found | Jack Burgess</title>
-      </Head>
+      <Meta title="Not Found" description="Page not found" />
 
       <div className="columns is-align-items-center pt-4">
         <div className={classnames(styles.errorCode, 'column has-text-right')}>

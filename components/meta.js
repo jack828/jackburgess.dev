@@ -1,8 +1,15 @@
 import Head from 'next/head'
 
-const Meta = () => {
+const Meta = ({ title, description, image }) => {
   return (
     <Head>
+      <title>
+        {title ? `${title} | Jack Burgess` : 'Jack Burgess | Software Engineer'}
+      </title>
+      <meta
+        name="description"
+        content={description}
+      />
       <link
         rel="apple-touch-icon"
         sizes="180x180"
@@ -30,7 +37,7 @@ const Meta = () => {
       <meta name="msapplication-TileColor" content="#000000" />
       <meta name="msapplication-config" content="/favicon/browserconfig.xml" />
       <meta name="theme-color" content="#000" />
-      <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+      {/* <link rel="alternate" type="application/rss+xml" href="/feed.xml" /> */}
     </Head>
   )
 }

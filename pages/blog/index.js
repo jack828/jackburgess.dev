@@ -1,7 +1,7 @@
-import Head from 'next/head'
 import {
   Layout,
   Container,
+  Meta,
   BlogTitle,
   HeroBlog,
   MoreBlogs,
@@ -14,9 +14,10 @@ const Index = ({ allBlogs }) => {
   const moreBlogs = blogs.slice(0, 2)
   return (
     <Layout>
-      <Head>
-        <title>Jack Burgess | Blog</title>
-      </Head>
+      <Meta
+        title="Blog"
+        description="A raw stream of information about programming topics - Node.JS, JavaScript, React, React Native, C, and ESP32."
+      />
       <Container>
         <BlogTitle>Blogs</BlogTitle>
         <p>

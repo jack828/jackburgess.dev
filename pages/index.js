@@ -1,14 +1,11 @@
-import Head from 'next/head'
 import classnames from 'classnames'
-import { Layout, Container } from '../components'
+import { Layout, Container, Meta } from '../components'
 import styles from '../styles/Home.module.scss'
 
 const Index = () => (
   <Layout>
     <Container>
-      <Head>
-        <title>Jack Burgess | Software Engineer</title>
-      </Head>
+      <Meta description="Hey - I am a software engineer from the UK. I love making websites and apps. Maybe you’ll use one of them one day." />
 
       <div className="columns is-centered has-text-centered">
         <img
