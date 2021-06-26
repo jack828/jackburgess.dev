@@ -24,7 +24,11 @@ export default function Blog({ blog, moreBlogs }) {
         ) : (
           <>
             <article>
-              <Meta title={blog.title} image={blog.coverImage} />
+              <Meta
+                title={blog.title}
+                description={blog.sell}
+                image={blog.coverImage}
+              />
               <BlogHeader {...blog} />
               <BlogBody {...blog} />
             </article>
