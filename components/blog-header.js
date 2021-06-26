@@ -20,7 +20,7 @@ const BlogHeader = ({ title, coverImage, date, published, tags }) => {
           </div>
         </div>
       )}
-      <div className="mb-8">
+      <div className="box p-0">
         <CoverImage title={title} src={coverImage} height={720} width={1280} />
       </div>
       <div className="mx-auto">

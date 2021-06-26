@@ -1,4 +1,3 @@
-import classnames from 'classnames'
 import Link from 'next/link'
 
 const CoverImage = ({ title, src, slug, height, width }) => {
@@ -6,7 +5,6 @@ const CoverImage = ({ title, src, slug, height, width }) => {
     <img
       src={src}
       alt={`Cover Image for ${title}`}
-      className={classnames('shadow-sm')}
       width={width}
       height={height}
     />
