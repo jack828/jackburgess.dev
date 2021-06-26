@@ -4,7 +4,7 @@ const BlogHeader = ({ title, coverImage, date, published, tags }) => {
   return (
     <>
       <BlogTitle>{title}</BlogTitle>
-      <div className="level pb-4">
+      <div className="level">
         <div className="level-left">
           <div className="level-item is-size-5">
             <DateFormatter date={date} />
