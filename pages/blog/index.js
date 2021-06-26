@@ -44,7 +44,6 @@ export async function getStaticProps() {
       'date',
       'slug',
       'tags',
-      'author',
       'coverImage',
       'coverImageSquare'
     ]

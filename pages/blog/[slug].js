@@ -6,12 +6,13 @@ import {
   Meta,
   BlogHeader,
   BlogBody,
-  BlogTitle
+  BlogTitle,
+  BlogNavigation
 } from '../../components'
 import { getBlogBySlug, getAllBlogs } from '../../lib/api'
 import markdownToHtml from '../../lib/markdownToHtml'
 
-export default function Blog({ blog, moreBlogs }) {
+export default function Blog({ blog, navBlogs }) {
   const router = useRouter()
   if (!router.isFallback && !blog?.slug) {
     return <ErrorPage statusCode={404} />
@@ -31,6 +32,7 @@ export default function Blog({ blog, moreBlogs }) {
               />
               <BlogHeader {...blog} />
               <BlogBody {...blog} />
+              <BlogNavigation blogs={navBlogs} />
             </article>
           </>
         )}
@@ -43,12 +45,31 @@ export async function getStaticProps({ params }) {
   const blog = getBlogBySlug(params.slug)
   const content = await markdownToHtml(blog.content || '')
 
+  const blogs = getAllBlogs({ fields: ['slug'] })
+
+  const index = blogs.findIndex(({ slug }) => slug === params.slug)
+
+  const navBlogs = [blogs[index - 1], blogs[index + 1]].map(
+    (navBlog) =>
+      (navBlog &&
+        navBlog.slug &&
+        getBlogBySlug(navBlog.slug, [
+          'title',
+          'sell',
+          'date',
+          'slug',
+          'tags',
+          'coverImage'
+        ])) ||
+      null
+  )
   return {
     props: {
       blog: {
         ...blog,
         content
-      }
+      },
+      navBlogs
     }
   }
 }
