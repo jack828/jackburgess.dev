@@ -4,13 +4,22 @@ const BlogHeader = ({ title, coverImage, date, published, tags }) => {
   return (
     <>
       <BlogTitle>{title}</BlogTitle>
-      <div className="pb-4">
-        <div className="tags">
-          {tags.map((tag) => (
-            <div key={tag} className="tag is-primary">
-              {tag}
+      <div className="level pb-4">
+        <div className="level-left">
+          <div className="level-item is-size-5">
+            <DateFormatter date={date} />
+          </div>
+        </div>
+        <div className="level-right">
+          <div className="level-item">
+            <div className="tags">
+              {tags.map((tag) => (
+                <div key={tag} className="tag is-primary">
+                  {tag}
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
       {!published && (
@@ -22,11 +31,6 @@ const BlogHeader = ({ title, coverImage, date, published, tags }) => {
       )}
       <div className="box p-0">
         <CoverImage title={title} src={coverImage} height={720} width={1280} />
-      </div>
-      <div className="mx-auto">
-        <div className="is-size-5">
-          <DateFormatter date={date} />
-        </div>
       </div>
     </>
   )
