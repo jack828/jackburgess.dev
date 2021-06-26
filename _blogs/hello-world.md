@@ -4,6 +4,7 @@
   "title": "Learn How to Pre-render Pages Using Static Generation with Next.js",
   "sell": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "coverImage": "https://img.clock.co.uk/1280x720",
+  "coverImageSquare": "https://img.clock.co.uk/720x720",
   "tags": ["one", "two"],
   "date": "2020-03-16T05:35:07.322Z",
   "ogImage": {

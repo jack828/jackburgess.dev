@@ -3,13 +3,15 @@ import {
   Layout,
   Container,
   BlogTitle,
+  HeroBlog,
   MoreBlogs,
-  HeroBlog
+  AllBlogs
 } from '../../components'
 import { getAllBlogs } from '../../lib/api'
 
 const Index = ({ allBlogs }) => {
   const [heroBlog, ...blogs] = allBlogs
+  const moreBlogs = blogs.slice(0, 2)
   return (
     <Layout>
       <Head>
@@ -26,7 +28,8 @@ const Index = ({ allBlogs }) => {
           </p>
         )}
         {heroBlog && <HeroBlog blog={heroBlog} />}
-        {blogs.length > 0 && <MoreBlogs blogs={blogs} />}
+        {moreBlogs.length > 0 && <MoreBlogs blogs={moreBlogs} />}
+        {allBlogs.length > 0 && <AllBlogs blogs={allBlogs} />}
       </Container>
     </Layout>
   )
@@ -34,8 +37,16 @@ const Index = ({ allBlogs }) => {
 
 export async function getStaticProps() {
   const allBlogs = getAllBlogs({
-    fields: ['title', 'sell', 'date', 'slug', 'tags', 'author', 'coverImage'],
-    limit: 3
+    fields: [
+      'title',
+      'sell',
+      'date',
+      'slug',
+      'tags',
+      'author',
+      'coverImage',
+      'coverImageSquare'
+    ]
   })
 
   return {
