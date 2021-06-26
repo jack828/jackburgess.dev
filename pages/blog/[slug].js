@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 import ErrorPage from 'next/error'
 import {
   Layout,
   Container,
+  Meta,
   BlogHeader,
   BlogBody,
   BlogTitle
@@ -24,10 +24,7 @@ export default function Blog({ blog, moreBlogs }) {
         ) : (
           <>
             <article>
-              <Head>
-                <title>{blog.title} | Jack Burgess</title>
-                <meta property="og:image" content={blog.ogImage.url} />
-              </Head>
+              <Meta title={blog.title} image={blog.coverImage} />
               <BlogHeader {...blog} />
               <BlogBody {...blog} />
             </article>
