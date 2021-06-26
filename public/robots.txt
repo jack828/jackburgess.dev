@@ -1,2 +1,4 @@
+Sitemap: https://jackburgess.dev/sitemap.xml
+
 User-Agent: *
 Allow: /
