@@ -10,7 +10,7 @@ const Index = () => (
       <div className="columns is-centered has-text-centered">
         <img
           className={classnames(styles.profile, 'is-align-self-center	')}
-          src="https://gravatar.com/avatar/15f72cea858c4bf90523f32a4c88c862?s=256"
+          src="/profile-picture.jpeg"
           alt="Profile Picture"
           width={256}
           height={256}
