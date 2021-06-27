@@ -13,8 +13,8 @@ const Meta = ({ title, description, image, type, date }) => {
       </title>
 
       {/* General */}
-      <meta property="author" content="Jack Burgess" />
-      <meta property="description" content={description} />
+      <meta name="author" content="Jack Burgess" />
+      <meta name="description" content={description} />
 
       {/* Open Graph */}
       <meta property="og:title" content={title} />
@@ -27,7 +27,7 @@ const Meta = ({ title, description, image, type, date }) => {
       {date && <meta property="og:article:published_time" content={date} />}
 
       {/* Twitter */}
-      <meta property="twitter:card" content="summary" />
+      <meta name="twitter:card" content="summary" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:site" content="@jackmburgess" />
