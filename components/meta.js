@@ -4,7 +4,7 @@ const Meta = ({ title, description, image, type, date }) => {
   const imageUrl = image
     ? image.startsWith('https://')
       ? image
-      : `https://jackburgess.dev/${image}`
+      : `https://jackburgess.dev${image}`
     : 'https://jackburgess.dev/profile-picture.jpeg'
   return (
     <Head>
