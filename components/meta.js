@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-const Meta = ({ title, description, image }) => {
+const Meta = ({ title, description, image, type }) => {
   return (
     <Head>
       <title>
@@ -18,6 +18,7 @@ const Meta = ({ title, description, image }) => {
         }
       />
       <meta name="og:description" content={description} />
+      <meta property="og:type" content={type || 'website'} />
       <link
         rel="apple-touch-icon"
         sizes="180x180"

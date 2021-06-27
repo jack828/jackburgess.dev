@@ -30,6 +30,7 @@ export default function Blog({ blog, navBlogs }) {
                 title={blog.title}
                 description={blog.sell}
                 image={blog.coverImage}
+                type="article"
               />
               <BlogHeader {...blog} />
               <BlogBody {...blog} />
