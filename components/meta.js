@@ -32,7 +32,7 @@ const Meta = ({ title, description, image, type, date }) => {
       <meta name="twitter:description" content={description} />
       <meta name="twitter:site" content="@jackmburgess" />
       <meta name="twitter:creator" content="@jackmburgess" />
-      <meta name="twitter:image" content={image} />
+      <meta name="twitter:image" content={imageUrl} />
 
       {/* Icons */}
       <link
