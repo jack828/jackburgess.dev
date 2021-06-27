@@ -8,7 +8,7 @@ const ShareButtons = ({ title }) => {
   const props = {
     target: '_blank',
     rel: 'noopener noreferrer nofollow',
-    style: { width: 32, height: 32 }
+    style: { width: 32, height: 32, margin: '0px 6px' }
   }
   return (
     <>
