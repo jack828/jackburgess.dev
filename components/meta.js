@@ -21,6 +21,7 @@ const Meta = ({ title, description, image, type }) => {
       <meta property="og:image:height" content={image ? '1080' : '1536'} />
       <meta name="og:description" content={description} />
       <meta property="og:type" content={type || 'website'} />
+      <meta property="og:author" content="Jack Burgess" />
       <link
         rel="apple-touch-icon"
         sizes="180x180"
