@@ -6,10 +6,7 @@
   "coverImage": "https://img.clock.co.uk/1280x720",
   "coverImageSquare": "https://img.clock.co.uk/720x720",
   "tags": ["one", "two"],
-  "date": "2020-03-16T05:35:07.322Z",
-  "ogImage": {
-    "url": "https://img.clock.co.uk/1280x720"
-  }
+  "date": "2020-03-16T05:35:07.322Z"
 }
 ---
 
