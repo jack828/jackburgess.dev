@@ -1,7 +1,15 @@
 @import "../../styles/_variables.scss";
 @import "../../node_modules/bulma/sass/utilities/_all.sass";
+@import "../../node_modules/bulma/sass/elements/content.sass";
 
 // NOTE only top level selectors seem to work :(
 // More styles are applied in ../../styles/globals.scss
 .markdown {
+  pre {
+    padding: 0.75em 0.75em !important;
+
+    @media (min-width: $tablet) {
+      padding: $content-pre-padding !important;
+    }
+  }
 }
