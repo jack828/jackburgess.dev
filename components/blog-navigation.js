@@ -6,7 +6,7 @@ const BlogNavigation = ({ blogs: [prevBlog, nextBlog] = [] }) => {
   }
   return (
     <section>
-      <div className="level">
+      <div className="level is-hidden-mobile">
         <div className="level-left">
           {prevBlog && (
             <div className="level-item">
@@ -25,6 +25,7 @@ const BlogNavigation = ({ blogs: [prevBlog, nextBlog] = [] }) => {
       <div className="columns">
         {prevBlog ? (
           <div className="column is-half">
+            <h2 className="title is-hidden-tablet">Previous</h2>
             <BlogPreview blog={prevBlog} />
           </div>
         ) : (
@@ -32,6 +33,7 @@ const BlogNavigation = ({ blogs: [prevBlog, nextBlog] = [] }) => {
         )}
         {nextBlog && (
           <div className="column is-half">
+            <h2 className="title is-hidden-tablet has-text-right">Next</h2>
             <BlogPreview blog={nextBlog} />
           </div>
         )}
