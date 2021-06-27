@@ -4,9 +4,10 @@ import {
   Layout,
   Container,
   Meta,
+  BlogTitle,
   BlogHeader,
   BlogBody,
-  BlogTitle,
+  BlogFooter,
   BlogNavigation
 } from '../../components'
 import { getBlogBySlug, getAllBlogs } from '../../lib/api'
@@ -32,6 +33,7 @@ export default function Blog({ blog, navBlogs }) {
               />
               <BlogHeader {...blog} />
               <BlogBody {...blog} />
+              <BlogFooter {...blog} />
               <BlogNavigation blogs={navBlogs} />
             </article>
           </>
