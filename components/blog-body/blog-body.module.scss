@@ -10,4 +10,18 @@
       padding: $content-pre-padding;
     }
   }
+
+  // Footnotes
+  // Unsure why .footnotes selector doesn't work here!
+  div {
+    hr {
+      &:first-child {
+        display: none;
+      }
+    }
+  }
+
+  .footnote-backref {
+    padding-left: 6px;
+  }
 }
