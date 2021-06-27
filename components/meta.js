@@ -17,6 +17,8 @@ const Meta = ({ title, description, image, type }) => {
             : 'https://jackburgess.dev/profile-picture.jpeg'
         }
       />
+      <meta property="og:image:width" content={image ? '1920' : '1536'} />
+      <meta property="og:image:height" content={image ? '1080' : '1536'} />
       <meta name="og:description" content={description} />
       <meta property="og:type" content={type || 'website'} />
       <link
