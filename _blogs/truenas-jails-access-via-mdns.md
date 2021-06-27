@@ -5,38 +5,38 @@
   "sell": "Learn to setup easy access to jail services via their hostname, using mDNS.",
   "coverImage": "/truenas-jails-access-via-mdns-cover.jpeg",
   "coverImageSquare": "/truenas-jails-access-via-mdns-cover-square.jpeg",
-  "tags": ["TrueNAS", "mDNS", "jails"],
+  "tags": ["TrueNAS", "mDNS"],
   "date": "2020-06-27T18:00:00.828Z"
 }
 ---
 
 ## Preamble
 
-So you've got yourself quite the setup now, right? A kick-ass TrueNAS with way more storage than you managed to rationalise to your partner (you'll need more...) and you've been setting up services left, right, and centre.
+So you’ve got yourself quite the setup now, right? A kick-ass TrueNAS with way more storage than you managed to rationalise to your partner (you’ll need more...) and you’ve been setting up services left, right, and centre.
 
 Your bookmarks folder on your browser is getting quite full - and you can only tell what goes where by the bookmark name - the IP address & port are a forgotten memory from the day you set it up.
 
-But then, you realise you've setup one service a little differently...the jail it's in is assigned a local IP by DHCP! You forgot to set a static one for it!
+But then, you realise you’ve setup one service a little differently...the jail it’s in is assigned a local IP by DHCP! You forgot to set a static one for it!
 
-Wouldn't it be great if you could access all these services using their name? Just whack in `http://netdata` into the browser bar and bam, [Netdata](https://www.netdata.cloud/)!
+Wouldn’t it be great if you could access all these services using their name? Just whack in `http://netdata` into the browser bar and bam, [Netdata](https://www.netdata.cloud/)!
 
-Well, I've done quite a bit of ~googling~ duckduckgo-ing on this topic and couldn't find a solution that didn't require adding entries to my hosts file or one that was as plug'n'play as I wanted.
+Well, I’ve done quite a bit of ~googling~ duckduckgo-ing on this topic and couldn’t find a solution that didn’t require adding entries to my hosts file or one that was as plug’n’play as I wanted.
 
 So, I figured out my own way!
 
 This uses zeroconf mDNS to advertise the jail on your local internal network - e.g. you can access your netdata jail at `http://netdata.local`.
 
-I've written a [kickstart script](https://gist.github.com/jack828/b8375b16b6fb9eae52201d4deb563ab7) that has a handy one-liner in it to get you up and running faster, but I'll explain what the script does in detail here.
+I’ve written a [kickstart script](https://gist.github.com/jack828/b8375b16b6fb9eae52201d4deb563ab7) that has a handy one-liner in it to get you up and running faster, but I’ll explain what the script does in detail here.
 
-Quite a major caveat (for me and my network at least) is that this may not allow resolution of .local domains on Android phones, for a couple[^1] of reasons[^2] that don't belong here.
+Quite a major caveat (for me and my network at least) is that this may not allow resolution of .local domains on Android phones, for a couple[^1] of reasons[^2] that don’t belong here.
 
-## Let's Get Started
+## Let’s Get Started
 
-This guide also assumes you've got a jail up and running, and a root shell in there already - and that you've set the hostname to something you want.
+This guide also assumes you’ve got a jail up and running, and a root shell in there already - and that you’ve set the hostname to something you want.
 
-We'll be using a popular mDNS daemon service [Avahi](http://avahi.org/). It is supported on most distributions of pretty much anything.
+We’ll be using a popular mDNS daemon service [Avahi](http://avahi.org/). It is supported on most distributions of pretty much anything.
 
-We'll also require [socat](http://www.dest-unreach.org/socat/), a multipurpose relay tool. This will allow us to access our services on port 80 instead of whatever port they use.
+We’ll also require [socat](http://www.dest-unreach.org/socat/), a multipurpose relay tool. This will allow us to access our services on port 80 instead of whatever port they use.
 
 ~~~
 root@jail:/ # pkg install -y avahi-app socat
@@ -50,7 +50,7 @@ root@jail:/ # sysrc avahi_daemon_enable="YES"
 root@jail:/ # sysrc socat_enable="YES"
 ~~~
 
-Now, avahi comes with two services enabled by default - which I never use. So to keep the network nice and tidy we'll go ahead and remove them.
+Now, avahi comes with two services enabled by default - which I never use. So to keep the network nice and tidy we’ll go ahead and remove them.
 
 ~~~
 root@jail:/ # rm /usr/local/etc/avahi/services/*.service
@@ -58,7 +58,7 @@ root@jail:/ # rm /usr/local/etc/avahi/services/*.service
 
 This directory is where avahi will look for service definitions - if you do want to add other ones, this is where you put it.
 
-We'll add the definition for our service in here too.
+We’ll add the definition for our service in here too.
 
 ~~~
 root@jail:/ # nano /usr/local/etc/avahi/services/http.service
@@ -67,7 +67,7 @@ root@jail:/ # nano /usr/local/etc/avahi/services/http.service
 And put in
 
 ~~~xml
-<?xml version="1.0" standalone='no'?><!--*-nxml-*-->
+<?xml version="1.0" standalone="no"?><!--*-nxml-*-->
 <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
 <service-group>
   <name replace-wildcards="yes">%h</name>
@@ -79,7 +79,7 @@ And put in
 ~~~
 
 
-Now avahi knows to respond to mDNS queries with our jail's hostname and what type of service it is running.
+Now avahi knows to respond to mDNS queries with our jail’s hostname and what type of service it is running.
 
 To redirect traffic to the correct port, lets setup socat. Like avahi, it already has some instances defined, so open its config file:
 
@@ -109,7 +109,7 @@ And give it a test by connecting to http://hostname.local.
 
 You can usee [mdns-scan](https://github.com/alteholz/mdns-scan) to scan and poll your local network for devices.
 
-Alternatively, see what's broadcasting in your network using avahi by running `avahi-browse --resolve _http._tcp` on another device.
+Alternatively, see what’s broadcasting in your network using avahi by running `avahi-browse --resolve _http._tcp` on another device.
 
 Example:
 
