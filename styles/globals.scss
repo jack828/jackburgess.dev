@@ -15,3 +15,46 @@ html {
   min-height: 100vh;
   flex-direction: column;
 }
+
+// Blog Body Content Styles
+// That I couldn't figure out the selector for :(
+
+.content {
+
+  // FOOTNOTES
+  div.footnotes {
+    // Hide <hr /> in top of footnote block
+    hr:first-child {
+      display: none;
+    }
+
+    // Padding before the backref so it isn't awful on mobile
+    a.footnote-backref {
+      padding-left: 6px;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    a {
+      margin-left: -20px;
+      padding-right: 4px;
+      .svg-link {
+        // margin: 0px 4px 0px -20px;
+        visibility: hidden;
+
+        &:hover {
+          visibility: visible;
+        }
+      }
+    }
+
+    &:hover .svg-link {
+      visibility: visible;
+    }
+  }
+}
