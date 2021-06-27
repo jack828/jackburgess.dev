@@ -1,6 +1,6 @@
 ---json
 {
-  "published": false,
+  "published": true,
   "title": "Easy access to TrueNAS jails via mDNS",
   "sell": "Learn to setup easy access to jail services via their hostname, using mDNS.",
   "coverImage": "/truenas-jails-access-via-mdns-cover.jpeg",

@@ -1,6 +1,6 @@
 ---json
 {
-  "published": true,
+  "published": false,
   "title": "Preview Mode",
   "sell": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "coverImage": "https://img.clock.co.uk/1280x720",
