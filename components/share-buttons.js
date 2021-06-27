@@ -6,6 +6,7 @@ const ShareButtons = ({ title }) => {
   const path = router.asPath
   const cleanPath = path.includes('#') ? path.slice(0, path.indexOf('#')) : path
   const url = encodeURIComponent(`https://jackburgess.dev${cleanPath}`)
+  const encodedTitle = encodeURIComponent(title)
 
   const props = {
     target: '_blank',
@@ -16,7 +17,7 @@ const ShareButtons = ({ title }) => {
     <>
       <SocialIcon
         network="twitter"
-        url={`https://twitter.com/intent/tweet?url=${url}&text=${title}`}
+        url={`https://twitter.com/intent/tweet?url=${url}&text=${encodedTitle}`}
         {...props}
       />
       <SocialIcon
@@ -31,7 +32,7 @@ const ShareButtons = ({ title }) => {
       />
       <SocialIcon
         network="reddit"
-        url={`https://reddit.com/submit?url=${url}&title=${title}`}
+        url={`https://reddit.com/submit?url=${url}&title=${encodedTitle}`}
         {...props}
       />
     </>
