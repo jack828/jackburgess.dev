@@ -23,6 +23,7 @@ const Meta = ({ title, description, image, type, date }) => {
       <meta property="og:type" content={type || 'website'} />
       {date && <meta property="og:article:published_time" content={date} />}
       <meta property="og:author" content="Jack Burgess" />
+      <meta property="twitter:card" content="summary" />
       <link
         rel="apple-touch-icon"
         sizes="180x180"
