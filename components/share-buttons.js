@@ -3,7 +3,9 @@ import { SocialIcon } from 'react-social-icons'
 
 const ShareButtons = ({ title }) => {
   const router = useRouter()
-  const url = encodeURIComponent(`https://jackburgess.dev${router.asPath}`)
+  const path = router.asPath
+  const cleanPath = path.includes('#') ? path.slice(0, path.indexOf('#')) : path
+  const url = encodeURIComponent(`https://jackburgess.dev${cleanPath}`)
 
   const props = {
     target: '_blank',
