@@ -17,6 +17,7 @@ const Meta = ({ title, description, image }) => {
             : 'https://jackburgess.dev/profile-picture.jpeg'
         }
       />
+      <meta name="og:description" content={description} />
       <link
         rel="apple-touch-icon"
         sizes="180x180"

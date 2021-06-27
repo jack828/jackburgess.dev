@@ -1,4 +1,9 @@
-import { DateFormatter, CoverImage, BlogTitle } from '../components'
+import {
+  DateFormatter,
+  CoverImage,
+  BlogTitle,
+  ShareButtons
+} from '../components'
 
 const BlogHeader = ({ title, coverImage, date, published, tags }) => {
   return (
@@ -9,6 +14,9 @@ const BlogHeader = ({ title, coverImage, date, published, tags }) => {
           <div className="level-item is-size-5">
             <DateFormatter date={date} />
           </div>
+        </div>
+        <div className="level-item">
+          <ShareButtons title={title} />
         </div>
         <div className="level-right">
           <div className="level-item">
