@@ -6,7 +6,7 @@ const Meta = ({ title, description, image, type, date }) => {
       <title>
         {title ? `${title} | Jack Burgess` : 'Jack Burgess | Software Engineer'}
       </title>
-      <meta name="description" content={description} />
+      <meta property="description" content={description} />
       <meta
         property="og:image"
         content={
@@ -19,7 +19,7 @@ const Meta = ({ title, description, image, type, date }) => {
       />
       <meta property="og:image:width" content={image ? '1920' : '1536'} />
       <meta property="og:image:height" content={image ? '1080' : '1536'} />
-      <meta name="og:description" content={description} />
+      <meta property="og:description" content={description} />
       <meta property="og:type" content={type || 'website'} />
       {date && <meta property="og:article:published_time" content={date} />}
       <meta property="og:author" content="Jack Burgess" />
