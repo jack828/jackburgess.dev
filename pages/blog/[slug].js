@@ -31,6 +31,7 @@ export default function Blog({ blog, navBlogs }) {
                 description={blog.sell}
                 image={blog.coverImage}
                 type="article"
+                date={blog.date}
               />
               <BlogHeader {...blog} />
               <BlogBody {...blog} />
