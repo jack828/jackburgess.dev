@@ -2,9 +2,9 @@
 {
   "published": false,
   "title": "Easy access to TrueNAS jails via mDNS",
-  "sell": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  "coverImage": "https://img.clock.co.uk/1280x720",
-  "coverImageSquare": "https://img.clock.co.uk/720x720",
+  "sell": "Learn to setup easy access to jail services via their hostname, using mDNS.",
+  "coverImage": "/truenas-jails-access-via-mdns-cover.jpeg",
+  "coverImageSquare": "/truenas-jails-access-via-mdns-cover-square.jpeg",
   "tags": ["TrueNAS", "mDNS", "jails"],
   "date": "2020-06-27T18:00:00.828Z"
 }
