@@ -24,7 +24,7 @@ const Meta = ({ title, description, image, type, date }) => {
       <meta property="og:image" content={imageUrl} />
       <meta property="og:image:width" content={image ? '1920' : '1536'} />
       <meta property="og:image:height" content={image ? '1080' : '1536'} />
-      {date && <meta property="og:article:published_time" content={date} />}
+      {date && <meta property="og:published_time" content={date} />}
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary" />
