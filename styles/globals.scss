@@ -1,8 +1,8 @@
 @import "./_variables.scss";
 
-@import "bulma/bulma.sass";
-// @import "bulma/sass/utilities/_all.sass";
-// @import "bulma/sass/grid/columns.sass";
+@import "../node_modules/bulma/bulma.sass";
+@import "../node_modules/bulma/sass/utilities/_all.sass";
+@import "../node_modules/bulma/sass/elements/content.sass";
 
 @import "../node_modules/highlight.js/styles/monokai.css";
 
@@ -19,7 +19,7 @@ html {
 // Blog Body Content Styles
 // That I couldn't figure out the selector for :(
 
-.content {
+.content-override {
 
   // FOOTNOTES
   div.footnotes {

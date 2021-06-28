@@ -1,10 +1,7 @@
-import classnames from 'classnames'
-import styles from './blog-body.module.scss'
-
 const BlogBody = ({ content }) => {
   return (
     <div
-      className={classnames(styles.markdown, 'content')}
+      className="content content-override"
       dangerouslySetInnerHTML={{ __html: content }}
     />
   )
