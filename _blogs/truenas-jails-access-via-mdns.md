@@ -81,7 +81,7 @@ And put in
 
 Now avahi knows to respond to mDNS queries with our jail’s hostname and what type of service it is running.
 
-To redirect traffic to the correct port, lets setup socat. Like avahi, it already has some instances defined, so open its config file:
+To redirect traffic to the correct port, let’s setup socat. Like avahi, it already has some instances defined, so open its config file:
 
 ~~~
 root@jail:/ # nano /usr/local/etc/socat-instances.conf
@@ -107,7 +107,7 @@ And give it a test by connecting to http://hostname.local.
 
 ## Debugging Tools
 
-You can usee [mdns-scan](https://github.com/alteholz/mdns-scan) to scan and poll your local network for devices.
+You can use [mdns-scan](https://github.com/alteholz/mdns-scan) to scan and poll your local network for devices.
 
 Alternatively, see what’s broadcasting in your network using avahi by running `avahi-browse --resolve _http._tcp` on another device.
 
