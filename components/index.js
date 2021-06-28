@@ -1,5 +1,6 @@
 export { default as AllBlogs } from './all-blogs'
 export { default as Footer } from './footer'
+export { default as BlogComments } from './blog-comments'
 export { default as BlogCard } from './blog-card'
 export { default as BlogBody } from './blog-body'
 export { default as BlogFooter } from './blog-footer'

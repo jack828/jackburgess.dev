@@ -38,6 +38,7 @@ const BlogNavigation = ({ blogs: [prevBlog, nextBlog] = [] }) => {
           </div>
         )}
       </div>
+      <hr />
     </section>
   )
 }

@@ -8,7 +8,8 @@ import {
   BlogHeader,
   BlogBody,
   BlogFooter,
-  BlogNavigation
+  BlogNavigation,
+  BlogComments
 } from '../../components'
 import { getBlogBySlug, getAllBlogs } from '../../lib/api'
 import markdownToHtml from '../../lib/markdownToHtml'
@@ -37,6 +38,7 @@ export default function Blog({ blog, navBlogs }) {
               <BlogBody {...blog} />
               <BlogFooter {...blog} />
               <BlogNavigation blogs={navBlogs} />
+              <BlogComments {...blog} />
             </article>
           </>
         )}
