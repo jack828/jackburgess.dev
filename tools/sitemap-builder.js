@@ -1,13 +1,16 @@
 const { writeFileSync } = require('fs')
 const { join } = require('path')
+const prettier = require('prettier')
 const { getAllBlogs } = require('../lib/api')
 
-const pages = ['/index', '/blog']
-const blogs = getAllBlogs({ fields: ['slug'] }).map(({ slug }) => `/blog/${slug}`)
+;(async () => {
+  const prettierConfig = await prettier.resolveConfig('./.prettierrc')
+  const pages = ['/index', '/blog']
+  const blogs = getAllBlogs({ fields: ['slug'] }).map(({ slug }) => `/${slug}`)
 
-const allPages = [...pages, ...blogs]
+  const allPages = [...pages, ...blogs]
 
-const sitemap = `
+  const sitemap = `
     <?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
         ${allPages
@@ -24,4 +27,10 @@ const sitemap = `
           .join('')}
     </urlset>
 `
-writeFileSync(join(__dirname, '../public/sitemap.xml'), sitemap, 'utf8')
+  const formatted = prettier.format(sitemap, {
+    ...prettierConfig,
+    parser: 'html'
+  })
+
+  writeFileSync(join(__dirname, '../public/sitemap.xml'), formatted, 'utf8')
+})()
