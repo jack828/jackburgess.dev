@@ -6,7 +6,7 @@ const Index = () => (
   <>
     <Meta description="Hey - I am a software engineer from the UK. I love making websites and apps. Maybe you’ll use one of them one day." />
     <Navbar />
-    <section className="hero is-primary is-fullheight">
+    <section className="hero is-primary is-fullheight-with-navbar">
       <div className="hero-body">
         <div className="container">
           <div className="columns is-align-items-center">
