@@ -7,11 +7,12 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <link rel="icon" href="/favicon.ico" />
-          <meta charSet="utf-8" />
           <link
             rel="preload"
             as="font"
-            href="https://fonts.googleapis.com/css?family=Oxygen:400,700&display=swap"
+            type="font/woff2"
+            href="/fonts/oxygen-v10-latin-regular.woff2"
+            crossOrigin
           />
         </Head>
         <body>
