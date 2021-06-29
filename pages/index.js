@@ -149,30 +149,35 @@ const Index = () => (
         </div>
       </section>
 
-      <div className="columns is-centered has-text-centered">
-        <div className="column is-narrow">
-          <h2 className="is-size-4">GitHub Stats</h2>
-          <p className="is-size-6">
-            Because we all know this is the only thing that is important.
-          </p>
+      <section className="section">
+        <div className="columns is-centered has-text-centered">
+          <div className="column">
+            <h2 className="is-size-1-desktop is-size-2-tablet is-size-3-mobile">
+              GitHub Stats
+            </h2>
+            <h3 className="subtitle is-5">
+              Because we all know this is the only thing that is important.
+            </h3>
+          </div>
         </div>
-      </div>
-      <div className="columns is-centered has-text-centered">
-        <div className="column">
-          <img
-            align="center"
-            src="https://github-readme-stats.vercel.app/api?username=jack828&show_icons=true&locale=en"
-            alt="jack828"
-          />
+
+        <div className="columns">
+          <div className="column">
+            <img
+              align="center"
+              src="https://github-readme-stats.vercel.app/api?username=jack828&show_icons=true&locale=en"
+              alt="jack828"
+            />
+          </div>
+          <div className="column">
+            <img
+              align="center"
+              src="https://github-readme-streak-stats.herokuapp.com/?user=jack828&"
+              alt="jack828"
+            />
+          </div>
         </div>
-        <div className="column">
-          <img
-            align="center"
-            src="https://github-readme-streak-stats.herokuapp.com/?user=jack828&"
-            alt="jack828"
-          />
-        </div>
-      </div>
+      </section>
     </section>
   </>
 )
