@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import classnames from 'classnames'
 import { Navbar, Layout, Container, Meta } from '../components'
 import styles from '../styles/Home.module.scss'
@@ -78,6 +79,21 @@ const Index = () => (
           </div>
         </div>
         <div className="container">
+          <div className="columns">
+            <div className="column">
+              <Link href="/blog" passHref>
+                <a className={classnames(styles.box, 'box is-fullheight')}>
+                  <div className="content">
+                    <h4 className="title is-5">Blog &rarr;</h4>
+                    <p>
+                      I&lsquo;m putting some useful stuff I&lsquo;ve learnt on
+                      my blog to hopefully help someone out.
+                    </p>
+                  </div>
+                </a>
+              </Link>
+            </div>
+          </div>
           <div className="columns">
             <div className="column">
               <a
