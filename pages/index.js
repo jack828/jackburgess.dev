@@ -1,20 +1,59 @@
 import classnames from 'classnames'
-import { Layout, Container, Meta } from '../components'
+import { Navbar, Layout, Container, Meta } from '../components'
 import styles from '../styles/Home.module.scss'
 
 const Index = () => (
-  <Layout>
-    <Container>
-      <Meta description="Hey - I am a software engineer from the UK. I love making websites and apps. Maybe you’ll use one of them one day." />
+  <>
+    <Meta description="Hey - I am a software engineer from the UK. I love making websites and apps. Maybe you’ll use one of them one day." />
+    <Navbar />
+    <section className="hero is-primary is-fullheight">
+      <div className="hero-body">
+        <div className="container">
+          <div className="columns is-align-items-center">
+            <div className="column has-text-centered-mobile">
+              Hello! I am
+              <h1 className="title is-1">Jack Burgess</h1>
+              <h2 className="subtitle is-3">Software Engineer</h2>
+            </div>
+            <div className="column">
+              <div className="columns is-centered">
+                <div
+                  className={classnames(
+                    styles.profileContainer,
+                    'column is-narrow'
+                  )}
+                >
+                  <figure className="image">
+                    <img
+                      className={classnames(styles.profile, 'is-rounded')}
+                      src="/profile-picture.jpeg"
+                      alt="Profile Picture"
+                      width={256}
+                      height={256}
+                    />
+                  </figure>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <Container>
       <div className="columns is-centered has-text-centered">
-        <img
-          className={classnames(styles.profile, 'is-align-self-center	')}
-          src="/profile-picture.jpeg"
-          alt="Profile Picture"
-          width={256}
-          height={256}
-        />
+        <figure className="image is-128x128">
+          <img
+            className={classnames(
+              styles.profile,
+              'is-rounded is-align-self-center'
+            )}
+            src="/profile-picture.jpeg"
+            alt="Profile Picture"
+            width={256}
+            height={256}
+          />
+        </figure>
       </div>
 
       <div className="columns is-centered has-text-centered">
@@ -104,7 +143,7 @@ const Index = () => (
         </div>
       </div>
     </Container>
-  </Layout>
+  </>
 )
 
 export default Index

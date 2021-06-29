@@ -3,7 +3,7 @@ import { Navbar } from './'
 const Layout = ({ children }) => {
   return (
     <>
-      <Navbar />
+      <Navbar shadow />
       <div className="section">{children}</div>
     </>
   )

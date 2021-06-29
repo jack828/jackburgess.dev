@@ -2,15 +2,17 @@
 @import "./node_modules/bulma/sass/utilities/_all.sass";
 
 .profile {
-  width: 128px;
-  border-radius: 128px;
-
-  @media (min-width: $tablet) {
-    width: 192px;
-  }
+  width: 192px !important;
 
   @media (min-width: $desktop) {
-    width: 256px;
+    width: 256px !important;
+  }
+}
+
+.profileContainer {
+  @media (max-width: $tablet) {
+    display: flex;
+    justify-content: center;
   }
 }
 

@@ -1,9 +1,9 @@
 import { useState } from 'react'
+import classnames from 'classnames'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import classnames from 'classnames'
 
-const Navbar = () => {
+const Navbar = ({ shadow }) => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const toggleOpen = () => setOpen((prevState) => !prevState)
@@ -12,7 +12,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className="navbar has-shadow is-primary"
+      className={classnames('navbar is-primary', { 'has-shadow': shadow })}
       role="navigation"
       aria-label="main navigation"
     >
