@@ -40,83 +40,114 @@ const Index = () => (
       </div>
     </section>
 
-    <Container>
-      <div className="columns is-centered has-text-centered">
-        <figure className="image is-128x128">
-          <img
-            className={classnames(
-              styles.profile,
-              'is-rounded is-align-self-center'
-            )}
-            src="/profile-picture.jpeg"
-            alt="Profile Picture"
-            width={256}
-            height={256}
-          />
-        </figure>
-      </div>
-
+    <section className="section">
       <div className="columns is-centered has-text-centered">
         <div className="column">
-          <h1 className="is-size-1-desktop is-size-2-tablet is-size-3-mobile">
-            Jack Burgess
-          </h1>
+          <h2 className="is-size-1-desktop is-size-2-tablet is-size-3-mobile">
+            About Me
+          </h2>
         </div>
       </div>
       <div className="columns is-centered has-text-centered">
         <div className="column">
-          <p className="is-size-4-desktop is-size-5-tablet is-size-6-mobile">
-            I like to write lots and lots of
-            <code>code.</code>
+          <p className="is-size-5">
+            UK-based Software Engineer currently residing in the beautiful town
+            of Ayr, Scotland. I have a love for programming which I have been
+            doing full time at{' '}
+            <a
+              href="https://clock.co.uk"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+            >
+              Clock Limited
+            </a>{' '}
+            for the last 5 years.
+            <br />
+            You can see all my educational and professional experience on
+            LinkedIn.
           </p>
         </div>
       </div>
 
-      <div className="columns">
-        <a
-          href="https://github.com/jack828"
-          target="_blank"
-          rel="noopener noreferrer nofollow"
-          className={classnames(styles.card, 'column')}
-        >
-          <h2>GitHub &rarr;</h2>
-          <p>Find all my public work on GitHub.</p>
-        </a>
+      <section className="section">
+        <div className="columns has-text-centered">
+          <div className="column">
+            <h2 className="is-size-1-desktop is-size-2-tablet is-size-3-mobile">
+              Highlights
+            </h2>
+          </div>
+        </div>
+        <div className="container">
+          <div className="columns">
+            <div className="column">
+              <a
+                href="https://github.com/jack828"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className={classnames(styles.box, 'box is-fullheight')}
+              >
+                <div className="content">
+                  <h4 className="title is-5">GitHub &rarr;</h4>
+                  <p>
+                    Find all my public work on GitHub. I like to fix typos in
+                    open-source software.
+                  </p>
+                </div>
+              </a>
+            </div>
+            <div className="column">
+              <a
+                href="https://clock.co.uk"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className={classnames(styles.box, 'box is-fullheight')}
+              >
+                <div className="content">
+                  <h4 className="title is-5">Clock &rarr;</h4>
+                  <p>
+                    I work as a Mid-Weight Software Engineer for Clock Limited.
+                    <br />
+                    Check them out!
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
 
-        <a
-          href="https://clock.co.uk"
-          target="_blank"
-          rel="noopener noreferrer nofollow"
-          className={classnames(styles.card, 'column')}
-        >
-          <h2>Clock &rarr;</h2>
-          <p>I work as a Mid-Weight Software Engineer for Clock Limited.</p>
-          <p>Check them out!</p>
-        </a>
-      </div>
-
-      <div className="columns">
-        <a
-          href="https://whitethorne.co.uk"
-          target="_blank"
-          rel="noopener noreferrer nofollow"
-          className={classnames(styles.card, 'column')}
-        >
-          <h2>Whitethorne &rarr;</h2>
-          <p>I&lsquo;m also CTO for my own company.</p>
-          <p>We make apps that (hopefully) disrupt industries.</p>
-        </a>
-
-        <a
-          href="https://www.linkedin.com/in/jack-burgess828/"
-          target="_blank"
-          rel="noopener noreferrer nofollow"
-          className={classnames(styles.card, 'column')}
-        >
-          <h2>LinkedIn &rarr;</h2>
-          <p>See how professional I am.</p>
-        </a>
-      </div>
+          <div className="columns">
+            <div className="column">
+              <a
+                href="https://whitethorne.co.uk"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className={classnames(styles.box, 'box is-fullheight')}
+              >
+                <div className="content">
+                  <h4 className="title is-5">Whitethorne &rarr;</h4>
+                  <p>
+                    I&lsquo;m also CTO of my own company.
+                    <br />
+                    We make apps that (hopefully) disrupt industries.
+                  </p>
+                </div>
+              </a>
+            </div>
+            <div className="column">
+              <a
+                href="https://www.linkedin.com/in/jack-burgess828/"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className={classnames(styles.box, 'box is-fullheight')}
+              >
+                <div className="content">
+                  <h4 className="title is-5">LinkedIn &rarr;</h4>
+                  <p>See how professional I am.</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <div className="columns is-centered has-text-centered">
         <div className="column is-narrow">
@@ -142,7 +173,7 @@ const Index = () => (
           />
         </div>
       </div>
-    </Container>
+    </section>
   </>
 )
 
