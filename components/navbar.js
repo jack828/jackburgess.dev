@@ -9,7 +9,7 @@ const Navbar = () => {
   const isOnBlog = router.asPath.startsWith('/blog')
 
   return (
-    <Headroom wrapperStyle={{ width: '100%' }}>
+    <Headroom>
       <nav
         className="navbar is-primary"
         role="navigation"

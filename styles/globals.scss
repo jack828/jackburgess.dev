@@ -14,6 +14,14 @@ html {
   flex-direction: column;
 }
 
+.headroom-wrapper {
+  z-index: 1000;
+
+  .headroom {
+    width: 100%;
+  }
+}
+
 // Blog Body Content Styles
 // That I couldn't figure out the selector for :(
 .content-override {
