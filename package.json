@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "clean": "rimraf .next out",
     "build": "run-s build:site build:sitemap build:export",
     "build:site": "next build",
     "build:sitemap": "node tools/sitemap-builder",
