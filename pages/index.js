@@ -50,7 +50,7 @@ const Index = () => (
         </div>
       </div>
       <div className="columns is-centered has-text-centered">
-        <div className="column">
+        <div className="column is-four-fifths">
           <p className="is-size-5">
             UK-based Software Engineer currently residing in the beautiful town
             of Ayr, Scotland. I have a love for programming which I have been
