@@ -19,7 +19,7 @@ const Image2Cpp = () => {
         <BlogTitle>Image2Cpp</BlogTitle>
         <p>
           image2cpp is a simple (yet feature rich) tool to change image into
-          byte arrays (and vice versa) for use with Arduino, ESP32, SMT32, etc
+          byte arrays (and modify byte arrays) for use with Arduino, ESP32, SMT32, etc
           and colour or monochrome displays.
         </p>
         <p>
@@ -53,6 +53,9 @@ const Image2Cpp = () => {
           </ExternalLink>
           .
         </p>
+
+        <hr />
+
         <div className="columns">
           <div className="column">
             <p className="is-size-3">1. Select Image</p>
