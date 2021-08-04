@@ -10,14 +10,28 @@ import {
 } from '../../components'
 
 const Image2Cpp = () => {
-  const [options, setOptions] = useState({})
+  const [options, setOptions] = useState({
+    backgroundColour: 'white',
+    invertColours: false,
+    threshold: '1',
+    scale: '1',
+    centerHorizontally: false,
+    centerVertically: false,
+    rotate180: false,
+    flipHorizontally: false,
+    flipVertically: false,
+    format: 'plain',
+    firstAsciiChar: '48',
+    xAdvance: '0',
+    identifier: '__bitmap__',
+    drawMode: 'horizontal1bit'
+  })
   const handleChange = ({ target: { type, name, value, checked } }) =>
     setOptions((prevState) => ({
       ...prevState,
       [name]: type === 'checkbox' ? checked : value
     }))
 
-  console.log(options)
   return (
     <Layout>
       <Meta
@@ -122,7 +136,7 @@ const Image2Cpp = () => {
                       name="backgroundColour"
                       value="white"
                       onChange={handleChange}
-                      defaultChecked={options.backgroundColour}
+                      defaultChecked={options.backgroundColour === 'white'}
                     />{' '}
                     White
                   </label>
@@ -132,7 +146,7 @@ const Image2Cpp = () => {
                       name="backgroundColour"
                       value="black"
                       onChange={handleChange}
-                      defaultChecked={options.backgroundColour}
+                      defaultChecked={options.backgroundColour === 'black'}
                     />{' '}
                     Black
                   </label>
@@ -142,7 +156,9 @@ const Image2Cpp = () => {
                       name="backgroundColour"
                       value="transparent"
                       onChange={handleChange}
-                      defaultChecked={options.backgroundColour}
+                      defaultChecked={
+                        options.backgroundColour === 'transparent'
+                      }
                     />{' '}
                     Transparent
                   </label>
@@ -397,7 +413,13 @@ const Image2Cpp = () => {
             <div className="field-body">
               <div className="field">
                 <p className="control is-expanded">
-                  <input className="input" type="text" placeholder="Name" />
+                  <input
+                    className="input"
+                    type="text"
+                    name="firstAsciiChar"
+                    onChange={handleChange}
+                    defaultValue={options.firstAsciiChar}
+                  />
                 </p>
               </div>
             </div>
@@ -410,7 +432,13 @@ const Image2Cpp = () => {
             <div className="field-body">
               <div className="field">
                 <p className="control is-expanded">
-                  <input className="input" type="text" placeholder="Name" />
+                  <input
+                    className="input"
+                    type="text"
+                    name="xAdvance"
+                    onChange={handleChange}
+                    defaultValue={options.xAdvance}
+                  />
                 </p>
               </div>
             </div>
@@ -423,7 +451,13 @@ const Image2Cpp = () => {
             <div className="field-body">
               <div className="field">
                 <p className="control is-expanded">
-                  <input className="input" type="text" placeholder="Name" />
+                  <input
+                    className="input"
+                    type="text"
+                    name="identifier"
+                    onChange={handleChange}
+                    defaultValue={options.identifier}
+                  />
                 </p>
               </div>
             </div>
@@ -437,7 +471,11 @@ const Image2Cpp = () => {
               <div className="field is-narrow">
                 <div className="control">
                   <div className="select is-fullwidth">
-                    <select>
+                    <select
+                      name="drawMode"
+                      onChange={handleChange}
+                      defaultValue={options.drawMode}
+                    >
                       <option value="horizontal1bit">
                         Horizontal - 1 bit per pixel
                       </option>
