@@ -498,6 +498,22 @@ const Image2Cpp = () => {
             </div>
           </div>
         </div>
+
+        <div>
+          <div className="control mb-3">
+            <button className="button is-primary">Generate</button>
+          </div>
+          <div className="field">
+            <div className="control">
+              <textarea
+                className="textarea"
+                placeholder="Code goes here"
+                rows="10"
+                readOnly
+              />
+            </div>
+          </div>
+        </div>
       </Container>
     </Layout>
   )
