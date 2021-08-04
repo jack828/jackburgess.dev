@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Layout,
   Container,
@@ -9,6 +10,14 @@ import {
 } from '../../components'
 
 const Image2Cpp = () => {
+  const [options, setOptions] = useState({})
+  const handleChange = ({ target: { type, name, value, checked } }) =>
+    setOptions((prevState) => ({
+      ...prevState,
+      [name]: type === 'checkbox' ? checked : value
+    }))
+
+  console.log(options)
   return (
     <Layout>
       <Meta
@@ -108,13 +117,34 @@ const Image2Cpp = () => {
               <div className="field is-narrow">
                 <div className="control">
                   <label className="radio">
-                    <input type="radio" name="backgroundColour" /> White
+                    <input
+                      type="radio"
+                      name="backgroundColour"
+                      value="white"
+                      onChange={handleChange}
+                      defaultChecked={options.backgroundColour}
+                    />{' '}
+                    White
                   </label>
                   <label className="radio">
-                    <input type="radio" name="backgroundColour" /> Black
+                    <input
+                      type="radio"
+                      name="backgroundColour"
+                      value="black"
+                      onChange={handleChange}
+                      defaultChecked={options.backgroundColour}
+                    />{' '}
+                    Black
                   </label>
                   <label className="radio">
-                    <input type="radio" name="backgroundColour" /> Transparent
+                    <input
+                      type="radio"
+                      name="backgroundColour"
+                      value="transparent"
+                      onChange={handleChange}
+                      defaultChecked={options.backgroundColour}
+                    />{' '}
+                    Transparent
                   </label>
                 </div>
               </div>
@@ -129,7 +159,12 @@ const Image2Cpp = () => {
               <div className="field is-narrow">
                 <div className="control">
                   <label className="checkbox">
-                    <input type="checkbox" />
+                    <input
+                      type="checkbox"
+                      name="invertColours"
+                      onChange={handleChange}
+                      defaultChecked={options.invertColours}
+                    />
                   </label>
                 </div>
               </div>
@@ -148,7 +183,9 @@ const Image2Cpp = () => {
                     type="number"
                     min="0"
                     max="255"
-                    placeholder=""
+                    name="threshold"
+                    onChange={handleChange}
+                    defaultValue={options.invertColours}
                   />
                 </p>
                 <p className="help">
@@ -168,7 +205,11 @@ const Image2Cpp = () => {
               <div className="field is-narrow">
                 <div className="control">
                   <div className="select is-fullwidth">
-                    <select>
+                    <select
+                      name="scale"
+                      onChange={handleChange}
+                      defaultValue={options.scale}
+                    >
                       <option value="1">original size</option>
                       <option value="2">
                         scale to fit, keeping proportions
@@ -195,10 +236,22 @@ const Image2Cpp = () => {
               <div className="field is-narrow">
                 <div className="control">
                   <label className="checkbox">
-                    <input type="checkbox" /> Horizontally
+                    <input
+                      type="checkbox"
+                      name="centerHorizontally"
+                      onChange={handleChange}
+                      defaultChecked={options.centerHorizontally}
+                    />{' '}
+                    Horizontally
                   </label>
                   <label className="checkbox">
-                    <input type="checkbox" /> Vertically
+                    <input
+                      type="checkbox"
+                      name="centerVertically"
+                      onChange={handleChange}
+                      defaultChecked={options.centerVertically}
+                    />{' '}
+                    Vertically
                   </label>
                 </div>
                 <p className="help">
@@ -216,7 +269,13 @@ const Image2Cpp = () => {
               <div className="field is-narrow">
                 <div className="control">
                   <label className="checkbox">
-                    <input type="checkbox" /> Rotate 180 degrees
+                    <input
+                      type="checkbox"
+                      name="rotate180"
+                      onChange={handleChange}
+                      defaultChecked={options.rotate180}
+                    />{' '}
+                    Rotate 180 degrees
                   </label>
                 </div>
               </div>
@@ -231,10 +290,22 @@ const Image2Cpp = () => {
               <div className="field is-narrow">
                 <div className="control">
                   <label className="checkbox">
-                    <input type="checkbox" /> Horizontally
+                    <input
+                      type="checkbox"
+                      name="flipHorizontally"
+                      onChange={handleChange}
+                      defaultChecked={options.flipHorizontally}
+                    />{' '}
+                    Horizontally
                   </label>
                   <label className="checkbox">
-                    <input type="checkbox" /> Vertically
+                    <input
+                      type="checkbox"
+                      name="flipVertically"
+                      onChange={handleChange}
+                      defaultChecked={options.flipVertically}
+                    />{' '}
+                    Vertically
                   </label>
                 </div>
                 <p className="help">
@@ -256,13 +327,17 @@ const Image2Cpp = () => {
         <div>
           <div className="field is-horizontal">
             <div className="field-label is-normal">
-              <label className="label">Scaling</label>
+              <label className="label">Format</label>
             </div>
             <div className="field-body">
               <div className="field is-narrow">
                 <div className="control">
-                  <div className="select is-fullwidth">
-                    <select>
+                  <div className="select">
+                    <select
+                      name="format"
+                      onChange={handleChange}
+                      defaultValue={options.format}
+                    >
                       <option value="plain">plain bytes</option>
                       <option value="arduino">Arduino code</option>
                       <option value="arduino_single">
@@ -276,40 +351,41 @@ const Image2Cpp = () => {
                 </div>
                 <p className="help"></p>
 
-                <p className="help" data-caption="arduino">
-                  Adds some extra Arduino code around the output for easy
-                  copy-paste into
-                  <a
-                    href="https://github.com/javl/image2cpp/blob/master/oled_example/oled_example.ino"
-                    target="_blank"
-                  >
-                    this example
-                  </a>
-                  . If multiple images are loaded, generates a byte array for
-                  each and appends a counter to the identifier.
-                </p>
-                <p className="help" data-caption="arduino_single">
-                  Adds some extra Arduino code around the output for easy
-                  copy-paste. If multiple images are loaded, generates a single
-                  byte array.
-                </p>
-                <p className="help" data-caption="adafruit_gfx">
-                  Creates a <code>GFXbitmapFont</code> formatted ouput. Used by
-                  a modified version of the Adafruit GFX library. GitHub project
-                  and example
-                  <a
-                    href="https://github.com/wiredolphin/Adafruit-GFX-Library/tree/bitmap-font"
-                    target="_blank"
-                  >
-                    here
-                  </a>
-                  .
-                  <br />
-                  <i>First ASCII character</i> value is used only if a glyph
-                  identifier of length equal to 1 is not provided for each
-                  image. The value itself will be incremented by 1 for each
-                  glyph.
-                </p>
+                {options.format === 'arduino' && (
+                  <p className="help" data-caption="arduino">
+                    Adds some extra Arduino code around the output for easy
+                    copy-paste into
+                    <ExternalLink href="https://github.com/javl/image2cpp/blob/master/oled_example/oled_example.ino">
+                      this example
+                    </ExternalLink>
+                    . If multiple images are loaded, generates a byte array for
+                    each and appends a counter to the identifier.
+                  </p>
+                )}
+
+                {options.format === 'arduino_single' && (
+                  <p className="help" data-caption="arduino_single">
+                    Adds some extra Arduino code around the output for easy
+                    copy-paste. If multiple images are loaded, generates a
+                    single byte array.
+                  </p>
+                )}
+                {options.format === 'adafruit_gfx' && (
+                  <p className="help" data-caption="adafruit_gfx">
+                    Creates a <code>GFXbitmapFont</code> formatted ouput. Used
+                    by a modified version of the Adafruit GFX library. GitHub
+                    project and example
+                    <ExternalLink href="https://github.com/wiredolphin/Adafruit-GFX-Library/tree/bitmap-font">
+                      here
+                    </ExternalLink>
+                    .
+                    <br />
+                    <i>First ASCII character</i> value is used only if a glyph
+                    identifier of length equal to 1 is not provided for each
+                    image. The value itself will be incremented by 1 for each
+                    glyph.
+                  </p>
+                )}
               </div>
             </div>
           </div>
