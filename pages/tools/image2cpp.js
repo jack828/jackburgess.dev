@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import classnames from 'classnames'
 import {
   Layout,
   Container,
@@ -26,11 +27,53 @@ const Image2Cpp = () => {
     identifier: '__bitmap__',
     drawMode: 'horizontal1bit'
   })
+  const [files, setFiles] = useState([])
+  const [hasFileTypeError, setHasFileTypeError] = useState(false)
+
   const handleChange = ({ target: { type, name, value, checked } }) =>
     setOptions((prevState) => ({
       ...prevState,
       [name]: type === 'checkbox' ? checked : value
     }))
+
+  const handleFilePropertyChange =
+    (index) =>
+    ({ target: { name, value } }) =>
+      setFiles((prevState) => {
+        prevState[index][name] = value
+        return [...prevState]
+      })
+  const handleFileRemove = (index) => () =>
+    setFiles((prevState) => {
+      // TODO bet there's a better (more readable) way of doing this
+      prevState[index] = null
+      return [...prevState.filter(Boolean)]
+    })
+
+  const handleFileUpload = ({ target: { files: inputFiles } }) => {
+    setHasFileTypeError(false)
+
+    console.log({ inputFiles })
+    Array.from(inputFiles).forEach((file) => {
+      console.log({ file })
+      // Only process image files
+      if (!file.type.match('image.*')) {
+        console.log('baaaaaaad')
+        setHasFileTypeError(true)
+        return
+      }
+
+      const reader = new FileReader()
+
+      reader.onload = function (e) {
+        setFiles((prevState) => [
+          ...prevState,
+          { name: file.name, data: e.target.result }
+        ])
+      }
+      reader.readAsDataURL(file)
+    })
+  }
 
   return (
     <Layout>
@@ -95,16 +138,36 @@ const Image2Cpp = () => {
           <div className="column">
             <p className="is-size-3">1. Select Image</p>
 
-            <div className="file is-centered has-name is-boxed">
+            <div
+              className={classnames('file is-centered has-name is-boxed', {
+                'is-danger': hasFileTypeError
+              })}
+            >
               <label className="file-label">
-                <input className="file-input" type="file" name="resume" />
+                <input
+                  className="file-input"
+                  type="file"
+                  name="files"
+                  onChange={handleFileUpload}
+                  multiple
+                />
                 <span className="file-cta">
                   <span className="file-icon">
                     <i className="fas fa-upload"></i>
                   </span>
                   <span className="file-label">Choose a file…</span>
                 </span>
-                <span className="file-name">filename.bmp</span>
+                <span className="file-name">
+                  {files.length === 0 ? (
+                    'No file(s) chosen'
+                  ) : (
+                    <>
+                      {files.length === 1
+                        ? files[0].name
+                        : `${files.length} files`}
+                    </>
+                  )}
+                </span>
               </label>
             </div>
           </div>
@@ -122,18 +185,64 @@ const Image2Cpp = () => {
         <p className="is-size-3">2. Image Settings</p>
 
         <div>
-          <div className="field is-horizontal">
-            <div className="field-label is-normal">
-              <label className="label">Canvas Size(s)</label>
-            </div>
-            <div className="field-body">
-              <div className="field">
-                <p className="control is-expanded">
-                  <input className="input" type="text" placeholder="Name" />
-                </p>
+          {files.map((file, i) => (
+            <div key={`File-${file.name}-${i}`} className="field is-horizontal">
+              <div className="field-label is-normal">
+                {i === 0 && <label className="label">Canvas Size(s)</label>}
+              </div>
+              <div className="field-body is-flex-direction-column">
+                <div className="field is-grouped">
+                  <p className="control">
+                    <p className="help">
+                      {file.name} (file resolution {file.originalWidth} ×{' '}
+                      {file.originalHeight})
+                    </p>
+                  </p>
+                </div>
+                <div className="field is-grouped">
+                  <p className="control">
+                    <input
+                      className="input"
+                      placeholder="width"
+                      name="width"
+                      type="number"
+                      min="0"
+                      onChange={handleFilePropertyChange(i)}
+                    />
+                  </p>
+                  <p className="is-size-3 mr-3">×</p>
+                  <p className="control">
+                    <input
+                      className="input"
+                      placeholder="height"
+                      name="height"
+                      type="number"
+                      min="0"
+                      onChange={handleFilePropertyChange(i)}
+                    />
+                  </p>
+                  <p className="control">
+                    <input
+                      className="input"
+                      placeholder="glyph"
+                      name="glyph"
+                      type="number"
+                      min="0"
+                      onChange={handleFilePropertyChange(i)}
+                    />
+                  </p>
+                  <p className="control">
+                    <button
+                      className="button is-danger"
+                      onClick={handleFileRemove(i)}
+                    >
+                      Remove
+                    </button>
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          ))}
 
           <div className="field is-horizontal">
             <div className="field-label">
