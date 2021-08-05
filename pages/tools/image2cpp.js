@@ -279,7 +279,8 @@ const Image2Cpp = () => {
     options.scale,
     options.drawMode,
     options.flipHorizontally,
-    options.flipVertically
+    options.flipVertically,
+    options.threshold
   ])
 
   console.log({ files })
@@ -670,6 +671,7 @@ const Image2Cpp = () => {
           <p className="is-size-3">3. Preview</p>
           {files.map((file, i) => (
             <canvas
+              className="mr-3"
               key={`Canvas-${file.name}-${i}`}
               ref={(ref) => setFileRef(i, ref)}
               width={file.width}
