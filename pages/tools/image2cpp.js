@@ -628,7 +628,19 @@ const Image2Cpp = () => {
 
         <div>
           <div className="control mb-3">
-            <button className="button is-primary">Generate</button>
+            <button
+              className={classnames(
+                'button',
+                files.length === 0 ? 'is-danger' : 'is-primary'
+              )}
+              disabled={files.length === 0}
+            >
+              Generate
+            </button>
+
+            {files.length === 0 && (
+              <p className="help is-danger">Please select one or more files</p>
+            )}
           </div>
           <div className="field">
             <div className="control">
