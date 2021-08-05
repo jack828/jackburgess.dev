@@ -155,10 +155,14 @@ const Image2Cpp = () => {
             const useRatio = Math.min(horizontalRatio, verticalRatio)
 
             if (options.centerHorizontally) {
-              offsetX = Math.round((canvas.width - originalWidth * useRatio) / 2)
+              offsetX = Math.round(
+                (canvas.width - originalWidth * useRatio) / 2
+              )
             }
             if (options.centerVertically) {
-              offsetY = Math.round((canvas.height - originalHeight * useRatio) / 2)
+              offsetY = Math.round(
+                (canvas.height - originalHeight * useRatio) / 2
+              )
             }
             ctx.drawImage(
               image,
