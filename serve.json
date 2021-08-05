@@ -1,0 +1,14 @@
+{
+  "public": "out",
+  "headers": [
+    {
+      "source": "*",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; img-src 'self' https://github-readme-stats.vercel.app https://github-readme-streak-stats.herokuapp.com; script-src 'self' https://static.cloudflareinsights.com https://jackburgess.disqus.com; style-src 'self' 'unsafe-inline'; font-src 'self'; prefetch-src 'self'; connect-src 'self' https://cloudflareinsights.com; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none';"
+        }
+      ]
+    }
+  ]
+}
