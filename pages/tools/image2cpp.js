@@ -43,6 +43,7 @@ const Image2Cpp = () => {
         prevState[index][name] = value
         return [...prevState]
       })
+
   const handleFileRemove = (index) => () =>
     setFiles((prevState) => {
       // TODO bet there's a better (more readable) way of doing this
@@ -53,28 +54,39 @@ const Image2Cpp = () => {
   const handleFileUpload = ({ target: { files: inputFiles } }) => {
     setHasFileTypeError(false)
 
-    console.log({ inputFiles })
     Array.from(inputFiles).forEach((file) => {
-      console.log({ file })
       // Only process image files
       if (!file.type.match('image.*')) {
-        console.log('baaaaaaad')
         setHasFileTypeError(true)
         return
       }
 
       const reader = new FileReader()
 
-      reader.onload = function (e) {
-        setFiles((prevState) => [
-          ...prevState,
-          { name: file.name, data: e.target.result }
-        ])
+      // Get file data as data:image string
+      reader.onload = ({ target: { result: data } }) => {
+        // Load it as an Image element to get width & height
+        const image = new Image()
+        image.onload = () => {
+          setFiles((prevState) => [
+            ...prevState,
+            {
+              name: file.name,
+              data,
+              originalWidth: image.width,
+              originalHeight: image.height,
+              width: image.width,
+              height: image.height
+            }
+          ])
+        }
+        image.src = data
       }
       reader.readAsDataURL(file)
     })
   }
 
+  console.log({ files })
   return (
     <Layout>
       <Meta
@@ -193,10 +205,8 @@ const Image2Cpp = () => {
               <div className="field-body is-flex-direction-column">
                 <div className="field is-grouped">
                   <p className="control">
-                    <p className="help">
-                      {file.name} (file resolution {file.originalWidth} ×{' '}
-                      {file.originalHeight})
-                    </p>
+                    {file.name} (file resolution {file.originalWidth} ×{' '}
+                    {file.originalHeight})
                   </p>
                 </div>
                 <div className="field is-grouped">
@@ -208,6 +218,7 @@ const Image2Cpp = () => {
                       type="number"
                       min="0"
                       onChange={handleFilePropertyChange(i)}
+                      defaultValue={file.width}
                     />
                   </p>
                   <p className="is-size-3 mr-3">×</p>
@@ -219,6 +230,7 @@ const Image2Cpp = () => {
                       type="number"
                       min="0"
                       onChange={handleFilePropertyChange(i)}
+                      defaultValue={file.height}
                     />
                   </p>
                   <p className="control">
@@ -229,6 +241,7 @@ const Image2Cpp = () => {
                       type="number"
                       min="0"
                       onChange={handleFilePropertyChange(i)}
+                      defaultValue={file.glyph}
                     />
                   </p>
                   <p className="control">
