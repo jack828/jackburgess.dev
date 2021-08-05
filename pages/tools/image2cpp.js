@@ -36,10 +36,10 @@ const Image2Cpp = () => {
     <Layout>
       <Meta
         title="image2cpp"
-        description="Useful (hopefully) libraries I've made or want to showcase for a variety of things - Node.JS, JavaScript, React, React Native, C, and ESP32."
+        description="Convert images into byte arrays for use in Arduino, Raspberry Pico, ESP32, etc."
       />
       <Container>
-        <BlogTitle>Image2Cpp</BlogTitle>
+        <BlogTitle>image2Cpp</BlogTitle>
         <p>
           image2cpp is a simple (yet feature rich) tool to change image into
           byte arrays (and modify byte arrays) for use with Arduino, ESP32,
@@ -73,6 +73,14 @@ const Image2Cpp = () => {
           ,{' '}
           <ExternalLink href="https://github.com/wiredolphin">
             wiredolphin
+          </ExternalLink>
+          .
+        </p>
+        <p>
+          As the original work is GNU GPLv3 licensed, so is this. You can find
+          the source code to this (and the entire site!) on{' '}
+          <ExternalLink href="https://github.com/jack828/jackburgess.dev">
+            the GitHub repository
           </ExternalLink>
           .
         </p>
