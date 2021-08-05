@@ -1,13 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import classnames from 'classnames'
 import {
   Layout,
   Container,
   Meta,
   BlogTitle,
-  ExternalLink,
-  MoreBlogs,
-  AllBlogs
+  ExternalLink
 } from '../../components'
 
 const Image2Cpp = () => {
@@ -15,7 +13,7 @@ const Image2Cpp = () => {
     backgroundColour: 'white',
     invertColours: false,
     threshold: '1',
-    scale: '1',
+    scale: 'original-size',
     centerHorizontally: false,
     centerVertically: false,
     rotate180: false,
@@ -51,6 +49,12 @@ const Image2Cpp = () => {
       return [...prevState.filter(Boolean)]
     })
 
+  const setFileRef = (i, ref) =>
+    setFiles((prevState) => {
+      prevState[i].canvas = ref
+      return prevState
+    })
+
   const handleFileUpload = ({ target: { files: inputFiles } }) => {
     setHasFileTypeError(false)
 
@@ -72,6 +76,8 @@ const Image2Cpp = () => {
             ...prevState,
             {
               name: file.name,
+              canvas: null,
+              image,
               data,
               originalWidth: image.width,
               originalHeight: image.height,
@@ -85,6 +91,196 @@ const Image2Cpp = () => {
       reader.readAsDataURL(file)
     })
   }
+
+  useEffect(() => {
+    // update canvasses
+    console.log('UPDATING CANVAS', files)
+    files
+      .filter(({ canvas }) => canvas)
+      .forEach((file) => {
+        const { canvas, image, originalWidth, originalHeight } = file
+        const ctx = canvas.getContext('2d')
+        console.log({ ctx })
+        // Invert background if needed
+        if (options.backgroundColour == 'transparent') {
+          ctx.fillStyle = 'rgba(0,0,0,0.0)'
+          ctx.globalCompositeOperation = 'copy'
+        } else {
+          if (options.invertColours) {
+            options.backgroundColour == 'white'
+              ? (ctx.fillStyle = 'black')
+              : (ctx.fillStyle = 'white')
+          } else {
+            ctx.fillStyle = options.backgroundColour
+          }
+          ctx.globalCompositeOperation = 'source-over'
+        }
+
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+        ctx.setTransform(1, 0, 0, 1, 0, 0) // start with identity matrix transform (no rotation).
+        if (options.rotate180) {
+          // Matrix transformation
+          ctx.translate(canvas.width / 2.0, canvas.height / 2.0)
+          ctx.rotate(Math.PI)
+          ctx.translate(-canvas.width / 2.0, -canvas.height / 2.0)
+        }
+
+        // Offset used for centering the image when requested
+        let offsetX = 0
+        let offsetY = 0
+
+        switch (options.scale) {
+          case 'original-size':
+            if (options.centerHorizontally) {
+              offsetX = Math.round((canvas.width - originalWidth) / 2)
+            }
+            if (options.centerVertically) {
+              offsetY = Math.round((canvas.height - originalHeight) / 2)
+            }
+            ctx.drawImage(
+              image,
+              0,
+              0,
+              originalWidth,
+              originalHeight,
+              offsetX,
+              offsetY,
+              originalWidth,
+              originalHeight
+            )
+            break
+          case 'scale':
+            const horizontalRatio = canvas.width / originalWidth
+            const verticalRatio = canvas.height / originalHeight
+            const useRatio = Math.min(horizontalRatio, verticalRatio)
+
+            if (options.centerHorizontally) {
+              offsetX = Math.round((canvas.width - originalWidth * useRatio) / 2)
+            }
+            if (options.centerVertically) {
+              offsetY = Math.round((canvas.height - originalHeight * useRatio) / 2)
+            }
+            ctx.drawImage(
+              image,
+              0,
+              0,
+              originalWidth,
+              originalHeight,
+              offsetX,
+              offsetY,
+              originalWidth * useRatio,
+              originalHeight * useRatio
+            )
+            break
+          case 'stretch-fill':
+            ctx.drawImage(
+              image,
+              0,
+              0,
+              originalWidth,
+              originalHeight,
+              offsetX,
+              offsetY,
+              canvas.width,
+              canvas.height
+            )
+            break
+          case 'stretch-horizontally':
+            offsetX = 0
+            if (options.centerVertically) {
+              Math.round((offsetY = (canvas.height - originalHeight) / 2))
+            }
+            ctx.drawImage(
+              image,
+              0,
+              0,
+              originalWidth,
+              originalHeight,
+              offsetX,
+              offsetY,
+              canvas.width,
+              originalHeight
+            )
+            break
+          case 'stretch-vertically':
+            if (options.centerHorizontally) {
+              offsetX = Math.round((canvas.width - originalWidth) / 2)
+            }
+            offsetY = 0
+            ctx.drawImage(
+              image,
+              0,
+              0,
+              originalWidth,
+              originalHeight,
+              offsetX,
+              offsetY,
+              originalWidth,
+              canvas.height
+            )
+            break
+        }
+
+        // Make sure the image is black and white
+        if (
+          options.drawMode == 'horizontal1bit' ||
+          options.drawMode == 'vertical1bit'
+        ) {
+          // Make black & white
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          const data = imageData.data
+          for (let i = 0; i < data.length; i += 4) {
+            let avg = (data[i] + data[i + 1] + data[i + 2]) / 3
+            avg = avg > options.threshold ? 255 : 0
+            data[i] = avg // red
+            data[i + 1] = avg // green
+            data[i + 2] = avg // blue
+          }
+          ctx.putImageData(imageData, 0, 0)
+
+          if (options.invertColours) {
+            const imageData = ctx.getImageData(
+              0,
+              0,
+              canvas.width,
+              canvas.height
+            )
+            const data = imageData.data
+            for (let i = 0; i < data.length; i += 4) {
+              data[i] = 255 - data[i] // red
+              data[i + 1] = 255 - data[i + 1] // green
+              data[i + 2] = 255 - data[i + 2] // blue
+            }
+            ctx.putImageData(imageData, 0, 0)
+          }
+        }
+
+        // Flip image if needed
+        if (options.flipHorizontally) {
+          ctx.save()
+          ctx.scale(-1, 1)
+          ctx.drawImage(canvas, -canvas.width, 0)
+          ctx.restore()
+        }
+        if (options.flipVertically) {
+          ctx.save()
+          ctx.scale(1, -1)
+          ctx.drawImage(canvas, 0, -canvas.height)
+          ctx.restore()
+        }
+      })
+  }, [
+    files,
+    options.backgroundColour,
+    options.invertColours,
+    options.rotate180,
+    options.centerHorizontally,
+    options.centerVertically,
+    options.scale,
+    options.drawMode,
+    options.flipHorizontally,
+    options.flipVertically
+  ])
 
   console.log({ files })
   return (
@@ -360,16 +556,18 @@ const Image2Cpp = () => {
                       onChange={handleChange}
                       defaultValue={options.scale}
                     >
-                      <option value="1">original size</option>
-                      <option value="2">
-                        scale to fit, keeping proportions
+                      <option value="original-size">Original size</option>
+                      <option value="scale">
+                        Scale to fit, keeping proportions
                       </option>
-                      <option value="3">stretch to fill canvas</option>
-                      <option value="4">
-                        stretch to fill canvas horizontally
+                      <option value="stretch-fill">
+                        Stretch to fill canvas
                       </option>
-                      <option value="5">
-                        stretch to fill canvas vertically
+                      <option value="stretch-horizontally">
+                        Stretch to fill canvas horizontally
+                      </option>
+                      <option value="stretch-vertically">
+                        Stretch to fill canvas vertically
                       </option>
                     </select>
                   </div>
@@ -468,7 +666,17 @@ const Image2Cpp = () => {
 
         <hr />
 
-        <p className="is-size-3">3. Preview</p>
+        <div>
+          <p className="is-size-3">3. Preview</p>
+          {files.map((file, i) => (
+            <canvas
+              key={`Canvas-${file.name}-${i}`}
+              ref={(ref) => setFileRef(i, ref)}
+              width={file.width}
+              height={file.height}
+            />
+          ))}
+        </div>
 
         <hr />
 
