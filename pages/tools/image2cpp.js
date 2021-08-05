@@ -259,7 +259,7 @@ const Image2Cpp = () => {
             <div className="field-body">
               <div className="field is-narrow">
                 <div className="control">
-                  <label className="checkbox">
+                  <label className="checkbox mr-2">
                     <input
                       type="checkbox"
                       name="centerHorizontally"
@@ -313,7 +313,7 @@ const Image2Cpp = () => {
             <div className="field-body">
               <div className="field is-narrow">
                 <div className="control">
-                  <label className="checkbox">
+                  <label className="checkbox mr-2">
                     <input
                       type="checkbox"
                       name="flipHorizontally"
