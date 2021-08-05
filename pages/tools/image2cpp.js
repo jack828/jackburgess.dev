@@ -362,7 +362,7 @@ const Image2Cpp = () => {
                       onChange={handleChange}
                       defaultValue={options.format}
                     >
-                      <option value="plain">plain bytes</option>
+                      <option value="plain">Plain bytes</option>
                       <option value="arduino">Arduino code</option>
                       <option value="arduino_single">
                         Arduino code, single bitmap
@@ -414,62 +414,68 @@ const Image2Cpp = () => {
             </div>
           </div>
 
-          <div className="field is-horizontal">
-            <div className="field-label">
-              <label className="label">First ASCII character (dec)</label>
-            </div>
-            <div className="field-body">
-              <div className="field">
-                <p className="control is-expanded">
-                  <input
-                    className="input"
-                    type="text"
-                    name="firstAsciiChar"
-                    onChange={handleChange}
-                    defaultValue={options.firstAsciiChar}
-                  />
-                </p>
+          {options.format === 'adafruit_gfx' && (
+            <>
+              <div className="field is-horizontal">
+                <div className="field-label">
+                  <label className="label">First ASCII character (dec)</label>
+                </div>
+                <div className="field-body">
+                  <div className="field">
+                    <p className="control is-expanded">
+                      <input
+                        className="input"
+                        type="text"
+                        name="firstAsciiChar"
+                        onChange={handleChange}
+                        defaultValue={options.firstAsciiChar}
+                      />
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div className="field is-horizontal">
-            <div className="field-label">
-              <label className="label">X advance</label>
-            </div>
-            <div className="field-body">
-              <div className="field">
-                <p className="control is-expanded">
-                  <input
-                    className="input"
-                    type="text"
-                    name="xAdvance"
-                    onChange={handleChange}
-                    defaultValue={options.xAdvance}
-                  />
-                </p>
+              <div className="field is-horizontal">
+                <div className="field-label">
+                  <label className="label">X Advance</label>
+                </div>
+                <div className="field-body">
+                  <div className="field">
+                    <p className="control is-expanded">
+                      <input
+                        className="input"
+                        type="text"
+                        name="xAdvance"
+                        onChange={handleChange}
+                        defaultValue={options.xAdvance}
+                      />
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            </>
+          )}
 
-          <div className="field is-horizontal">
-            <div className="field-label">
-              <label className="label">Identifier/prefix</label>
-            </div>
-            <div className="field-body">
-              <div className="field">
-                <p className="control is-expanded">
-                  <input
-                    className="input"
-                    type="text"
-                    name="identifier"
-                    onChange={handleChange}
-                    defaultValue={options.identifier}
-                  />
-                </p>
+          {options.format !== 'plain' && (
+            <div className="field is-horizontal">
+              <div className="field-label">
+                <label className="label">Identifier/prefix</label>
+              </div>
+              <div className="field-body">
+                <div className="field">
+                  <p className="control is-expanded">
+                    <input
+                      className="input"
+                      type="text"
+                      name="identifier"
+                      onChange={handleChange}
+                      defaultValue={options.identifier}
+                    />
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           <div className="field is-horizontal">
             <div className="field-label is-normal">
