@@ -85,6 +85,10 @@ const Image2Cpp = () => {
           .
         </p>
 
+        <p className="is-size-4 has-text-danger is-hidden-desktop">
+          This tool has not been designed for mobile!
+        </p>
+
         <hr />
 
         <div className="columns">
