@@ -7,6 +7,8 @@ import {
   BlogTitle,
   ExternalLink
 } from '../../components'
+import converters from '../../lib/image2cpp/converters'
+import formatters from '../../lib/image2cpp/formatters'
 
 const Image2Cpp = () => {
   const [options, setOptions] = useState({
@@ -27,6 +29,7 @@ const Image2Cpp = () => {
   })
   const [files, setFiles] = useState([])
   const [hasFileTypeError, setHasFileTypeError] = useState(false)
+  const [output, setOutput] = useState('')
 
   const handleChange = ({ target: { type, name, value, checked } }) =>
     setOptions((prevState) => ({
@@ -76,6 +79,7 @@ const Image2Cpp = () => {
             ...prevState,
             {
               name: file.name,
+              glyph: file.name.slice(0, file.name.lastIndexOf('.')),
               canvas: null,
               image,
               data,
@@ -287,6 +291,29 @@ const Image2Cpp = () => {
     options.threshold
   ])
 
+  const getImageData = (file) => {
+    // extract raw image data
+    var canvas = file.canvas
+    var ctx = canvas.getContext('2d')
+
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+    var data = imageData.data
+    return data
+  }
+  const handleGenerateOutput = (e) => {
+    e.preventDefault()
+    setOutput('')
+    const converter = converters[options.drawMode]
+    const imagesData = files.map(getImageData)
+    const convertedFiles = files.map((file, i) => ({
+      convertedData: converter(imagesData[i], file.canvas.width, file.canvas.height, options),
+      ...file
+    }))
+    console.log({ converter, imagesData, convertedFiles })
+    const formatter = formatters[options.format]
+    setOutput(formatter(convertedFiles, options, converter.dataType))
+  }
+
   console.log({ files })
   return (
     <Layout>
@@ -439,8 +466,7 @@ const Image2Cpp = () => {
                       className="input"
                       placeholder="glyph"
                       name="glyph"
-                      type="number"
-                      min="0"
+                      type="text"
                       onChange={handleFilePropertyChange(i)}
                       defaultValue={file.glyph}
                     />
@@ -686,7 +712,7 @@ const Image2Cpp = () => {
 
         <hr />
 
-        <p className="is-size-3">3. Output</p>
+        <p className="is-size-3">4. Output</p>
 
         <div>
           <div className="field is-horizontal">
@@ -704,10 +730,10 @@ const Image2Cpp = () => {
                     >
                       <option value="plain">Plain bytes</option>
                       <option value="arduino">Arduino code</option>
-                      <option value="arduino_single">
+                      <option value="arduino-single">
                         Arduino code, single bitmap
                       </option>
-                      <option value="adafruit_gfx">
+                      <option value="adafruit-gfx">
                         Adafruit GFXbitmapFont
                       </option>
                     </select>
@@ -754,7 +780,7 @@ const Image2Cpp = () => {
             </div>
           </div>
 
-          {options.format === 'adafruit_gfx' && (
+          {options.format === 'adafruit-gfx' && (
             <>
               <div className="field is-horizontal">
                 <div className="field-label">
@@ -861,6 +887,7 @@ const Image2Cpp = () => {
                 files.length === 0 ? 'is-danger' : 'is-primary'
               )}
               disabled={files.length === 0}
+              onClick={handleGenerateOutput}
             >
               Generate
             </button>
@@ -872,10 +899,12 @@ const Image2Cpp = () => {
           <div className="field">
             <div className="control">
               <textarea
-                className="textarea"
+                className="textarea is-family-monospace"
                 placeholder="Code goes here"
                 rows="10"
                 readOnly
+                spellCheck={false}
+                defaultValue={output}
               />
             </div>
           </div>
