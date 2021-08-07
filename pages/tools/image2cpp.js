@@ -98,13 +98,11 @@ const Image2Cpp = () => {
 
   useEffect(() => {
     // update canvasses
-    console.log('UPDATING CANVAS', files)
     files
       .filter(({ canvas }) => canvas)
       .forEach((file) => {
         const { canvas, image, originalWidth, originalHeight } = file
         const ctx = canvas.getContext('2d')
-        console.log({ ctx })
         // Invert background if needed
         if (options.backgroundColour == 'transparent') {
           ctx.fillStyle = 'rgba(0,0,0,0.0)'
@@ -309,12 +307,10 @@ const Image2Cpp = () => {
       convertedData: converter(imagesData[i], file.canvas.width, file.canvas.height, options),
       ...file
     }))
-    console.log({ converter, imagesData, convertedFiles })
     const formatter = formatters[options.format]
     setOutput(formatter(convertedFiles, options, converter.dataType))
   }
 
-  console.log({ files })
   return (
     <Layout>
       <Meta
