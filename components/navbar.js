@@ -7,6 +7,7 @@ const Navbar = () => {
   const router = useRouter()
   const isOnHome = router.asPath === '/'
   const isOnBlog = router.asPath.startsWith('/blog')
+  const isOnTools = router.asPath.startsWith('/tools')
 
   return (
     <Headroom>
@@ -35,6 +36,15 @@ const Navbar = () => {
                 className={classnames('navbar-item', { 'is-active': isOnBlog })}
               >
                 Blog
+              </a>
+            </Link>
+            <Link href="/tools" passHref>
+              <a
+                className={classnames('navbar-item', {
+                  'is-active': isOnTools
+                })}
+              >
+                Tools
               </a>
             </Link>
           </div>
