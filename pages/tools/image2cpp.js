@@ -70,6 +70,10 @@ const Image2Cpp = () => {
       return
     }
     setFiles((prevState) => {
+      if (!prevState[i].canvas) {
+        // initial render
+        renderFilePreview({ ...prevState[i], canvas: ref }, options)
+      }
       prevState[i].canvas = ref
       return prevState
     })
