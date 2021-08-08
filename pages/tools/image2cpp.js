@@ -14,7 +14,7 @@ const Image2Cpp = () => {
   const [options, setOptions] = useState({
     backgroundColour: 'white',
     invertColours: false,
-    threshold: '1',
+    threshold: 128,
     scale: 'original-size',
     centerHorizontally: false,
     centerVertically: false,
@@ -253,7 +253,7 @@ const Image2Cpp = () => {
           const data = imageData.data
           for (let i = 0; i < data.length; i += 4) {
             let avg = (data[i] + data[i + 1] + data[i + 2]) / 3
-            avg = avg > options.threshold ? 255 : 0
+            avg = avg > Number(options.threshold) ? 255 : 0
             data[i] = avg // red
             data[i + 1] = avg // green
             data[i + 2] = avg // blue
@@ -321,7 +321,12 @@ const Image2Cpp = () => {
     const converter = converters[options.drawMode]
     const imagesData = files.map(getImageData)
     const convertedFiles = files.map((file, i) => ({
-      convertedData: converter(imagesData[i], file.canvas.width, file.canvas.height, options),
+      convertedData: converter(
+        imagesData[i],
+        file.canvas.width,
+        file.canvas.height,
+        options
+      ),
       ...file
     }))
     const formatter = formatters[options.format]
@@ -575,7 +580,7 @@ const Image2Cpp = () => {
                     max="255"
                     name="threshold"
                     onChange={handleChange}
-                    defaultValue={options.invertColours}
+                    defaultValue={options.threshold}
                   />
                 </p>
                 <p className="help">
