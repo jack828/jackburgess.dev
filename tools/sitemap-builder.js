@@ -5,7 +5,7 @@ const { getAllBlogs } = require('../lib/api')
 
 ;(async () => {
   const prettierConfig = await prettier.resolveConfig('./.prettierrc')
-  const pages = ['/index', '/blog']
+  const pages = ['/index', '/blog', '/tools', '/tools/image2cpp']
   const blogs = getAllBlogs({ fields: ['slug'] }).map(
     ({ slug }) => `/blog/${slug}`
   )
