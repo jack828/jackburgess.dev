@@ -569,7 +569,6 @@ const Image2Cpp = () => {
                     </select>
                   </div>
                 </div>
-                <p className="help"></p>
 
                 {options.format === 'arduino' && (
                   <p className="help" data-caption="arduino">
@@ -645,6 +644,12 @@ const Image2Cpp = () => {
                         onChange={handleChange}
                         defaultValue={options.xAdvance}
                       />
+                    </p>
+                    <p className="help">
+                      Distance to advance cursor (x axis) see{' '}
+                      <ExternalLink href="https://github.com/adafruit/Adafruit-GFX-Library">
+                        The Adafruit-GFX-Library for more information
+                      </ExternalLink>
                     </p>
                   </div>
                 </div>
