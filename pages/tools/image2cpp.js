@@ -30,27 +30,40 @@ const Image2Cpp = () => {
   const [files, setFiles] = useState([])
   const [hasFileTypeError, setHasFileTypeError] = useState(false)
   const [output, setOutput] = useState('')
+  const [isDirty, setIsDirty] = useState(false)
 
-  const handleChange = ({ target: { type, name, value, checked } }) =>
+  const handleChange = ({ target: { type, name, value, checked } }) => {
+    if (output) {
+      setIsDirty(true)
+    }
     setOptions((prevState) => ({
       ...prevState,
       [name]: type === 'checkbox' ? checked : value
     }))
+  }
 
   const handleFilePropertyChange =
     (index) =>
-    ({ target: { name, value } }) =>
+    ({ target: { name, value } }) => {
+      if (output) {
+        setIsDirty(true)
+      }
       setFiles((prevState) => {
         prevState[index][name] = value
         return [...prevState]
       })
+    }
 
-  const handleFileRemove = (index) => () =>
+  const handleFileRemove = (index) => () => {
+    if (output) {
+      setIsDirty(true)
+    }
     setFiles((prevState) => {
       // TODO bet there's a better (more readable) way of doing this
       prevState[index] = null
       return [...prevState.filter(Boolean)]
     })
+  }
 
   const setFileRef = (i, ref) =>
     setFiles((prevState) => {
@@ -60,6 +73,9 @@ const Image2Cpp = () => {
 
   const handleFileUpload = ({ target: { files: inputFiles } }) => {
     setHasFileTypeError(false)
+    if (output) {
+      setIsDirty(true)
+    }
 
     Array.from(inputFiles).forEach((file) => {
       // Only process image files
@@ -301,6 +317,7 @@ const Image2Cpp = () => {
   const handleGenerateOutput = (e) => {
     e.preventDefault()
     setOutput('')
+    setIsDirty(false)
     const converter = converters[options.drawMode]
     const imagesData = files.map(getImageData)
     const convertedFiles = files.map((file, i) => ({
@@ -890,6 +907,11 @@ const Image2Cpp = () => {
 
             {files.length === 0 && (
               <p className="help is-danger">Please select one or more files</p>
+            )}
+            {isDirty && (
+              <p className="help is-danger">
+                Your input options have changed and the output needs updating!
+              </p>
             )}
           </div>
           <div className="field">
