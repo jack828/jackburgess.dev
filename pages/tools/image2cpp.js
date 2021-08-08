@@ -318,7 +318,7 @@ const Image2Cpp = () => {
         description="Convert images into byte arrays for use in Arduino, Raspberry Pico, ESP32, etc."
       />
       <Container>
-        <BlogTitle>image2Cpp</BlogTitle>
+        <BlogTitle>image2cpp</BlogTitle>
         <p>
           image2cpp is a simple (yet feature rich) tool to change image into
           byte arrays (and modify byte arrays) for use with Arduino, ESP32,
