@@ -59,17 +59,20 @@ const Image2Cpp = () => {
       setIsDirty(true)
     }
     setFiles((prevState) => {
-      // TODO bet there's a better (more readable) way of doing this
-      prevState[index] = null
-      return [...prevState.filter(Boolean)]
+      prevState.splice(index, 1)
+      return [...prevState]
     })
   }
 
-  const setFileRef = (i, ref) =>
+  const setFileRef = (i, ref) => {
+    if (!ref) {
+      return
+    }
     setFiles((prevState) => {
       prevState[i].canvas = ref
       return prevState
     })
+  }
 
   const handleFileUpload = ({ target: { files: inputFiles } }) => {
     setHasFileTypeError(false)
