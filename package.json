@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "test": "mocha --full-trace --trace-deprecation -R dot --timeout 15000 ./lib/**/*.test.js",
-    "run-test": "mocha --full-trace --trace-deprecation -R dot --timeout 15000 $@",
+    "run-test": "mocha --full-trace --trace-deprecation --timeout 15000 $@",
     "dev": "next dev",
     "clean": "rimraf .next out",
     "build": "run-s build:site build:sitemap build:export",
