@@ -305,15 +305,13 @@ const Image2Cpp = () => {
     options.threshold
   ])
 
-  const getImageData = (file) => {
+  const getImageData = ({ canvas }) => {
     // extract raw image data
-    var canvas = file.canvas
-    var ctx = canvas.getContext('2d')
-
-    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-    var data = imageData.data
+    const ctx = canvas.getContext('2d')
+    const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height)
     return data
   }
+
   const handleGenerateOutput = (e) => {
     e.preventDefault()
     setOutput('')
