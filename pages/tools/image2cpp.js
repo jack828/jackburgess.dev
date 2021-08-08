@@ -720,7 +720,7 @@ const Image2Cpp = () => {
           <p className="is-size-3">3. Preview</p>
           {files.map((file, i) => (
             <canvas
-              className="mr-3"
+              className="mr-3 p-1 has-background-primary"
               key={`Canvas-${file.name}-${i}`}
               ref={(ref) => setFileRef(i, ref)}
               width={file.width}
