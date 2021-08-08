@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { Fragment, useState, useEffect, useRef } from 'react'
 import classnames from 'classnames'
 import {
   Layout,
@@ -351,31 +351,23 @@ const Image2Cpp = () => {
           This is based on the work by{' '}
           <ExternalLink href="https://github.com/javl">javl</ExternalLink>. Them
           and the original authors are credited here:{' '}
-          <ExternalLink href="https://github.com/javl">javl</ExternalLink>,{' '}
-          <ExternalLink href="https://github.com/akumpf">akumpf</ExternalLink>,{' '}
-          <ExternalLink href="https://github.com/davidalim">
-            davidalim
-          </ExternalLink>
-          ,{' '}
-          <ExternalLink href="https://github.com/hurricaneJoef">
-            hurricaneJoef
-          </ExternalLink>
-          ,{' '}
-          <ExternalLink href="https://github.com/jochenderwae">
-            jochenderwae
-          </ExternalLink>
-          ,{' '}
-          <ExternalLink href="https://github.com/Sebski123">
-            Sebski123
-          </ExternalLink>
-          ,{' '}
-          <ExternalLink href="https://github.com/whoisnian">
-            whoisnian
-          </ExternalLink>
-          ,{' '}
-          <ExternalLink href="https://github.com/wiredolphin">
-            wiredolphin
-          </ExternalLink>
+          {[
+            'javl',
+            'akumpf',
+            'davidalim',
+            'hurricaneJoef',
+            'jochenderwae',
+            'Sebski123',
+            'whoisnian',
+            'wiredolphin'
+          ].map((username, i) => (
+            <Fragment key={username}>
+              <ExternalLink href={`https://github.com/${username}`}>
+                {username}
+              </ExternalLink>
+              {i !== 7 ? ', ' : ''}
+            </Fragment>
+          ))}
           .
         </p>
         <p>
