@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import classnames from 'classnames'
-import { Navbar, Layout, Container, Meta } from '../components'
+import { Navbar, ExternalLink, Meta } from '../components'
 import styles from '../styles/Home.module.scss'
 
 const Index = () => (
@@ -52,16 +52,11 @@ const Index = () => (
       <div className="columns is-centered has-text-centered">
         <div className="column is-four-fifths">
           <p className="is-size-5">
-            UK-based Software Engineer currently residing in the beautiful town
-            of Ayr, Scotland. I have a love for programming which I have been
-            doing full time at{' '}
-            <a
-              href="https://clock.co.uk"
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-            >
+            UK-based Software Engineer currently working from Scotland. I have a
+            love for programming which I have been doing full time at{' '}
+            <ExternalLink href="https://clock.co.uk">
               Clock Limited
-            </a>{' '}
+            </ExternalLink>{' '}
             for the last 5 years.
             <br />
             You can see all my educational and professional experience on
@@ -96,10 +91,8 @@ const Index = () => (
           </div>
           <div className="columns">
             <div className="column">
-              <a
+              <ExternalLink
                 href="https://github.com/jack828"
-                target="_blank"
-                rel="noopener noreferrer nofollow"
                 className={classnames(styles.box, 'box is-fullheight')}
               >
                 <div className="content">
@@ -109,13 +102,11 @@ const Index = () => (
                     open-source software.
                   </p>
                 </div>
-              </a>
+              </ExternalLink>
             </div>
             <div className="column">
-              <a
+              <ExternalLink
                 href="https://clock.co.uk"
-                target="_blank"
-                rel="noopener noreferrer nofollow"
                 className={classnames(styles.box, 'box is-fullheight')}
               >
                 <div className="content">
@@ -126,16 +117,14 @@ const Index = () => (
                     Check them out!
                   </p>
                 </div>
-              </a>
+              </ExternalLink>
             </div>
           </div>
 
           <div className="columns">
             <div className="column">
-              <a
+              <ExternalLink
                 href="https://whitethorne.co.uk"
-                target="_blank"
-                rel="noopener noreferrer nofollow"
                 className={classnames(styles.box, 'box is-fullheight')}
               >
                 <div className="content">
@@ -146,20 +135,91 @@ const Index = () => (
                     We make apps that (hopefully) disrupt industries.
                   </p>
                 </div>
-              </a>
+              </ExternalLink>
             </div>
             <div className="column">
-              <a
+              <ExternalLink
                 href="https://www.linkedin.com/in/jack-burgess828/"
-                target="_blank"
-                rel="noopener noreferrer nofollow"
                 className={classnames(styles.box, 'box is-fullheight')}
               >
                 <div className="content">
                   <h4 className="title is-5">LinkedIn &rarr;</h4>
                   <p>See how professional I am.</p>
                 </div>
-              </a>
+              </ExternalLink>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="columns has-text-centered">
+          <div className="column">
+            <h2 className="is-size-1-desktop is-size-2-tablet is-size-3-mobile">
+              Projects
+            </h2>
+            <h3 className="subtitle is-5">
+              I quite like to dabble in technologies I don&lsquo;t get to use at
+              work - mainly embedded systems.
+            </h3>
+          </div>
+        </div>
+        <div className="container">
+          <div className="columns">
+            <div className="column">
+              <ExternalLink
+                href="https://github.com/jack828/esp32-solar"
+                className={classnames(styles.box, 'box is-fullheight')}
+              >
+                <div className="content">
+                  <h4 className="title is-5">ESP32 Solar System &rarr;</h4>
+                  <p>
+                    Using a MAKERFABS ESP32-TOUCH-CAMERA development board, I
+                    ported and extended some code by another user to work with
+                    the constraints of the ESP32 environment.
+                  </p>
+                </div>
+              </ExternalLink>
+            </div>
+          </div>
+          <div className="columns">
+            <div className="column">
+              <ExternalLink
+                href="https://github.com/jack828/esp32-logger"
+                className={classnames(styles.box, 'box is-fullheight')}
+              >
+                <div className="content">
+                  <h4 className="title is-5">ESP32 Logger &rarr;</h4>
+                  <p>
+                    My home environment logger has gone through multiple
+                    iterations - first it logged data by POSTing to{' '}
+                    <ExternalLink href="https://github.com/jack828/pihome">
+                      PiHome
+                    </ExternalLink>{' '}
+                    (which was a MongoDB backend with some very primitive
+                    graphing capabilities!) - now it uses InfluxDB+Grafana on my
+                    home NAS to supercharge my metrics.
+                  </p>
+                  <p>Data has never tasted so sweet.</p>
+                </div>
+              </ExternalLink>
+            </div>
+          </div>
+          <div className="columns">
+            <div className="column">
+              <ExternalLink
+                href="https://github.com/jack828/dotfiles"
+                className={classnames(styles.box, 'box is-fullheight')}
+              >
+                <div className="content">
+                  <h4 className="title is-5">Dotfiles &rarr;</h4>
+                  <p>
+                    The heart of my development environment - using Neovim and
+                    Tmux to effortlessly refactor code and add new{' '}
+                    <strike>bugs</strike> features.
+                  </p>
+                </div>
+              </ExternalLink>
             </div>
           </div>
         </div>
