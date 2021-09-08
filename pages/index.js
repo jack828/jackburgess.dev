@@ -241,7 +241,7 @@ const Index = () => (
           <div className="column">
             <img
               align="center"
-              src="https://github-readme-stats.vercel.app/api?username=jack828&show_icons=true&locale=en"
+              src="https://github-readme-stats.vercel.app/api?username=jack828&show_icons=true&locale=en&count_private=true"
               alt="jack828"
             />
           </div>
