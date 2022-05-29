@@ -30,7 +30,6 @@ export default function Blog({ blog, navBlogs }) {
               <Meta
                 title={blog.title}
                 description={blog.sell}
-                image={blog.coverImage}
                 type="article"
                 date={blog.date}
               />

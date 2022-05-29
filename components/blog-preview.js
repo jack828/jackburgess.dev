@@ -2,17 +2,12 @@ import Link from 'next/link'
 import { DateFormatter } from '../components'
 
 const BlogPreview = ({
-  blog: { title, sell, coverImage, date, slug, tags }
+  blog: { title, sell, date, slug, tags }
 }) => {
   return (
     <Link as={`/blog/${slug}`} href="/blog/[slug]" passHref>
       <a>
         <div className="card">
-          <div className="card-image">
-            <figure className="image is-16by9">
-              <img src={coverImage} alt={title} />
-            </figure>
-          </div>
           <header className="card-header">
             <p className="card-header-title">{title}</p>
           </header>

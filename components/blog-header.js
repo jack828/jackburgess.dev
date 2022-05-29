@@ -1,11 +1,10 @@
 import {
   DateFormatter,
-  CoverImage,
   BlogTitle,
   ShareButtons
 } from '../components'
 
-const BlogHeader = ({ title, coverImage, date, published, tags }) => {
+const BlogHeader = ({ title, date, published, tags }) => {
   return (
     <>
       <BlogTitle>{title}</BlogTitle>
@@ -37,9 +36,6 @@ const BlogHeader = ({ title, coverImage, date, published, tags }) => {
           </div>
         </div>
       )}
-      <div className="box p-0">
-        <CoverImage title={title} src={coverImage} height={720} width={1280} />
-      </div>
     </>
   )
 }

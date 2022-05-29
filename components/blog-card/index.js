@@ -3,24 +3,12 @@ import Link from 'next/link'
 import { DateFormatter } from '../'
 import styles from './blog-card.module.scss'
 
-const BlogCard = ({
-  blog: { title, sell, coverImageSquare, date, slug, tags }
-}) => {
+const BlogCard = ({ blog: { title, sell, date, slug, tags } }) => {
   return (
     <div className={classnames('column is-12')}>
       <Link as={`/blog/${slug}`} href="/blog/[slug]" passHref>
         <a>
           <div className={classnames('card', styles.card)}>
-            <div
-              className={classnames(
-                'card-image is-hidden-mobile',
-                styles.image
-              )}
-            >
-              <figure className="image is-square">
-                <img src={coverImageSquare} alt={title} />
-              </figure>
-            </div>
             <div className={styles.stacked}>
               <header className="card-header">
                 <p className="card-header-title title is-4">{title}</p>
