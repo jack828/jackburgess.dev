@@ -79,7 +79,14 @@ html {
       padding: $content-pre-padding !important;
     }
   }
+
+  // Default table styles
+  table {
+    @extend .table;
+    width: unset !important;
+  }
 }
+
 
 // Bulma style extensions
 .is-fullheight {
