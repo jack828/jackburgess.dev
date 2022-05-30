@@ -25,19 +25,6 @@ html {
 // Blog Body Content Styles
 // That I couldn't figure out the selector for :(
 .content-override {
-  // FOOTNOTES
-  div.footnotes {
-    // Hide <hr /> in top of footnote block
-    hr:first-child {
-      display: none;
-    }
-
-    // Padding before the backref so it isn't awful on mobile
-    a.footnote-backref {
-      padding-left: 6px;
-    }
-  }
-
   // SECTION HEADER LINK ICONS
   h1,
   h2,
@@ -85,6 +72,39 @@ html {
     @extend .table;
     width: unset !important;
   }
+
+  // Make footnotes longer for clickableness
+  sup {
+    a.footnote-ref {
+      &:before {
+        content: "[Note ";
+      }
+      &:after {
+        content: "]";
+      }
+    }
+  }
+
+  // FOOTNOTES
+  div.footnotes {
+    // Hide <hr /> in top of footnote block
+    hr:first-child {
+      display: none;
+    }
+
+    // Improve click target and display of backref
+    a.footnote-backref {
+      padding-left: 6px;
+
+      &:before {
+        content: "[Back ";
+      }
+      &:after {
+        content: "]";
+      }
+    }
+  }
+
 }
 
 
