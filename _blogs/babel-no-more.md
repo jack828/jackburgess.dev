@@ -81,9 +81,30 @@ In my case, this is three main areas - development node binary, Webpack, and a b
 
 ### Migrating Development Node Binary
 
-babel-node
+By "development node binary", I am referring to how in development Node is started. When you're using language features not supported by your current version, it becomes a necessity to perform just-in-time (JIT) compilation.
 
-tsx
+This was done using the [@babel/node](https://npmjs.com/@babel/node). It uses the same setup as any normal Babel compilation stage.
+
+It wasn't _too_ hard to find a esbuild alternative - [tsx](https://npmjs.com/tsx). It sounds like part of the TypeScript ecosystem, and that's because it does support it - but in this project TypeScript is nowhere to be found.[^4]
+
+It's a simple drop-in replacement in our `nodemon.config.json`:
+
+~~~diff
+{
+  "restartable": "api",
+- "exec": "babel-node",
++ "exec": "tsx",
+  "ext": "js",
+  "signal": "SIGINT",
+  "watch": ["api", "components/api", "components/service"]
+}
+~~~
+
+A quick and dirty speed comparison yields:
+
+| babel-node | tsx |
+|------------|-----|
+| 2.3s | 0.1s |
 
 ### Migrating Webpack
 
@@ -110,3 +131,4 @@ breaks on a .tpl file - what can we do?
 [^1]: I've always wondered _why_ this is the case though. Fresh eyes are extremely valuable when trying to improve the developer experience - even more so when they're unfamiliar with any legacy nuances.
 [^2]: This isn't to say the major changes are a net negative to the community. Often times having a strict requirement on backwards compatibility just causes the slow death of the thing struggling to keep support for unused things.
 [^3]: See more <https://github.com/evanw/esbuild/issues/297>
+[^4]: I know I know, I tried adding it but there's far too many project-specific packages that I simply don't have the time to add type definitions for. And some core features aren't type-able.
