@@ -124,21 +124,6 @@ const Index = () => (
           <div className="columns">
             <div className="column">
               <ExternalLink
-                href="https://whitethorne.co.uk"
-                className={classnames(styles.box, 'box is-fullheight')}
-              >
-                <div className="content">
-                  <h4 className="title is-5">Whitethorne &rarr;</h4>
-                  <p>
-                    I&lsquo;m also CTO of my own company.
-                    <br />
-                    We make apps that (hopefully) disrupt industries.
-                  </p>
-                </div>
-              </ExternalLink>
-            </div>
-            <div className="column">
-              <ExternalLink
                 href="https://www.linkedin.com/in/jack-burgess828/"
                 className={classnames(styles.box, 'box is-fullheight')}
               >
@@ -177,6 +162,10 @@ const Index = () => (
                     Using a MAKERFABS ESP32-TOUCH-CAMERA development board, I
                     ported and extended some code by another user to work with
                     the constraints of the ESP32 environment.
+                  </p>
+                  <p>
+                    This project was a 2D simulation of the positions of the
+                    planets in the solar system at a configurable time.
                   </p>
                 </div>
               </ExternalLink>
