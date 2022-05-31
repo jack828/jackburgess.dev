@@ -1,6 +1,6 @@
 ---json
 {
-  "published": false,
+  "published": true,
   "title": "Babel No More - Replacing Babel for esbuild",
   "sell": "Upgrading a legacy codebase to use esbuild instead of Babel - how, and more importantly, why?",
   "coverImage": "https://img.clock.co.uk/1280x720",
