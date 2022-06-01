@@ -25,13 +25,31 @@ const Index = () => (
                   )}
                 >
                   <figure className="image">
-                    <img
-                      className={classnames(styles.profile, 'is-rounded')}
-                      src="/profile-picture.jpeg"
-                      alt="Profile Picture"
-                      width={256}
-                      height={256}
-                    />
+                    <picture>
+                      <source
+                        srcSet="profile-picture.webp"
+                        type="image/webp"
+                        className={classnames(styles.profile, 'is-rounded')}
+                        alt="Profile Picture"
+                        width={256}
+                        height={256}
+                      />
+                      <source
+                        srcSet="profile-picture.jpeg"
+                        type="image/jpeg"
+                        className={classnames(styles.profile, 'is-rounded')}
+                        alt="Profile Picture"
+                        width={256}
+                        height={256}
+                      />
+                      <img
+                        src="profile-picture.jpeg"
+                        className={classnames(styles.profile, 'is-rounded')}
+                        alt="Profile Picture"
+                        width={256}
+                        height={256}
+                      />
+                    </picture>
                   </figure>
                 </div>
               </div>
