@@ -229,6 +229,7 @@ const Index = () => (
         <div className="columns">
           <div className="column">
             <img
+              loading="lazy"
               align="center"
               src="https://github-readme-stats.vercel.app/api?username=jack828&show_icons=true&locale=en&count_private=true"
               alt="jack828"
@@ -236,6 +237,7 @@ const Index = () => (
           </div>
           <div className="column">
             <img
+              loading="lazy"
               align="center"
               src="https://github-readme-streak-stats.herokuapp.com/?user=jack828&"
               alt="jack828"
