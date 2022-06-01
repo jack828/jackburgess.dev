@@ -12,7 +12,7 @@ class MyDocument extends Document {
             as="font"
             type="font/woff2"
             href="/fonts/oxygen-v10-latin-regular.woff2"
-            crossOrigin
+            crossOrigin="anonymous"
           />
         </Head>
         <body>
