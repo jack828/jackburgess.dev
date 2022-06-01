@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "clean": "rimraf .next out",
-    "build": "run-s build:site build:sitemap build:export",
+    "build": "run-s build:site build:sitemap build:export build:copy",
     "build:site": "next build",
     "build:sitemap": "node tools/sitemap-builder",
     "build:export": "next export",
+    "build:copy": "cp _headers out/",
     "start": "next start",
     "lint": "next lint"
   },
