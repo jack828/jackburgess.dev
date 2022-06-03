@@ -35,9 +35,9 @@
     "sass": "^1.35.1"
   },
   "devDependencies": {
-    "eslint": "7.28.0",
-    "eslint-config-next": "11.0.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0"
+    "eslint": "8.16.0",
+    "eslint-config-next": "12.1.6",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0"
   }
 }
