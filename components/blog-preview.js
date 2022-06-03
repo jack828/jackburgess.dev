@@ -1,9 +1,7 @@
 import Link from 'next/link'
 import { DateFormatter } from '../components'
 
-const BlogPreview = ({
-  blog: { title, sell, date, slug, tags }
-}) => {
+const BlogPreview = ({ blog: { title, sell, date, slug, tags } }) => {
   return (
     <Link as={`/blog/${slug}`} href="/blog/[slug]" passHref>
       <a>

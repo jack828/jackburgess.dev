@@ -1,8 +1,4 @@
-import {
-  DateFormatter,
-  BlogTitle,
-  ShareButtons
-} from '../components'
+import { DateFormatter, BlogTitle, ShareButtons } from '../components'
 
 const BlogHeader = ({ title, date, published, tags }) => {
   return (
