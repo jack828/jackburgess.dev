@@ -12,7 +12,7 @@
 
 ## Preamble
 
-This post isn’t telling you to run into your boss’s office and demand the team drop what they’re doing and move to esbuild - I’m only sharing some thoughts and experiences. Ultimately, it’s down to the team as a whole to evaluate if it is worth the risks and time. Personally, if it fits the bill, it’s going to be worth it - even only for the speed!
+This post isn’t telling you to run into your boss’s office and demand the team drop what they’re doing and move to esbuild - I’m only sharing some thoughts and experiences. Ultimately, it’s down to the team as a whole to evaluate if it is worth the risks and time. Personally, if it fits the bill, it’s going to be worth it - even only for the performance and speed gains!
 
 ## Babel
 
