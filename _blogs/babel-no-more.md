@@ -1,12 +1,12 @@
 ---json
 {
-  "published": false,
+  "published": true,
   "title": "Babel No More - Replacing Babel for esbuild",
   "sell": "Upgrading a legacy codebase to use esbuild instead of Babel - how, and why?",
   "coverImage": "https://img.clock.co.uk/1280x720",
   "coverImageSquare": "https://img.clock.co.uk/720x720",
   "tags": ["JavaScript", "NodeJS", "Babel", "esbuild"],
-  "date": "2022-05-29T13:00:00.000Z"
+  "date": "2022-06-01T12:00:00.000Z"
 }
 ---
 
