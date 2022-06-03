@@ -199,10 +199,7 @@ const Index = () => (
                   <h4 className="title is-5">ESP32 Logger &rarr;</h4>
                   <p>
                     My home environment logger has gone through multiple
-                    iterations - first it logged data by POSTing to{' '}
-                    <ExternalLink href="https://github.com/jack828/pihome">
-                      PiHome
-                    </ExternalLink>{' '}
+                    iterations - first it logged data by POSTing to PiHome{' '}
                     (which was a MongoDB backend with some very primitive
                     graphing capabilities!) - now it uses InfluxDB+Grafana on my
                     home NAS to supercharge my metrics.
