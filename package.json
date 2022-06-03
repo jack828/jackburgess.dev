@@ -11,7 +11,7 @@
     "build:export": "next export",
     "build:copy": "cp _headers out/",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint -f unix ."
   },
   "dependencies": {
     "bulma": "^0.9.3",
