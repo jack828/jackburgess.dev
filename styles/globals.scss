@@ -73,9 +73,11 @@ html {
     width: unset !important;
   }
 
+  // FOOTNOTES
+  //
   // Make footnotes longer for clickableness
   sup {
-    a.footnote-ref {
+    a[data-footnote-ref] {
       &:before {
         content: "[Note ";
       }
@@ -85,15 +87,14 @@ html {
     }
   }
 
-  // FOOTNOTES
-  div.footnotes {
-    // Hide <hr /> in top of footnote block
-    hr:first-child {
+  section.footnotes {
+    // Hide h2 in top of footnote block
+    h2:first-child {
       display: none;
     }
 
     // Improve click target and display of backref
-    a.footnote-backref {
+    a.data-footnote-backref {
       padding-left: 6px;
 
       &:before {
@@ -104,7 +105,6 @@ html {
       }
     }
   }
-
 }
 
 
