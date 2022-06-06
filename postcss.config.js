@@ -15,18 +15,21 @@ module.exports = {
     ],
     [
       '@fullhuman/postcss-purgecss',
-      {
-        content: [
-          './pages/**/*.{js,jsx,ts,tsx}',
-          './components/**/*.{js,jsx,ts,tsx}'
-        ],
-        defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
-        safelist: {
-          standard: ['html', 'body', /table/],
-          deep: [/table/, /code/, /hljs/],
-          greedy: [/pre/, /code/, /hljs/, /^language-/],
-        }
-      }
+      process.env.NODE_ENV === 'production'
+        ? {
+            content: [
+              './pages/**/*.{js,jsx,ts,tsx}',
+              './components/**/*.{js,jsx,ts,tsx}'
+            ],
+            defaultExtractor: (content) =>
+              content.match(/[\w-/:]+(?<!:)/g) || [],
+            safelist: {
+              standard: ['html', 'body', /table/],
+              deep: [/table/, /code/, /hljs/],
+              greedy: [/pre/, /code/, /hljs/, /^language-/]
+            }
+          }
+        : false
     ]
   ]
 }
