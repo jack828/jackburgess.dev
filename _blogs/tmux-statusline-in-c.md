@@ -1,27 +1,28 @@
 ---json
 {
   "published": false,
-  "title": "A tmux statusline in C",
+  "title": "A TMUX statusline in C",
   "sell": "Because when the need for speed is too great, you always go a level down.",
   "coverImage": "https://img.clock.co.uk/1280x720",
   "coverImageSquare": "https://img.clock.co.uk/720x720",
   "tags": ["TMUX", "C"],
-  "date": "2022-01-17T04:20:00.000Z"
+  "date": "2022-06-11T18:20:00.000Z"
 }
 ---
 
 # TMUX Statusline in C
 
-Those of us that _love_ tmux usually _love_ having a convienient display of handy information in their statusline (TODO: link docs)
+Those of us that _love_ TMUX usually _love_ having a convenient display of handy information in their statusline.
 
-In my setup, I have my window information on the left hand side and my custom statusline on the right hand side.
+The documentation for this feature is very comprehensive and clear - I recommend you have a read if you want to level up your status line: <https://www.man7.org/linux/man-pages/man1/tmux.1.html#STATUS_LINE>
 
-There's a long list of benefits (and drawbacks) to cramming information in the statusline - you can very quickly grow it larger than the size of your screen! Or, more often than not, fill it with stuff you'll never think to look at.
+In my setup, I have my window information on the left-hand side and my custom statusline on the right-hand side.
 
-Most people opt for something relatively basic - especially if they've grabbed something from a Tmux quick start guide (not that this is bad, everyone starts off somehow!):
+There's a long list of benefits (and drawbacks) to cramming information in the statusline - you can very quickly grow it larger than the size of your screen! Or, more often than not, you'll fill it with stuff you'll never look at.
+
+Most people opt for something relatively basic - especially if they've grabbed something from a TMUX quick start guide (not that this is bad, everyone starts out somehow!):
 
 ```
-
 set -g status-left ''
 set-option -ag status-right '#[fg=colour234,bold,bg=colour12] %R '
 
@@ -29,7 +30,7 @@ setw -g window-status-format '#[fg=colour236,bold,bg=colour180] #I #[fg=colour18
 setw -g window-status-current-format '#[fg=colour180,bold,bg=colour236] #I #[fg=colour236,bold,bg=colour180] #W '
 ```
 
-> For those unfamiliar with tmux configuration, all the above does is set `status-left` to blank, `status-right` to the current time, and then set the `window-status-{,current-}format` options. The colours are derived from the 256 colour set, visible here: [jonasjacek.github.io/colors](https://jonasjacek.github.io/colors/).
+> For those unfamiliar with TMUX configuration, all the above does is set `status-left` to blank, `status-right` to the current time, and then set the `window-status-{,current-}format` options. The colours are derived from the 256-colour set, visible here: [jonasjacek.github.io/colors](https://jonasjacek.github.io/colors/).
 
 And eventually, they expand upon it, trying to split things out using the append option `a` to try and bring meaning to the mayhem:
 
@@ -47,13 +48,13 @@ set-option -ag status-right '#[fg=colour146,bold,bg=colour236] %d #[fg=colour176
 set-option -ag status-right '#[fg=colour234,bold,bg=colour12] %R '
 ```
 
-This is more complicated to explain - but it remains _relatively simple_[^citation needed]. It does use some shell wizardry to optimise - which we'll get onto in a moment.
+This is more complicated to explain - but it remains _relatively simple_ <sup>_[citation needed]_</sup>. It does use some shell wizardry to optimise - which we'll get onto in a moment.
 
 # Optimising Statuslines
 
 As with anything your computer does, it requires processing power - CPU, RAM, and battery are all used. The more it does, the more it will use.
 
-This will normally only be noticeable exceptional circumstances, but, if it's there to optimise, why not optimise it?
+This will normally only be noticeable in exceptional circumstances, but, if it's there to optimise, why not optimise it?
 
 Take this line to infer VPN status for example:
 
@@ -64,11 +65,9 @@ set -g status-right 'VPN: #(ifconfig | grep "^wg0" -q && echo "Connected" || ech
 This calls `ifconfig` - with all the overhead - just to see if a particular string is within the output.
 
 
-We can run this though a simple shell command using the power of `zsh`'s `typeset` command (TODO: expand? https://unix.stackexchange.com/a/204807)
+We can run this through a simple shell command using the power of `zsh`'s `typeset` command.[^1]
 
-^ precision, overhead compared to `date -%s%N`
-
-```zsh
+```bash
 #!/bin/zsh
 
 typeset -F SECONDS=0
@@ -81,8 +80,10 @@ echo $SECONDS
 
 Then run through a `for` loop:
 
-```
-# for i in {1..100}; do ./timer.sh; done | awk -v OFMT='%f' '{sum += $0} END {print sum / NR}'
+```bash
+for i in {1..100};
+  do ./timer.sh;
+done | awk -v OFMT='%f' '{sum += $0} END {print sum / NR}'
 ```
 
 On my machine, running this gives me an average execution time for:
@@ -93,12 +94,12 @@ of:
 
 `0.001599` seconds, or `1.599` milliseconds - not great, not terrible!
 
-We can improve this significantly, just by removing the call to `ifconfig` and all it's overhead. Looking closer at how WireGuard configures interfaces, we can see that a file exists if the interface is connected:
+We can improve this significantly, just by removing the call to `ifconfig` and all its overhead. Looking closer at how WireGuard configures interfaces, we can see that a file exists if the interface is connected:
 
 ```
 /proc/net/dev_snmp6/wg0
 ```
->File location and naming will differ per-system and per-interface.
+>File location and naming will differ per system and per interface.
 
 We can then re-write the command as:
 
@@ -108,7 +109,7 @@ test -f /proc/net/dev_snmp6/wg0 && echo "Connected" || echo "Disconnected" > /de
 
 And re-run to see the improvement:
 
-`0.000054` seconds, or `0.054` milliseconds, over **30x better!**
+`0.00008` seconds, or `0.08` milliseconds, over **30x better!**
 
 ## Super-speed!
 
@@ -137,17 +138,40 @@ int main () {
 
 Compiling with defaults enabled `gcc -o vpncheck.c vpncheck` and amending our test script gives us a runtime of:
 
-`0.000652` seconds, or `0.652` milliseconds.
+`0.000811` seconds, or `0.811` milliseconds.
 
-We're **10x worse** now :c
+We're **10x worse** now :c - but we're neglecting the fact that there's going to be some more start-up and tear-down costs with an executable vs the shell.
 
-But, it's not all bad here. Rewriting just this one section of the statusline in C gives us a good start to expand the script into capturing and outputting _all_ of our statusline information.
+We can adjust our C program here to have the loop internally - that way, we're only timing the `stat()` and `fputs()` calls.
+
+```c
+#include <stdio.h>
+#include <sys/stat.h>
+
+#define WIREGUARD_INTERFACE_FILE "/proc/net/dev_snmp6/wg0"
+
+int main () {
+  for (int8_t i = 0; i < 100; i++) {
+    struct stat buffer;
+    int exists = stat(WIREGUARD_INTERFACE_FILE, &buffer);
+    if (exists == 0) {
+      fputs("Connected", stdout);
+    } else {
+      fputs("Disconnected", stdout);
+    }
+  }
+}
+```
+
+`0.000956` seconds, or `0.956` milliseconds - for 100 iterations - giving a runtime of `0.00956` milliseconds (9.56 microseconds!).
+
+Re-writing just this one section of the statusline in C gives us a good start to expand the script into capturing and outputting _all_ of our statusline information.
 
 ## The Full Monty
 
-Despite our C underperforming an optimised oneliner by an order of magnitude, we'll compare it's performance when expanded to a full statusline.
+Despite our C being unclear whether or not it is any faster or slower in isolation than our shell equivalent, we'll compare its performance when expanded to a full statusline.
 
-Taking the original config version first:
+Taking the original shell version first:
 
 ```bash
 ## Power
@@ -161,7 +185,7 @@ grep "wg0:" /proc/net/dev -q && echo "VPN ↑" || echo "VPN ↓"
 # These are calls to strftime under the hood. Here we replace with "date" to emulate what bash can do.
 date "+%d %B, %Y %R"
 ```
-> NOTE: For the sake of demonstration, and tidyness, I've removed the `set-option` calls and the colour configuration.
+> NOTE: For the sake of demonstration and tidiness, I've removed the `set-option` calls and the colour configuration from this and the C version below.
 
 And a version written in C:
 
@@ -181,7 +205,6 @@ And a version written in C:
 
 int main() {
   /* Power */
-
   FILE *acStatusFile = fopen(AC_STATUS_FILE, "r");
   char acStatus = fgetc(acStatusFile);
   fclose(acStatusFile);
@@ -243,12 +266,22 @@ int main() {
 }
 ```
 
-Now we can compare the average run times of each:
+Now we can compare the average run times of each, in milliseconds:
 
-| Bash | C |
-|------|---|
-| 0.006552 | 0.002400 |
+| Bash  |   C   |
+|:-----:|:-----:|
+| 6.785 | 2.492 |
 
-#### Notes
+Over 2 times faster! Think of how many cycles and process forks you're saving your poor CPU from handling unnecessarily.
 
-With all the [awesome-tmux plugins available](https://github.com/rothgar/awesome-tmux) this can really quickly become unwieldy.
+## Conclusion
+
+With all the [awesome-tmux plugins available](https://github.com/rothgar/awesome-tmux) your statusline can quickly become unwieldy, poorly performing, and confusing to understand.
+
+There are many reasons why you may attempt to do something like this to your TMUX statusline. It can vary from eeking out performance and optimising early out of habit, or just as a learning exercise for a language you don't get to use at work.
+
+In my case, I write in JavaScript at work, and like to dabble in C/C++ in my hobby projects - I just enjoy a challenge!
+
+### Footnotes
+
+[^1]: Why do we use `typeset` and not just `/bin/time`? Because precision, that's why! <https://unix.stackexchange.com/a/204807>
