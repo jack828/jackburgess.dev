@@ -17,6 +17,7 @@
  - Add relevant tags
  - Make sure footnotes link correctly and add value
  - Replace dumb quotes with <https://smartquotesforsmartpeople.com>
+ - Run through Grammarly
  - Go live with `"published": true`!
 
 
