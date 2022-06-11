@@ -24,12 +24,91 @@
 
 Longer summary of the article, maybe a bit about the background of why it's being written.[^1]
 
+Various text modifiers:
+
+_italic text_
+
+**bold text**
+
+~strikethrough text~
+
 Venenatis cras sed _felis eget velit_. Consectetur libero **id faucibus nisl tincidunt**. Gravida in fermentum et sollicitudin ac orci phasellus egestas tellus. Volutpat consequat mauris nunc congue nisi vitae. Id aliquet risus feugiat in ante metus dictum at tempor. Sed blandit libero volutpat sed cras. Sed odio morbi quis commodo odio aenean sed adipiscing. Velit euismod in pellentesque massa placerat. Mi bibendum neque egestas congue quisque egestas diam in arcu. Nisi lacus sed viverra tellus in. Nibh cras pulvinar mattis nunc sed. Luctus accumsan tortor posuere ac ut consequat semper viverra. Fringilla ut morbi tincidunt augue interdum velit euismod.[^2]
 
 | Table demo | Align columns |
 |:----------:|--------------:|
 | babel-node |        1.786s |
 |    tsx     |        1.526s |
+
+
+## Headings
+
+```
+# Sample H1
+## Sample H2
+### Sample H3
+```
+
+will produce
+# Sample H1
+## Sample H2
+### Sample H3
+
+---
+
+## Horizontal Rules
+
+Horizontal rule is created using `---` on a line by itself.
+
+---
+## Hyperlinks
+- GFMD will automatically detect URL and convert them to links like this http://www.futureworkz.com
+- To specify a link on a text, do this:
+
+```
+This is [an example](http://example.com/ "Title") inline link.
+[This link](http://example.net/) has no title attribute.
+```
+
+This is [an example](http://example.com/ "Title") inline link.
+[This link](http://example.net/) has no title attribute.
+
+---
+
+## Creating list
+
+Adding a `-` will change it into a list:
+
+```
+- Item 1
+- Item 2
+- Item 3
+```
+
+will produce
+
+- Item 1
+- Item 2
+- Item 3
+
+Numbered lists:
+
+1. Item 1
+2. Item 2
+3. Item 3
+
+---
+
+## Quoting
+
+You can create a quote using `>`:
+
+```
+> This is a quote
+```
+
+will produce
+
+> This is a quote
 
 ## Lorem Ipsum
 
