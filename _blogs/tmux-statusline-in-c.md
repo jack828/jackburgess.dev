@@ -1,6 +1,6 @@
 ---json
 {
-  "published": false,
+  "published": true,
   "title": "A TMUX statusline in C",
   "sell": "Because when the need for speed is too great, you always go a level down.",
   "coverImage": "https://img.clock.co.uk/1280x720",
