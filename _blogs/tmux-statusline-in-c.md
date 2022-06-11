@@ -12,6 +12,8 @@
 
 # TMUX Statusline in C
 
+![My finished statusline](/blogs/tmux-statusline-in-c--statusline-complete.png)
+
 Those of us that _love_ TMUX usually _love_ having a convenient display of handy information in their statusline.
 
 The documentation for this feature is very comprehensive and clear - I recommend you have a read if you want to level up your status line: <https://www.man7.org/linux/man-pages/man1/tmux.1.html#STATUS_LINE>
@@ -281,6 +283,25 @@ With all the [awesome-tmux plugins available](https://github.com/rothgar/awesome
 There are many reasons why you may attempt to do something like this to your TMUX statusline. It can vary from eeking out performance and optimising early out of habit, or just as a learning exercise for a language you don’t get to use at work.
 
 In my case, I write in JavaScript at work, and like to dabble in C/C++ in my hobby projects - I just enjoy a challenge!
+
+## My Statusline
+
+![My finished statusline](/blogs/tmux-statusline-in-c--statusline-complete.png)
+
+You might wonder what my current statusline looks like - there was a sneak preview in the start of this post, and another image above. You can see the full source for it on [my dotfiles repo on GitHub](https://github.com/jack828/dotfiles/blob/master/statusline.c).
+
+It’s grown considerably since I first accepted a challenge of a >10kB statusline binary -- more detail about that in the next post!
+
+As of the time of this post, it has the following features, from left to right:
+ - AC or battery %
+ - CPU temperature
+ - 5min load average
+ - RAM usage %
+ - Fan RPM
+ - Current WiFi network + signal strength, or ethernet if wired
+ - WireGuard VPN status
+ - Current date
+ - Current time, with a background that reflects the sun’s current position in the sky!
 
 ### Footnotes
 
