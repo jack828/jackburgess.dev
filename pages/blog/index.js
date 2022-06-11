@@ -4,14 +4,12 @@ import {
   Meta,
   BlogTitle,
   HeroBlog,
-  MoreBlogs,
   AllBlogs
 } from '../../components'
 import { getAllBlogs } from '../../lib/api'
 
 const Index = ({ allBlogs }) => {
   const [heroBlog, ...blogs] = allBlogs
-  const moreBlogs = blogs.slice(0, 2)
   return (
     <Layout>
       <Meta
@@ -29,8 +27,7 @@ const Index = ({ allBlogs }) => {
           </p>
         )}
         {heroBlog && <HeroBlog blog={heroBlog} />}
-        {moreBlogs.length > 0 && <MoreBlogs blogs={moreBlogs} />}
-        {allBlogs.length > 0 && <AllBlogs blogs={allBlogs} />}
+        {blogs.length > 0 && <AllBlogs blogs={blogs} />}
       </Container>
     </Layout>
   )
