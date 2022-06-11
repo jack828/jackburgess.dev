@@ -18,9 +18,9 @@ The documentation for this feature is very comprehensive and clear - I recommend
 
 In my setup, I have my window information on the left-hand side and my custom statusline on the right-hand side.
 
-There's a long list of benefits (and drawbacks) to cramming information in the statusline - you can very quickly grow it larger than the size of your screen! Or, more often than not, you'll fill it with stuff you'll never look at.
+There are a long list of benefits (and drawbacks) to cramming information in the statusline - you can very quickly grow it larger than the size of your screen! Or, more often than not, you’ll fill it with stuff you’ll never look at.
 
-Most people opt for something relatively basic - especially if they've grabbed something from a TMUX quick start guide (not that this is bad, everyone starts out somehow!):
+Most people opt for something relatively basic - especially if they’ve grabbed something from a TMUX quick start guide (not that this is bad, everyone starts out somehow!):
 
 ```
 set -g status-left ''
@@ -48,13 +48,13 @@ set-option -ag status-right '#[fg=colour146,bold,bg=colour236] %d #[fg=colour176
 set-option -ag status-right '#[fg=colour234,bold,bg=colour12] %R '
 ```
 
-This is more complicated to explain - but it remains _relatively simple_ <sup>_[citation needed]_</sup>. It does use some shell wizardry to optimise - which we'll get onto in a moment.
+This is more complicated to explain - but it remains _relatively simple_ <sup>_[citation needed]_</sup>. It does use some shell wizardry to optimise - which we’ll get onto in a moment.
 
 # Optimising Statuslines
 
 As with anything your computer does, it requires processing power - CPU, RAM, and battery are all used. The more it does, the more it will use.
 
-This will normally only be noticeable in exceptional circumstances, but, if it's there to optimise, why not optimise it?
+This will normally only be noticeable in exceptional circumstances, but, if it’s there to optimise, why not optimise it?
 
 Take this line to infer VPN status for example:
 
@@ -65,7 +65,7 @@ set -g status-right 'VPN: #(ifconfig | grep "^wg0" -q && echo "Connected" || ech
 This calls `ifconfig` - with all the overhead - just to see if a particular string is within the output.
 
 
-We can run this through a simple shell command using the power of `zsh`'s `typeset` command.[^1]
+We can run this through a simple shell command using the power of `zsh`’s `typeset` command.[^1]
 
 ```bash
 #!/bin/zsh
@@ -115,7 +115,7 @@ And re-run to see the improvement:
 
 Can we make this even faster? We can certainly try!
 
-Now that we've optimised out `ifconfig` the core logic is clear. Check for a file, and output something based on that.
+Now that we’ve optimised out `ifconfig` the core logic is clear. Check for a file, and output something based on that.
 
 We can easily re-write this in C:
 
@@ -140,9 +140,9 @@ Compiling with defaults enabled `gcc -o vpncheck.c vpncheck` and amending our te
 
 `0.000811` seconds, or `0.811` milliseconds.
 
-We're **10x worse** now :c - but we're neglecting the fact that there's going to be some more start-up and tear-down costs with an executable vs the shell.
+We’re **10x worse** now :c - but we’re neglecting the fact that there’s going to be some more start-up and tear-down costs with an executable vs the shell.
 
-We can adjust our C program here to have the loop internally - that way, we're only timing the `stat()` and `fputs()` calls.
+We can adjust our C program here to have the loop internally - that way, we’re only timing the `stat()` and `fputs()` calls.
 
 ```c
 #include <stdio.h>
@@ -169,7 +169,7 @@ Re-writing just this one section of the statusline in C gives us a good start to
 
 ## The Full Monty
 
-Despite our C being unclear whether or not it is any faster or slower in isolation than our shell equivalent, we'll compare its performance when expanded to a full statusline.
+Despite our C being unclear whether or not it is any faster or slower in isolation than our shell equivalent, we’ll compare its performance when expanded to a full statusline.
 
 Taking the original shell version first:
 
@@ -185,7 +185,7 @@ grep "wg0:" /proc/net/dev -q && echo "VPN ↑" || echo "VPN ↓"
 # These are calls to strftime under the hood. Here we replace with "date" to emulate what bash can do.
 date "+%d %B, %Y %R"
 ```
-> NOTE: For the sake of demonstration and tidiness, I've removed the `set-option` calls and the colour configuration from this and the C version below.
+> NOTE: For the sake of demonstration and tidiness, I’ve removed the `set-option` calls and the colour configuration from this and the C version below.
 
 And a version written in C:
 
@@ -272,16 +272,16 @@ Now we can compare the average run times of each, in milliseconds:
 |:-----:|:-----:|
 | 6.785 | 2.492 |
 
-Over 2 times faster! Think of how many cycles and process forks you're saving your poor CPU from handling unnecessarily.
+Over 2 times faster! Think of how many cycles and process forks you’re saving your poor CPU from handling unnecessarily.
 
 ## Conclusion
 
 With all the [awesome-tmux plugins available](https://github.com/rothgar/awesome-tmux) your statusline can quickly become unwieldy, poorly performing, and confusing to understand.
 
-There are many reasons why you may attempt to do something like this to your TMUX statusline. It can vary from eeking out performance and optimising early out of habit, or just as a learning exercise for a language you don't get to use at work.
+There are many reasons why you may attempt to do something like this to your TMUX statusline. It can vary from eeking out performance and optimising early out of habit, or just as a learning exercise for a language you don’t get to use at work.
 
 In my case, I write in JavaScript at work, and like to dabble in C/C++ in my hobby projects - I just enjoy a challenge!
 
 ### Footnotes
 
-[^1]: Why do we use `typeset` and not just `/bin/time`? Because precision, that's why! <https://unix.stackexchange.com/a/204807>
+[^1]: Why do we use `typeset` and not just `/bin/time`? Because precision, that’s why! <https://unix.stackexchange.com/a/204807>
