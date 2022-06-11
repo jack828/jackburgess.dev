@@ -25,8 +25,8 @@ module.exports = {
               content.match(/[\w-/:]+(?<!:)/g) || [],
             safelist: {
               standard: ['html', 'body', /table/],
-              deep: [/table/, /code/, /hljs/],
-              greedy: [/pre/, /code/, /hljs/, /^language-/]
+              deep: [/hljs/, /.content/],
+              greedy: [/hljs/, /^language-/]
             }
           }
         : false
