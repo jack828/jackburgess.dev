@@ -59,6 +59,7 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
                       {author.avatar && (
                         <Image
                           src={author.avatar}
+                          srcWebp={author.avatarWebp}
                           width="38px"
                           height="38px"
                           alt="avatar"

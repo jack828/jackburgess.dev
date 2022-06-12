@@ -1,6 +1,7 @@
 ---
 name: Jack Burgess
-avatar: /static/images/avatar.png
+avatar: /static/images/avatar.jpeg
+avatarWebp: /static/images/avatar.webp
 occupation: Software Engineer
 company: Clock Limited
 email: me@jackburgess.dev
