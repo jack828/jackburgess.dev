@@ -2,20 +2,19 @@ const siteMetadata = {
   title: 'Jack Burgess',
   author: 'Jack Burgess',
   headerTitle: 'Jack Burgess',
-  description: 'Hey - I am a software engineer from the UK. I love making websites and apps. Maybe you’ll use one of them one day.',
+  description:
+    'Hey - I am a software engineer from the UK. I love making websites and apps. Maybe you’ll use one of them one day.',
   language: 'en-gb',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
-  siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
+  siteUrl: 'https://jackburgess.dev',
+  siteRepo: 'https://github.com/jack828/jackburgess.dev',
   siteLogo: '/static/images/logo.png',
-  image: '/static/images/avatar.png',
+  image: '/static/images/avatar.jpeg',
   socialBanner: '/static/images/twitter-card.png',
-  email: 'address@yoursite.com',
+  email: 'me@jackburgess.dev',
   github: 'https://github.com/jack828',
   twitter: 'https://twitter.com/jackmburgess',
-  facebook: 'https://facebook.com',
-  youtube: 'https://youtube.com',
-  linkedin: 'https://www.linkedin.com',
+  linkedin: 'https://www.linkedin.com/in/jack-burgess828/',
   locale: 'en-GB',
   comment: {
     // If you want to use a commenting system other than giscus you have to add it to the
