@@ -27,7 +27,7 @@ const SocialIcon = ({ className, svgClassName, kind, href, size = 8 }) => {
     <a
       className={classnames('text-sm text-gray-500 transition hover:text-gray-600', className)}
       target="_blank"
-      rel="noopener noreferrer"
+      rel="noopener noreferrer nofollow"
       href={href}
     >
       <span className="sr-only">{kind}</span>
