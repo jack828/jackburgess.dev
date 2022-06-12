@@ -13,7 +13,6 @@ const siteMetadata = {
   socialBanner: '/static/images/twitter-card.png',
   email: 'me@jackburgess.dev',
   github: 'https://github.com/jack828',
-  twitter: 'https://twitter.com/jackmburgess',
   linkedin: 'https://www.linkedin.com/in/jack-burgess828/',
   locale: 'en-GB',
   comment: {

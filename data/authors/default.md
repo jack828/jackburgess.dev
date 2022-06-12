@@ -5,7 +5,6 @@ avatarWebp: /static/images/avatar.webp
 occupation: Software Engineer
 company: Clock Limited
 email: me@jackburgess.dev
-twitter: https://twitter.com/jackmburgess
 linkedin: https://www.linkedin.com/in/jack-burgess828/
 github: https://github.com/jack828
 ---
