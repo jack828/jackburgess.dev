@@ -1,267 +1,101 @@
-import Link from 'next/link'
-import classnames from 'classnames'
-import { Navbar, ExternalLink, Meta } from '../components'
-import styles from '../styles/Home.module.scss'
+import Link from '@/components/Link'
+import { PageSEO } from '@/components/SEO'
+import Tag from '@/components/Tag'
+import siteMetadata from '@/data/siteMetadata'
+import { getAllFilesFrontMatter } from '@/lib/mdx'
+import formatDate from '@/lib/utils/formatDate'
 
-const Index = () => (
-  <>
-    <Meta description="Hey - I am a software engineer from the UK. I love making websites and apps. Maybe you’ll use one of them one day." />
-    <Navbar />
-    <section className="hero is-primary is-fullheight-with-navbar">
-      <div className="hero-body">
-        <div className="container">
-          <div className="columns is-align-items-center">
-            <div className="column has-text-centered-mobile">
-              Hello! I am
-              <h1 className="title is-1">Jack Burgess</h1>
-              <h2 className="subtitle is-3">Software Engineer</h2>
-            </div>
-            <div className="column">
-              <div className="columns is-centered">
-                <div
-                  className={classnames(
-                    styles.profileContainer,
-                    'column is-narrow'
-                  )}
-                >
-                  <figure className="image">
-                    <picture>
-                      <source
-                        srcSet="profile-picture.webp"
-                        type="image/webp"
-                        className={classnames(styles.profile, 'is-rounded')}
-                        alt="Profile Picture"
-                        width={256}
-                        height={256}
-                      />
-                      <source
-                        srcSet="profile-picture.jpeg"
-                        type="image/jpeg"
-                        className={classnames(styles.profile, 'is-rounded')}
-                        alt="Profile Picture"
-                        width={256}
-                        height={256}
-                      />
-                      <img
-                        src="profile-picture.jpeg"
-                        className={classnames(styles.profile, 'is-rounded')}
-                        alt="Profile Picture"
-                        width={256}
-                        height={256}
-                      />
-                    </picture>
-                  </figure>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+import NewsletterForm from '@/components/NewsletterForm'
 
-    <section className="section">
-      <div className="columns is-centered has-text-centered">
-        <div className="column">
-          <h2 className="is-size-1-desktop is-size-2-tablet is-size-3-mobile">
-            About Me
-          </h2>
-        </div>
-      </div>
-      <div className="columns is-centered has-text-centered">
-        <div className="column is-four-fifths">
-          <p className="is-size-5">
-            UK-based Software Engineer currently working from Scotland. I have a
-            love for programming which I have been doing full time at{' '}
-            <ExternalLink href="https://clock.co.uk">
-              Clock Limited
-            </ExternalLink>{' '}
-            for the last 5 years.
-            <br />
-            You can see all my educational and professional experience on
-            LinkedIn.
+const MAX_DISPLAY = 5
+
+export async function getStaticProps() {
+  const posts = await getAllFilesFrontMatter('blog')
+
+  return { props: { posts } }
+}
+
+export default function Home({ posts }) {
+  return (
+    <>
+      <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
+      <div className="divide-y divide-gray-200 dark:divide-gray-700">
+        <div className="space-y-2 pt-6 pb-8 md:space-y-5">
+          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+            Latest
+          </h1>
+          <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
+            {siteMetadata.description}
           </p>
         </div>
-      </div>
-
-      <section className="section">
-        <div className="columns has-text-centered">
-          <div className="column">
-            <h2 className="is-size-1-desktop is-size-2-tablet is-size-3-mobile">
-              Highlights
-            </h2>
-          </div>
-        </div>
-        <div className="container">
-          <div className="columns">
-            <div className="column">
-              <Link href="/blog" passHref>
-                <a className={classnames(styles.box, 'box is-fullheight')}>
-                  <div className="content">
-                    <h4 className="title is-5">Blog &rarr;</h4>
-                    <p>
-                      I&lsquo;m putting some useful stuff I&lsquo;ve learnt on
-                      my blog to hopefully help someone out.
-                    </p>
+        <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+          {!posts.length && 'No posts found.'}
+          {posts.slice(0, MAX_DISPLAY).map((frontMatter) => {
+            const { slug, date, title, summary, tags } = frontMatter
+            return (
+              <li key={slug} className="py-12">
+                <article>
+                  <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
+                    <dl>
+                      <dt className="sr-only">Published on</dt>
+                      <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                        <time dateTime={date}>{formatDate(date)}</time>
+                      </dd>
+                    </dl>
+                    <div className="space-y-5 xl:col-span-3">
+                      <div className="space-y-6">
+                        <div>
+                          <h2 className="text-2xl font-bold leading-8 tracking-tight">
+                            <Link
+                              href={`/blog/${slug}`}
+                              className="text-gray-900 dark:text-gray-100"
+                            >
+                              {title}
+                            </Link>
+                          </h2>
+                          <div className="flex flex-wrap">
+                            {tags.map((tag) => (
+                              <Tag key={tag} text={tag} />
+                            ))}
+                          </div>
+                        </div>
+                        <div className="prose max-w-none text-gray-500 dark:text-gray-400">
+                          {summary}
+                        </div>
+                      </div>
+                      <div className="text-base font-medium leading-6">
+                        <Link
+                          href={`/blog/${slug}`}
+                          className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                          aria-label={`Read "${title}"`}
+                        >
+                          Read more &rarr;
+                        </Link>
+                      </div>
+                    </div>
                   </div>
-                </a>
-              </Link>
-            </div>
-          </div>
-          <div className="columns">
-            <div className="column">
-              <ExternalLink
-                href="https://github.com/jack828"
-                className={classnames(styles.box, 'box is-fullheight')}
-              >
-                <div className="content">
-                  <h4 className="title is-5">GitHub &rarr;</h4>
-                  <p>
-                    Find all my public work on GitHub. I like to fix typos in
-                    open-source software.
-                  </p>
-                </div>
-              </ExternalLink>
-            </div>
-            <div className="column">
-              <ExternalLink
-                href="https://clock.co.uk"
-                className={classnames(styles.box, 'box is-fullheight')}
-              >
-                <div className="content">
-                  <h4 className="title is-5">Clock &rarr;</h4>
-                  <p>
-                    I work as a Mid-Weight Software Engineer for Clock Limited.
-                    <br />
-                    Check them out!
-                  </p>
-                </div>
-              </ExternalLink>
-            </div>
-          </div>
-
-          <div className="columns">
-            <div className="column">
-              <ExternalLink
-                href="https://www.linkedin.com/in/jack-burgess828/"
-                className={classnames(styles.box, 'box is-fullheight')}
-              >
-                <div className="content">
-                  <h4 className="title is-5">LinkedIn &rarr;</h4>
-                  <p>See how professional I am.</p>
-                </div>
-              </ExternalLink>
-            </div>
-          </div>
+                </article>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+      {posts.length > MAX_DISPLAY && (
+        <div className="flex justify-end text-base font-medium leading-6">
+          <Link
+            href="/blog"
+            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+            aria-label="all posts"
+          >
+            All Posts &rarr;
+          </Link>
         </div>
-      </section>
-
-      <section className="section">
-        <div className="columns has-text-centered">
-          <div className="column">
-            <h2 className="is-size-1-desktop is-size-2-tablet is-size-3-mobile">
-              Projects
-            </h2>
-            <h3 className="subtitle is-5">
-              I quite like to dabble in technologies I don&lsquo;t get to use at
-              work - mainly embedded systems.
-            </h3>
-          </div>
+      )}
+      {siteMetadata.newsletter.provider !== '' && (
+        <div className="flex items-center justify-center pt-4">
+          <NewsletterForm />
         </div>
-        <div className="container">
-          <div className="columns">
-            <div className="column">
-              <ExternalLink
-                href="https://github.com/jack828/esp32-solar"
-                className={classnames(styles.box, 'box is-fullheight')}
-              >
-                <div className="content">
-                  <h4 className="title is-5">ESP32 Solar System &rarr;</h4>
-                  <p>
-                    Using a MAKERFABS ESP32-TOUCH-CAMERA development board, I
-                    ported and extended some code by another user to work with
-                    the constraints of the ESP32 environment.
-                  </p>
-                  <p>
-                    This project was a 2D simulation of the positions of the
-                    planets in the solar system at a configurable time.
-                  </p>
-                </div>
-              </ExternalLink>
-            </div>
-          </div>
-          <div className="columns">
-            <div className="column">
-              <ExternalLink
-                href="https://github.com/jack828/esp32-logger"
-                className={classnames(styles.box, 'box is-fullheight')}
-              >
-                <div className="content">
-                  <h4 className="title is-5">ESP32 Logger &rarr;</h4>
-                  <p>
-                    My home environment logger has gone through multiple
-                    iterations - first it logged data by POSTing to PiHome{' '}
-                    (which was a MongoDB backend with some very primitive
-                    graphing capabilities!) - now it uses InfluxDB+Grafana on my
-                    home NAS to supercharge my metrics.
-                  </p>
-                  <p>Data has never tasted so sweet.</p>
-                </div>
-              </ExternalLink>
-            </div>
-          </div>
-          <div className="columns">
-            <div className="column">
-              <ExternalLink
-                href="https://github.com/jack828/dotfiles"
-                className={classnames(styles.box, 'box is-fullheight')}
-              >
-                <div className="content">
-                  <h4 className="title is-5">Dotfiles &rarr;</h4>
-                  <p>
-                    The heart of my development environment - using Neovim and
-                    Tmux to effortlessly refactor code and add new{' '}
-                    <strike>bugs</strike> features.
-                  </p>
-                </div>
-              </ExternalLink>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="columns is-centered has-text-centered">
-          <div className="column">
-            <h2 className="is-size-1-desktop is-size-2-tablet is-size-3-mobile">
-              GitHub Stats
-            </h2>
-            <h3 className="subtitle is-5">
-              Because we all know this is the only thing that is important.
-            </h3>
-          </div>
-        </div>
-
-        <div className="columns">
-          <div className="column">
-            <img
-              loading="lazy"
-              align="center"
-              src="https://github-readme-stats.vercel.app/api?username=jack828&show_icons=true&locale=en&count_private=true"
-              alt="jack828"
-            />
-          </div>
-          <div className="column">
-            <img
-              loading="lazy"
-              align="center"
-              src="https://github-readme-streak-stats.herokuapp.com/?user=jack828&"
-              alt="jack828"
-            />
-          </div>
-        </div>
-      </section>
-    </section>
-  </>
-)
-
-export default Index
+      )}
+    </>
+  )
+}
