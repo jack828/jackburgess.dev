@@ -2,15 +2,16 @@ import siteMetadata from '@/data/siteMetadata'
 import Link from 'next/link'
 import SocialIcon from '@/components/social-icons'
 
-const editUrl = (fileName) => `${siteMetadata.siteRepo}/blob/master/data/blog/${fileName}`
+const editUrl = (fileName) =>
+  `${siteMetadata.siteRepo}/blob/master/data/blog/${fileName}`
 
 export default function Sharing({ title, slug, fileName }) {
   const url = encodeURIComponent(`${siteMetadata.siteUrl}/blog/${slug}`)
   const encodedTitle = encodeURIComponent(title)
   return (
     <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
-      If you&lsquo;ve liked what I&lsquo;ve written, or it has helped you out, please consider
-      sharing!
+      If you&lsquo;ve liked what I&lsquo;ve written, or it has helped you out,
+      please consider sharing!
       <div className="mt-3 flex flex-row items-center justify-center gap-x-2">
         <SocialIcon
           kind="twitter"
