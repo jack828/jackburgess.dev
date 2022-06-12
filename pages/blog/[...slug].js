@@ -1,5 +1,4 @@
 import fs from 'fs'
-import PageTitle from '@/components/PageTitle'
 import generateRss from '@/lib/generate-rss'
 import { MDXLayoutRenderer } from '@/components/MDXComponents'
 import {
@@ -27,7 +26,7 @@ export async function getStaticProps({ params }) {
   let allPosts = await getAllFilesFrontMatter('blog')
 
   if (process.env.NODE_ENV === 'production') {
-    allPosts = allPosts.filter((post) => !post.frontMatter.draft)
+    allPosts = allPosts.filter((post) => !post.draft)
   }
 
   const postIndex = allPosts.findIndex(
