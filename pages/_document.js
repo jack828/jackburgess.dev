@@ -5,30 +5,44 @@ class MyDocument extends Document {
     return (
       <Html lang="en" className="scroll-smooth">
         <Head>
+          {[32, 57, 76, 96, 128, 192, 228].map((size) => (
+            /* Standard browser icons */
+            <link
+              key={`Favicon-${size}`}
+              rel="icon"
+              sizes={`${size}x${size}`}
+              href={`/static/favicons/favicon-${size}.png`}
+            />
+          ))}
+          {/* Android */}
           <link
-            rel="apple-touch-icon"
-            sizes="76x76"
-            href="/static/favicons/apple-touch-icon.png"
+            key={`Favicon-196`}
+            rel="shortcut icon"
+            sizes={`196x196`}
+            href={`/static/favicons/favicon-196.png`}
           />
-          <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="/static/favicons/favicon-32x32.png"
+          {[120, 152, 180].map((size) => (
+            /* Apple / iOS */
+            <link
+              key={`Favicon-${size}`}
+              rel="apple-touch-icon"
+              sizes={`${size}x${size}`}
+              href={`/static/favicons/favicon-${size}.png`}
+            />
+          ))}
+          {/* Windows / IE */}
+          <meta
+            name="msapplication-config"
+            content="/static/favicons/browserconfig.xml"
           />
-          <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="/static/favicons/favicon-16x16.png"
-          />
-          <link rel="manifest" href="/static/favicons/site.webmanifest" />
+          {/* Safari */}
           <link
             rel="mask-icon"
             href="/static/favicons/safari-pinned-tab.svg"
             color="#5bbad5"
           />
-          <meta name="msapplication-TileColor" content="#000000" />
+          {/* Chrome */}
+          <link rel="manifest" href="/static/favicons/site.webmanifest" />
           <meta name="theme-color" content="#000000" />
           <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
         </Head>
