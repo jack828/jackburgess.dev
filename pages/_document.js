@@ -5,6 +5,20 @@ class MyDocument extends Document {
     return (
       <Html lang="en" className="scroll-smooth">
         <Head>
+          {/* New Browsers*/}
+          <link
+            key={`Favicon-svg`}
+            rel="icon"
+            type="image/svg+xml"
+            href={`/static/favicons/favicon.svg`}
+          />
+          {/* Old Browsers */}
+          <link
+            key={`Favicon-16`}
+            rel="icon"
+            sizes={`any`}
+            href={`/static/favicons/favicon-16.ico`}
+          />
           {[32, 57, 76, 96, 128, 192, 228].map((size) => (
             /* Standard browser icons */
             <link
@@ -17,7 +31,7 @@ class MyDocument extends Document {
           {/* Android */}
           <link
             key={`Favicon-196`}
-            rel="shortcut icon"
+            rel="icon"
             sizes={`196x196`}
             href={`/static/favicons/favicon-196.png`}
           />
