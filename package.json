@@ -58,10 +58,8 @@
     "next-remote-watch": "^1.0.0",
     "prettier": "^2.5.1",
     "prettier-plugin-tailwindcss": "^0.1.4",
-    "sharp": "^0.30.6",
     "socket.io": "^4.4.0",
-    "socket.io-client": "^4.4.0",
-    "to-ico": "^1.1.5"
+    "socket.io-client": "^4.4.0"
   },
   "lint-staged": {
     "*.+(js|jsx|ts|tsx)": [

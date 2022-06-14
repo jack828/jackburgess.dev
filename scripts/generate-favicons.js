@@ -1,3 +1,4 @@
+// This happens so infrequently you'll need to temporarily add the dependencies
 const sharp = require('sharp')
 const fs = require('fs/promises')
 const toIco = require('to-ico')
