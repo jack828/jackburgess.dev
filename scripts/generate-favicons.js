@@ -9,7 +9,7 @@ const generateFavicon = async (sourcePath, destPath) => {
   const image = await fs.readFile(sourcePath)
 
   const icoFile = await toIco([image], {
-    sizes: [16, 24, 32, 48, 64],
+    sizes: [16, 32, 48],
     resize: true
   })
   await fs.writeFile(destPath, icoFile)
