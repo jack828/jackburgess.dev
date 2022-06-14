@@ -14,10 +14,10 @@ class MyDocument extends Document {
           />
           {/* Old Browsers */}
           <link
-            key={`Favicon-16`}
+            key={`Favicon-ico`}
             rel="icon"
             sizes={`any`}
-            href={`/static/favicons/favicon-16.ico`}
+            href={`/favicon.ico`}
           />
           {[32, 57, 76, 96, 128, 192, 228].map((size) => (
             /* Standard browser icons */
