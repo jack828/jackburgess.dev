@@ -63,6 +63,12 @@ class MyDocument extends Document {
         <body className="bg-white text-black antialiased dark:bg-gray-900 dark:text-white">
           <Main />
           <NextScript />
+          {/* Cloudflare Web Analytics */}
+          <script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon='{"token": "73cbd72b8d264c2985b81306ca184e4a"}'
+          />
         </body>
       </Html>
     )
