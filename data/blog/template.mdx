@@ -8,6 +8,16 @@ lastmod: '2022-06-01'
 bibliography: references-data.bib
 ---
 
+# Published Checklist
+
+- Update `date` + `lastmod` to today
+- Modify title + sell if changed since initial writing
+- Add relevant tags
+- Make sure footnotes link correctly and add value
+- Replace dumb quotes with https://smartquotesforsmartpeople.com
+- Run through Grammarly
+- Go live with `"draft": false`!
+
 # Front Matter
 
 ```
@@ -144,31 +154,45 @@ Format: ![Alt Text](url)
 
 ```
 http://github.com - automatic!
-[GitHub](http://github.com)
+This is [an example](http://example.com/ "Title") inline link.
+[This link](http://example.net/) has no title attribute.
+```
+
 ```
 
 http://github.com - automatic!
-[GitHub](http://github.com)
+This is [an example](http://example.com/ "Title") inline link.
+[This link](http://example.net/) has no title attribute.
 
 ## Blockquotes
 
 ```
+
 As Jayden Smith said:
 
 > How can mirrors be real
 > if our eyes aren't real?.
+
 ```
 
 As Jayden Smith said:
 
 > How can mirrors be real
 > if our eyes aren't real?.
+
+## Horizontal Rules
+
+Horizontal rule is created using `---` on a line by itself.
+
+---
 
 ## Inline code
 
 ```
+
 I think you should use an
 `<addr>` element here instead.
+
 ```
 
 I think you should use an
@@ -178,7 +202,8 @@ I think you should use an
 
 Here’s an example of how you can use syntax highlighting with [GitHub Flavored Markdown](https://help.github.com/articles/basic-writing-and-formatting-syntax/):
 
-````
+```
+
 ```js:fancyAlert.js
 function fancyAlert(arg) {
   if (arg) {
@@ -186,6 +211,7 @@ function fancyAlert(arg) {
   }
 }
 ```
+
 ````
 
 And here's how it looks - nicely colored with styled code titles!
@@ -201,6 +227,7 @@ function fancyAlert(arg) {
 Line highlighting and line numbers are now supported out of the box thanks to the new [rehype-prism-plus plugin](https://github.com/timlrx/rehype-prism-plus)
 
 ````
+
 ```js {1, 3-4} showLineNumbers
 var num1, num2, sum
 num1 = prompt('Enter first number')
@@ -208,6 +235,7 @@ num2 = prompt('Enter second number')
 sum = parseInt(num1) + parseInt(num2) // "+" means "add"
 alert('Sum = ' + sum) // "+" means combine into a string
 ```
+
 ````
 
 will appear as:
@@ -296,3 +324,4 @@ You can create tables by assembling a list of words and dividing them with hyphe
 Any word wrapped with two tildes (like `~~this~~`) will appear ~~crossed out~~.
 
 [^1]: Footnote ref
+````
