@@ -9,8 +9,6 @@ const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true'
 })
 
-const { SubresourceIntegrityPlugin } = require('webpack-subresource-integrity')
-
 // You might need to insert additional domains in script-src if you are using external services
 const ContentSecurityPolicy = `
   default-src 'self';
@@ -83,9 +81,6 @@ module.exports = withBundleAnalyzer({
     })
 
     if (!dev && !isServer) {
-      config.output.crossOriginLoading = 'anonymous'
-      config.plugins.push(new SubresourceIntegrityPlugin())
-
       // Replace React with Preact only in client production build
       Object.assign(config.resolve.alias, {
         'react/jsx-runtime.js': 'preact/compat/jsx-runtime',
