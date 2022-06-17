@@ -19,6 +19,7 @@ public/sitemap.xml
 # rss feed
 /public/tags/**/*.xml
 /public/feed.xml
+/public/cf-beacon.min.js
 
 # misc
 .DS_Store
