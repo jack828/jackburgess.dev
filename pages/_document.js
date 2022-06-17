@@ -66,7 +66,7 @@ class MyDocument extends Document {
           {/* Cloudflare Web Analytics */}
           <script
             defer
-            src="/_cf-beacon"
+            src="/cf-beacon.min.js"
             data-cf-beacon='{"token": "73cbd72b8d264c2985b81306ca184e4a"}'
           />
         </body>
