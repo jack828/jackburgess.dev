@@ -1,4 +1,11 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+let bundleAnalyzer
+try {
+  bundleAnalyzer = require('@next/bundle-analyzer')
+} catch {
+  bundleAnalyzer = () => (config) => config
+}
+
+const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true'
 })
 
