@@ -2,7 +2,6 @@ import fetch from 'node-fetch'
 import fs from 'fs/promises'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import siteMetadata from '../data/siteMetadata.js'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
@@ -17,7 +16,7 @@ const task = async () => {
   ).then((res) => res.text())
   const modifiedScript = originalScript.replace(
     'https://cloudflareinsights.com',
-    siteMetadata.siteUrl
+    ''
   )
   await fs.writeFile(
     join(__dirname, '../public/cf-beacon.min.js'),
