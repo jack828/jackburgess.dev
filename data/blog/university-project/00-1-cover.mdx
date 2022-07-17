@@ -40,3 +40,293 @@ order: 1
 # Acknowledgements
 
 I would like to thank my supervisor for all the support and guidance she has provided during this project. I would also like to thank my friends and family for their non-stop support throughout this project. Scalability testing could not have been completed without the support of colleagues at Clock Limited and the server time generously donated.
+
+# Contents
+
+Acknowledgements
+
+Contents
+
+List of Figures
+
+List of Tables
+
+Abstract
+
+1.0 Introduction
+
+2.0 Design - Application
+
+&emsp;2.1 User Stories
+
+&emsp;&emsp;2.1.1 Client
+
+&emsp;&emsp;2.1.2 CMS
+
+&emsp;&emsp;4.1.3 Backend
+
+&emsp;2.2 Implementation Decisions
+
+&emsp;2.3 CMS
+
+&emsp;&emsp;Interface
+
+&emsp;2.4 Client
+
+3. Design - Testing
+
+&emsp;3.1 Metric Collection
+
+&emsp;3.2 Artificial Load Generation
+
+&emsp;3.2 Test Limits
+
+&emsp;3.3 Test Phases
+
+&emsp;&emsp;Phase 0 - “Warm up”
+
+&emsp;&emsp;Phase 1 - “Ramp up”
+
+&emsp;&emsp;Phase 2 - “Sustained Average”
+
+&emsp;&emsp;Phase 3 - “Peak Load”
+
+&emsp;&emsp;Phase 4 - “Maximum”
+
+4. Implementation
+
+&emsp;4.1 Tooling
+
+&emsp;&emsp;4.1.1 Version Control
+
+&emsp;&emsp;4.1.2 Integrated Development Environment
+
+&emsp;4.2 Code Standards
+
+&emsp;&emsp;4.2.1 Linters
+
+&emsp;&emsp;4.2.2 File structure
+
+&emsp;4.3 Implementation Examples
+
+&emsp;&emsp;4.3.1 WebSocket Request-Response
+
+&emsp;&emsp;4.3.2 Vote Aggregation
+
+&emsp;&emsp;4.3.3 Choropleth Election Map
+
+&emsp;&emsp;4.3.4 Vote Generation
+
+&emsp;&emsp;4.3.5 Database Implementation
+
+&emsp;&emsp;4.3.6 Containerisation
+
+5. Testing
+
+&emsp;5.1 Preliminary testing
+
+&emsp;5.2 Scale Testing Setup
+
+&emsp;&emsp;5.2.1 Bottlenecks & Tool Failures
+
+6. Analysis of Results
+
+&emsp;6.1 Horizontal Scale Results
+
+&emsp;&emsp;6.1.1 DB1 - MongoDB
+
+&emsp;&emsp;&emsp;6.1.1.1 SD1
+
+&emsp;&emsp;&emsp;6.1.1.2 SD2
+
+&emsp;&emsp;&emsp;6.1.1.3 SD3
+
+&emsp;&emsp;&emsp;6.1.1.4 SD4
+
+&emsp;&emsp;6.1.2 DB2 - Couchbase
+
+&emsp;&emsp;&emsp;6.1.2.1 SD1
+
+&emsp;&emsp;&emsp;6.1.2.2 SD2
+
+&emsp;&emsp;&emsp;6.1.2.3 SD3
+
+&emsp;&emsp;&emsp;6.1.2.4 SD4
+
+&emsp;&emsp;6.1.3 Summary
+
+&emsp;6.2 Vertical Scale Results
+
+&emsp;&emsp;6.2.1 V1
+
+&emsp;&emsp;6.2.2 V2
+
+&emsp;&emsp;6.2.3 V3
+
+&emsp;&emsp;6.2.4 V4
+
+&emsp;&emsp;6.2.5 Summary
+
+&emsp;6.3 Summary
+
+7. Conclusion
+
+8. References
+
+Appendix
+
+&emsp;A. CoreUI Admin Template
+
+&emsp;B. Commit Log
+
+&emsp;C. Artillery Testing Script
+
+&emsp;D. Development Machine Information
+
+#List of Figures
+
+Figure 2.1 - CMS Layout
+
+Figure 2.2 - CMS Content List View
+
+Figure 2.3 - CMS Content Form View
+
+Figure 2.4 - CoreUI Sample Form
+
+Figure 2.5 - CMS Election Edit Form
+
+Figure 2.6 - Client Vote View
+
+Figure 2.7 - Client Vote Confirmation
+
+Figure 2.8 - Client Cast Vote view
+
+Figure 4.1 - Send Functionality in WebSocket Library File
+
+Figure 4.2 - Server side vote handler
+
+Figure 4.3 - Interfacing with the server on the client
+
+Figure 4.4 - Main connection logic for the server
+
+Figure 4.5 - Vote aggregation logic
+
+Figure 4.6 - Aggregated Votes
+
+Figure 4.7 - Constituency example
+
+Figure 4.8 - Random from list function
+
+Figure 4.9 - Random vote distribution map
+
+Figure 4.10 - Weighted random selection function
+
+Figure 4.11 - Weighted random vote distribution map
+
+Figure 4.12 - Party schema definition
+
+Figure 4.13 - Visual error feedback
+
+Figure 4.14 - save-mongodb create API
+
+Figure 4.15 - save-couchbase create API
+
+Figure 4.16 - Loader function for database swapping
+
+Figure 4.17 - Application Dockerfile
+
+Figure 5.1 - `node dist/server/app.js`
+
+Figure 5.2 - `node --max-old-space-size=4096 dist/server/app.js`
+
+Figure 5.3 - `node --max-old-space-size=4096 --gc_interval=100 dist/server/app.js`
+
+Figure 5.4 - `node --max-old-space-size=4096 --gc_interval=100 --optimize-for-size dist/server/app.js`
+
+Figure 5.5 - 5 clients connecting over 10 seconds
+
+Figure 5.6 - A Flamegraph of the mini-scenario
+
+Figure 5.7 - Flamegraph removing vote aggregation
+
+Figure 5.8 - Phase 0 without vote aggregation
+
+Figure 5.9 - 5 second vote aggregation caching
+
+Figure 5.10 - System CPU load during phase 0
+
+Figure 5.11 - System RAM use during phase 0
+
+Figure 5.12 - Load balancer
+
+Figure 6.1 - DB1 SD1 - Elect CPU and RAM
+
+Figure 6.2 - DB1 SD1 - Mongo CPU and RAM
+
+Figure 6.3 - DB1 SD1 - MongoDB IO Read and IO Write
+
+Figure 6.4 - DB1 SD1 - Concurrently connected clients
+
+Figure 6.5 - DB1 SD2 - Elect CPU and RAM
+
+Figure 6.6 - DB1 SD2 - Mongo CPU and RAM
+
+Figure 6.7 - DB1 SD2 - MongoDB IO Read and IO Write
+
+Figure 6.8 - DB1 SD2 - Concurrently connected clients
+
+Figure 6.9 - DB1 SD3 - Elect CPU and RAM
+
+Figure 6.10 - DB1 SD3 - Mongo CPU and RAM
+
+Figure 6.11 - DB1 SD3 - MongoDB IO Read and IO Write
+
+Figure 6.12 - DB1 SD3 - Concurrently connected clients
+
+Figure 6.13 - DB1 SD4 - Elect CPU and RAM
+
+Figure 6.14 - DB1 SD4 - Mongo CPU and RAM
+
+Figure 6.15 - DB1 SD4 - MongoDB IO Read and IO Write
+
+Figure 6.16 - DB1 SD4 - Concurrently connected clients
+
+Figure 6.17 - DB2 SD1 - Elect CPU and RAM
+
+Figure 6.18 - DB2 SD1 - Couchbase CPU and RAM
+
+Figure 6.19 - DB2 SD1 - Couchbase IO Read and IO Write
+
+Figure 6.20 - DB2 SD1 - Concurrently connected clients
+
+Figure 6.21 - DB2 SD2 - Elect CPU and RAM
+
+Figure 6.22 - DB2 SD2 - Couchbase CPU and RAM
+
+Figure 6.23 - DB2 SD2 - Couchbase IO Read and IO Write
+
+Figure 6.24 - DB2 SD2 - Concurrently connected clients
+
+Figure 6.25 - DB2 SD3 - Elect CPU and RAM
+
+Figure 6.26 - DB2 SD3 - Couchbase CPU and RAM
+
+Figure 6.27 - DB2 SD3 - Couchbase IO Read and IO Write
+
+Figure 6.28 - DB2 SD3 - Concurrently connected clients
+
+Figure 6.29 - DB2 SD4 - Elect CPU and RAM
+
+Figure 6.30 - DB2 SD4 - Couchbase CPU and RAM
+
+Figure 6.31 - DB2 SD4 - Couchbase IO Read and IO Write
+
+Figure 6.32 - DB2 SD4 - Concurrently connected clients
+
+# List of Tables
+
+Table 1 - Load Test Phases
+
+Table 2 - Horizontal Scale Results
+
+Table 3 - Vertical Scale Results
