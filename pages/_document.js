@@ -57,7 +57,16 @@ class MyDocument extends Document {
           />
           {/* Chrome */}
           <link rel="manifest" href="/static/favicons/site.webmanifest" />
-          <meta name="theme-color" content="#000000" />
+          <meta
+            name="theme-color"
+            media="(prefers-color-scheme: light)"
+            content="#fff"
+          />
+          <meta
+            name="theme-color"
+            media="(prefers-color-scheme: dark)"
+            content="#000"
+          />
           <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
         </Head>
         <body className="bg-white text-black antialiased dark:bg-gray-900 dark:text-white">
