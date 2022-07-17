@@ -15,7 +15,7 @@ export default function PostSimple({
   prev,
   children
 }) {
-  const { date, title, draft } = frontMatter
+  const { date, title, draft, disableComments } = frontMatter
 
   return (
     <SectionContainer>
@@ -51,7 +51,7 @@ export default function PostSimple({
                 {children}
               </div>
             </div>
-            <Comments frontMatter={frontMatter} />
+            {!disableComments && <Comments frontMatter={frontMatter} />}
             <footer>
               <div className="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base">
                 {prev && (
