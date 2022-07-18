@@ -1,0 +1,82 @@
+---
+title: 'Design - Application'
+date: '2022-07-17'
+tags: []
+draft: true
+summary: ''
+lastmod: '2019-05-19'
+bibliography: university-project.bib
+layout: PostSimple
+disableComments: true
+nestedPost: true
+order: 2
+---
+
+# 2. Design - Application
+
+This chapter presents the design of the application and implementation decisions. It is structured into 4 sections. The first contains the user stories that form the backlog for the software artefacts. The second discusses crucial decisions - those that fundamentally shape the artefact, and allow development to take place. The third provides the interfaces that will form the CMS, and the fourth provides client interface designs.
+
+## 2.1 User Stories
+
+In a Scrum based workflow, the project as a whole is split into user stories, which together form the product backlog. A “user story” simply refers to a piece of information that forms a general requirement the product must fulfil, often taking the structure of “As an X, I will be able to Y, when I Z”. This simplifies development by providing a set of features to implement. The use of user stories in Scrum based workflows ensures all functional and non-functional requirements can be catered for during development [@srivastava_bhardwaj_saraswat_2017].
+
+### 2.1.1 Client
+
+As a user, I will be able to
+
+1. Login to the site
+1. Register to the site and select a constituency
+1. View the upcoming election information
+1. View the current election live as a choropleth map, with the current winning constituency being the primary colour, or grey if it is tied
+1. View anonymised votes live, as they are cast from other users, changing the numbers on the map to represent the course of the election
+1. Cast my vote for a party participating in the current live election, or spoil my ballot
+1. Not be able to cast my vote again
+1. Not be able to edit my vote
+1. Verify my vote was cast, and who I voted for
+
+### 2.1.2 CMS
+
+As an administrator, I will be able to
+
+1. Login to the CMS
+1. Create and edit parties
+1. Create and edit elections
+1. Assign specific dates to dictate when the election is visible from-to when voting is open from-to
+1. Not create elections whose dates overlap
+1. Assign parties to an election
+1. Not be able to modify an election once voting opens
+1. Create and edit administrators
+1. View registered voters information
+
+### 4.1.3 Backend
+
+In addition to the above stories, the implementation of the server components must consider additional requirements to ensure a simple changeable database interface.
+
+The backend will be able to
+
+1. Provide a WebSocket server for clients to connect to
+1. Handle large numbers of votes cast simultaneously
+1. Store the data in a sensible format
+1. Be extensible and maintainable
+1. Support database drivers being swapped out with ease
+
+## 2.2 Implementation Decisions
+
+The choice of the programming language in a project is by far one of the most important decisions to make; affecting maintainability, extensibility, and code reuse. The use-cases of the system to implement influences this choice - as requirements may be impossible to implement if the language does not support it.
+
+High availability, scalability, and concurrency are the core principles the chosen language must support. The JavaScript engine NodeJS was selected as the most suitable candidate due to its asynchronous, scalable, high-throughput nature [@nodejs_foundation_2019]. This engine was chosen to be used to build the server-side components. The open source nature of NodeJS and the community build around it provided the perfect environment for developers to share segments (modules) of their code between their own projects and anyone else’s. From this community, a central repository (NPM) for these modules was created to significantly reduce the barrier to entry for NodeJS projects (npm, Inc, 2014).
+
+This library of over 800,000 modules allows developers to reduce their development times by using community-curated modules for common functionality.
+
+Web browsers have undergone many iterations and design choices throughout the history of the World Wide Web. Since the very early days of the browser Netscape, something was needed to give additional functionality to websites and their designers. This came in the form of a procedural scripting language JavaScript. Due to the ubiquity of Netscape and its high adoption speed, JavaScript became the de-facto standard client-side scripting language in web browsers (Andreessen, 1998). As new browsers came and went, they all still implemented the now ECMAScript standard (that defines the JavaScript language). This has remained the case throughout the evolution of the World Wide Web, with all major browsers supporting a client-side JavaScript interpreter, to provide dynamic, interactive content to end users.
+
+The Client will be designed to run in the user’s browser, so the decision to also write the client side code in JavaScript was not a difficult decision to make. This would not only mean users on different devices (desktop computers, laptops, mobile phones) will be able to connect and successfully use the Client, but it will allow code to be shared between components on both Client and server.
+
+The front-end interface was provided by the User Interface library React (Facebook Open Source, 2019), as it provides a huge array of features to speed up development. A bootstrap tool is used to quickly set up a project from a base configuration. The base configuration has many features usable out of the box, including hot loading, code splitting with tree shaking, and progressive web app support. This library was used to build both the CMS and Client interfaces.
+
+## 2.3 CMS
+
+The objective of creating Elect is to produce an optimum configuration for the election model. This means User Interface (UI) or User Experience (UX) design stages of development can be sped up, so the decision was made to utilise an “admin template”. This is simply a library of UI components, with an interface pre-created for use in projects. This will significantly reduce the development time - time need only be spent in adapting the template and creating the Create, Read, Update, and Delete (CRUD) interfaces for the data Clients will be able to view.
+Interface
+Simple wireframes have been designed to aid development, as a reference is created to work from.
+Screenshots of the template used are provided in Appendix A.

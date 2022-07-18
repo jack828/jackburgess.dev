@@ -1,0 +1,40 @@
+---
+title: 'Introduction'
+date: '2022-07-17'
+tags: []
+draft: true
+summary: ''
+lastmod: '2019-05-19'
+bibliography: university-project.bib
+layout: PostSimple
+disableComments: true
+nestedPost: true
+order: 1
+---
+
+# Abstract
+
+Using the asynchronous platform NodeJS, this project looks into scalability and optimisation techniques to assess the optimum configuration for a specific scenario. The scenario chosen was an e-voting system, with traffic volumes similar to that of a general election in the UK. The system was designed to show real-time information about the state of the election live, as votes are cast.
+
+Two software artefacts were produced, an administrative Content Management System and a web-based Client served to users through the application Server. These together form the e-voting system named “Elect”.
+
+The horizontal and vertical scaling performance of different configurations were used to identify the optimum configuration. Two different NoSQL databases were chosen to assess their scalability, and analyse the variation in performance.
+
+The key findings of the scalability tests performed were that MongoDB performed much better than the alternative Couchbase, when the number of application instances is high enough, with only 50% of the configurations discussed withstanding the load generated from the test.
+
+# 1. Introduction
+
+Completing a project is one of the first hurdles a software development team will encounter. The second is when the project is released to the public - and traffic is higher than anticipated. This often causes the hardware behind the scenes to suffer fatal errors, bringing the product offline - potentially having an impact on a business's profits. This project aimed to produce an optimum configuration of a scaled service, allowing practitioners to identify whether or not the configuration fulfils the criteria required. To produce this framework, an issue must first be chosen to become the model of the test. This issue was chosen to be similar in scale to the 2017 General Election.
+
+A simple development workflow was provided by using the Scrum methodology. Scrum is a process framework, emphasising minimising complexity by breaking work down into manageable chunks [@srivastava_bhardwaj_saraswat_2017]. It consisted of three short work cycles with three deliverables.
+
+The deliverables come in the form of two software prototypes, and a period of testing and optimisation.
+
+The prototypes required for the full product are:
+
+- An administrative Content Management System (CMS), used to create and modify records
+- A simple web-based Client to allow users to participate (cast their vote) and view live vote information.
+
+Once the products have been completed and communication interfaces implemented, a Testing Strategy was created. This ensured a rigorous comparison between combinations of application and database instances (horizontal scaling), and server resources (vertical scaling). Two different databases were selected for comparison in order to explore any potential differences between NoSQL database implementations.
+
+This report is structured into seven chapters. Chapter 2 presents the design of the application, and the implementation decisions made. Chapter 3 presents the design of the testing strategy used for a fair, exhaustive test. Chapter 4 shows how the implementation of the software artefacts took place, with a number of notable examples. Chapter 5 contains the configuration details of each setup used in the test, and Chapter 6 analysis the results of the experiment. Chapter 7 contains a conclusive statement of the report and a summary of future work.
