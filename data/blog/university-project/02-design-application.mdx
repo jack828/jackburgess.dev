@@ -64,19 +64,126 @@ The backend will be able to
 
 The choice of the programming language in a project is by far one of the most important decisions to make; affecting maintainability, extensibility, and code reuse. The use-cases of the system to implement influences this choice - as requirements may be impossible to implement if the language does not support it.
 
-High availability, scalability, and concurrency are the core principles the chosen language must support. The JavaScript engine NodeJS was selected as the most suitable candidate due to its asynchronous, scalable, high-throughput nature [@nodejs_foundation_2019]. This engine was chosen to be used to build the server-side components. The open source nature of NodeJS and the community build around it provided the perfect environment for developers to share segments (modules) of their code between their own projects and anyone else’s. From this community, a central repository (NPM) for these modules was created to significantly reduce the barrier to entry for NodeJS projects (npm, Inc, 2014).
+High availability, scalability, and concurrency are the core principles the chosen language must support. The JavaScript engine NodeJS was selected as the most suitable candidate due to its asynchronous, scalable, high-throughput nature [@nodejs_foundation_2019]. This engine was chosen to be used to build the server-side components. The open source nature of NodeJS and the community build around it provided the perfect environment for developers to share segments (modules) of their code between their own projects and anyone else’s. From this community, a central repository (NPM) for these modules was created to significantly reduce the barrier to entry for NodeJS projects [@npm_inc_2014].
 
 This library of over 800,000 modules allows developers to reduce their development times by using community-curated modules for common functionality.
 
-Web browsers have undergone many iterations and design choices throughout the history of the World Wide Web. Since the very early days of the browser Netscape, something was needed to give additional functionality to websites and their designers. This came in the form of a procedural scripting language JavaScript. Due to the ubiquity of Netscape and its high adoption speed, JavaScript became the de-facto standard client-side scripting language in web browsers (Andreessen, 1998). As new browsers came and went, they all still implemented the now ECMAScript standard (that defines the JavaScript language). This has remained the case throughout the evolution of the World Wide Web, with all major browsers supporting a client-side JavaScript interpreter, to provide dynamic, interactive content to end users.
+Web browsers have undergone many iterations and design choices throughout the history of the World Wide Web. Since the very early days of the browser Netscape, something was needed to give additional functionality to websites and their designers. This came in the form of a procedural scripting language JavaScript. Due to the ubiquity of Netscape and its high adoption speed, JavaScript became the de-facto standard client-side scripting language in web browsers [@andreessen_m_1998]. As new browsers came and went, they all still implemented the now ECMAScript standard (that defines the JavaScript language). This has remained the case throughout the evolution of the World Wide Web, with all major browsers supporting a client-side JavaScript interpreter, to provide dynamic, interactive content to end users.
 
 The Client will be designed to run in the user’s browser, so the decision to also write the client side code in JavaScript was not a difficult decision to make. This would not only mean users on different devices (desktop computers, laptops, mobile phones) will be able to connect and successfully use the Client, but it will allow code to be shared between components on both Client and server.
 
-The front-end interface was provided by the User Interface library React (Facebook Open Source, 2019), as it provides a huge array of features to speed up development. A bootstrap tool is used to quickly set up a project from a base configuration. The base configuration has many features usable out of the box, including hot loading, code splitting with tree shaking, and progressive web app support. This library was used to build both the CMS and Client interfaces.
+The front-end interface was provided by the User Interface library React [@facebook_open_source_2019], as it provides a huge array of features to speed up development. A bootstrap tool is used to quickly set up a project from a base configuration. The base configuration has many features usable out of the box, including hot loading[^1], code splitting[^2] with tree shaking[^3], and progressive web app support. This library was used to build both the CMS and Client interfaces.
+
+[^1]: Automatic reloading of changes to components without rebuilding the entire project, and without user interaction
+[^2]: Separating final application into bundles, to reduce initial load times
+[^3]: A way of reducing final application sizes by removing unused code
 
 ## 2.3 CMS
 
 The objective of creating Elect is to produce an optimum configuration for the election model. This means User Interface (UI) or User Experience (UX) design stages of development can be sped up, so the decision was made to utilise an “admin template”. This is simply a library of UI components, with an interface pre-created for use in projects. This will significantly reduce the development time - time need only be spent in adapting the template and creating the Create, Read, Update, and Delete (CRUD) interfaces for the data Clients will be able to view.
-Interface
+
+### Interface
+
 Simple wireframes have been designed to aid development, as a reference is created to work from.
+
 Screenshots of the template used are provided in Appendix A.
+
+![Figure 2.1 - The layout of the CMS](/static/images/university-project/figure-2-1-cms-layout.png)
+Figure 2.1 - The layout of the CMS
+
+Figure 2.1 illustrates the basic layout of the CMS. The header bar shows the CMS logo along with a dropdown for user actions. The sidebar contains shortcuts for the interfaces to view and edit elections, parties, administrators, and votes.
+
+![Figure 2.2 - Content List View](/static/images/university-project/figure-2-2-cms-content-list-view.png)
+Figure 2.2 - Content List View
+
+When viewing the CMS content, the user will be presented with a list view of the data, with optional content filters for keyword searching.
+
+![Figure 2.3 - Content Form View](/static/images/university-project/figure-2-3-cms-content-form-view.png)
+Figure 2.3 - Content Form View
+
+Figure 2.3 is an interface to create and edit content records - a basic form to fill the information required. Validation is provided through colour-coded fields and textual feedback.
+
+Instead of fighting with styling and HTML structure, Figure 2.4 shows a template from the CoreUI dashboard template [@coreui_team_2018].
+
+![Figure 2.4 - CoreUI Sample Form](/static/images/university-project/figure-2-4-coreui-sample-form.png)
+Figure 2.4 - An example form with sample elements
+
+This can be easily reused into the forms required for the CRUD interface of the CMS, as shown in Figure 2.5.
+
+![Figure 2.5 - The edit form view for an election](/static/images/university-project/figure-2-5-cms-election-edit-form.png)
+Figure 2.5 - The edit form view for an election
+
+##2.4 Client
+
+The WebSocket protocol, instead of relying on multiple HTTP connections or long polling, reduces the overhead required when communicating bi-directionally with the client and server by keeping a single TCP connection open [@internet_engineering_task_force_2011]. This removes the overheads of HTTP headers being sent with each request and response - significantly reducing the load on servers with many clients communicating with it. Arbitrary data can be sent client-to-server or server-to-client with minimal resource use by eliminating the superfluous data sent with each message.
+
+For example, a client that requires data may send a request as such:
+
+```
+GET /users?name=Jack HTTP/1.1
+Host: example.com
+Accept: application/json
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-GB,en;q=0.9
+Cache-Control: no-cache
+DNT: 1
+Pragma: no-cache
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/73.0.3683.75 Chrome/73.0.3683.75 Safari/537.36
+```
+
+And the server could reply with:
+
+```
+HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Cache-Control: max-age=604800
+Content-Type: application/json; charset=UTF-8
+Date: Tues, 09 Apr 2019 12:34:56 GMT
+Etag: "1541025663"
+Expires: Tues, 16 Apr 2019 12:34:56 GMT
+Last-Modified: Fri, 09 Aug 2013 23:54:35 GMT
+Server: ECS (phd/FD6F)
+Vary: Accept-Encoding
+X-Cache: HIT
+Content-Length: 1270
+<response body omitted>
+```
+
+Note the additional information pertaining to the request - modified, expiry, cache information - all adds up over the lifetime of a connection. This information, whilst only requiring approximately 300 bytes per response (in the example above), when applied to millions of connected clients, can considerably increase the load generated on a server.
+
+For a WebSocket connection, once the initial HTTP request has been upgraded by the server to a persistent connection, information can be requested in any way desired.
+
+For example, to retrieve a list of users, a simple JavaScript Object Notation (JSON)[^4] object may be sent:
+
+```
+{ "users": { "name": "Jack" } }
+```
+
+And the server could respond with:
+
+```
+{ "users": [ { _id: "1", name: "Jack" } ] }
+```
+
+Note the lack of supporting information in each request and response - only the information that needs to be sent over the wire is actually sent - reducing load per request.
+
+The interface for the client provides the user with an established connection to the server, to enable the map view to receive broadcasted information from other clients.
+There is also an interface for users to cast their vote, built from the CoreUI sample elements.
+
+[^4]: The protocol only supports sending data as strings - but JSON can be serialised to and from a string representation
+
+![Figure 2.6 - Client Vote View](/static/images/university-project/figure-2-6-client-vote-view.png)
+Figure 2.6 - Client Vote View
+
+Figure 2.6 presents the interface for casting a vote. Some UX consideration has been taken with the addition of a different colour to signify a spoilt ballot, and a confirmation window when a vote is cast.
+
+![Figure 2.7 - Client Vote Confirmation](/static/images/university-project/figure-2-7-client-vote-confirmation.png)
+Figure 2.7 - Client Vote Confirmation
+
+Figure 2.7 shows a confirmation modal presented to the user when they try to submit their vote. Due to the requirement that once cast, votes cannot be changed, this was added as a warning to users.
+
+![Figure 2.8 - Client Vote Cast View](/static/images/university-project/figure-2-8-client-vote-cast-view.png)
+Figure 2.8 - Client Cast Vote View
+
+Once the vote is cast, users will be presented with a basic confirmation screen showing the core information about their vote, being the time cast and the party it was for.
