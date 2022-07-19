@@ -1,0 +1,115 @@
+---
+title: 'Design - Testing'
+date: '2022-07-17'
+tags: []
+draft: true
+summary: ''
+lastmod: '2019-05-19'
+bibliography: university-project.bib
+layout: PostSimple
+disableComments: true
+nestedPost: true
+order: 3
+---
+
+# 3. Design - Testing
+
+This chapter explores the design and structure of the scalability testing that was performed on the software artefact. The results of this project are heavily dependent on a thorough, high quality, consistent test being performed. This test must analyse the required dependent and independent variables and will form the basis for the ideal scenario that will be produced as a result.
+
+During each test scenario, multiple metrics will be used to quantify the results:
+
+- Mean percentage of CPU load caused by the application
+- Mean percentage of CPU load caused by the database
+- Mean size of RAM usage caused by the application
+- Mean size of RAM usage caused by the database
+- Disk I/O operation speed for database reads & writes
+- Requests handled per second
+
+The first stage of testing will be to analyse the effect of horizontal scaling on the server application and the database store. It will show the effect the addition of additional clients has on the processing capabilities of the cluster. Only one database instance is required, to eliminate any variance in the performance of each database when operating in a cluster.
+
+The Server and Database (referred to as “SDx”) configurations are:
+
+- SD1 - 3 apps, 1 database
+- SD2 - 6 apps, 1 database
+- SD3 - 12 apps, 1 database
+- SD4 - 24 apps, 1 database
+
+For each SD configuration, these two database programs were trialled for their suitability (referred as “DBx”).
+
+- DB1 - MongoDB
+- DB2 - Couchbase
+
+In total, 8 configurations were tested for their horizontal scale performance.
+
+For the vertical scale tests (referred to as “Vx”), the optimum configuration as discovered through the horizontal tests will be subject of a test of the impact server resources has on the application cluster.
+
+- V1 - 1 core, 256 MB RAM
+- V2 - 2 cores, 512 MB RAM
+- V3 - 3 cores, 768 MB RAM
+- V4 - 4 cores, 1024 MB RAM
+
+## 3.1 Metric Collection
+
+Accurate metric collection for each test provides reliable results. Many different metrics need to be recorded simultaneously with a high level of accuracy. This was provided by the metrics engine Datadog. This metrics engine attaches itself to system process events, obtaining detailed information about low-level system events. [@datadog_2019]
+
+## 3.2 Artificial Load Generation
+
+Supporting the load test is the benchmarking tool Artillery. It supports creating millions of concurrent workers to test any size load, for both WebSocket and HTTP, with each worker performing either the same set of actions or from a weighted list of scenarios [@artillery_io_nd].
+
+In addition to this, and due to the NPM ecosystem, a plugin was available for Artillery that supported sending the metrics collected to Datadog. This provided a more permanent data store when running tests, and brought all the metric collection to one location.
+
+## 3.2 Test Limits
+
+According to parliamentary reports published on the 2017 General Election in the UK, the total number of votes cast was 32,204,184 [@baker_c_2017].
+
+Over the 12 hour polling period (7 am - 7 pm), this number of votes can be interpreted to result in an average of 745 votes being cast per second. This is referred to as “Sustained Average” in Table 1.
+
+Each stage of the test will have an increasing number of clients connecting and casting a random vote to the server, and then a period of remaining connected and receiving votes from other clients. Using this sustained average value, and generating loads lower, at, and above this figure attempts to accurately reflect all load scenarios that the e-voting system could potentially encounter.
+
+## 3.3 Test Phases
+
+Using a fixed scenario for each instance will reduce the number of variables in the test - allowing the variables under test to accurately reflect the changes in the metrics recorded.
+
+The test will be structured in three phases. Each phase will connect a number of clients to the Server, and each client will perform seven actions:
+
+- Authenticate with the server
+- Wait 5 seconds
+- Query the server for the current election information
+- Randomly pick from the available parties
+- Wait 5 seconds
+- Send a vote to the server
+- Maintain connection for 60 seconds - to receive votes from other Clients
+
+This results in a total connection period of 70 seconds per client.
+
+| Phase #                 | Clients/Second | Approximate Number of Clients Connecting | Expected Number of Votes During Test |
+| ----------------------- | -------------- | ---------------------------------------- | ------------------------------------ |
+| 0 - “Warm Up”           | 74             | 4,440                                    | 4,440                                |
+| 1 - “Ramp Up”           | 74 - 745       | 24,800                                   | 29,240                               |
+| 2 - “Sustained Average” | 745            | 44,700                                   | 73,940                               |
+| 3 - “Peak Load”         | 1,000          | 60,000                                   | 133,940                              |
+| 4 - “Maximum”           | 1,000 - 1,490  | 75,300                                   | 209,240                              |
+
+Table 1 - Load Test Phases
+
+#### Phase 0 - “Warm up”
+
+This will be used to warm up the application and its resources. A load representing 10% of the sustained average is used.
+
+#### Phase 1 - “Ramp up”
+
+This will be a period of increasing load. The number of connected clients will increase from 74.5 clients per second (c/s) to the average figure of 745 c/s.
+
+#### Phase 2 - “Sustained Average”
+
+This will be a period constant load that matches the average vote cast rate obtained in 5.2.
+
+#### Phase 3 - “Peak Load”
+
+During this phase, the rate of clients connecting will increase from the average to 1,000 to test the configurations ability to cope with a sudden peak in traffic.
+
+#### Phase 4 - “Maximum”
+
+This phase will see another period of increasing load, from the peak rate of 1,000 clients to double the sustained average, with a rate of 1,490 c/s.
+
+The full test script is provided in Appendix C.
