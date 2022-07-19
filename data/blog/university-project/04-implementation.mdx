@@ -1,0 +1,63 @@
+---
+title: 'Implementation'
+date: '2022-07-17'
+tags: []
+draft: true
+summary: ''
+lastmod: '2019-05-19'
+bibliography: university-project.bib
+layout: PostSimple
+disableComments: true
+nestedPost: true
+order: 4
+---
+
+# 4. Implementation
+
+## 4.1 Tooling
+
+A developers toolbelt makes the difference between completing projects on time, on budget, and as bug-free as possible. Choosing the tools most appropriate to not only the product being produced but also appropriate to the developer's knowledge domain can aid development greatly.
+
+### 4.1.1 Version Control
+
+Version control provides many benefits when working with a team of developers working on the same software product. One of those benefits is a fully comprehensive history of a project, tracked by a series of “commits”. A commit is a set of changes to any number of files held within a repository. It can include additions, deletions, and modifications to files. Applying each of these commits in the order they were created allows a developer to view the project from any point in its history - a valuable tool for tracking down software regressions.
+
+In addition to full project history, version control allows many developers to simultaneously work on any number of features through the use of “branches”. A branch in version control simply splits the project history, allowing a number of commits to be added to it. This does not affect the default (main) branch of the project - which other developers could also branch off, at the same time. Later on, these branches can all be integrated into (“merged”) the main branch, by applying each commit in the order they were created.
+
+Using these features, a team of software engineers could each create separate branches for separate tasks within a project. Reviews of each branch could be carried out to ensure appropriate software engineering practices are being followed. Once complete, these separate branches can all be easily merged back into the main development branch.
+
+The version control software that was used for this project was Git (Software Freedom Conservancy, 2019) due to its decentralised, open-source, and free to use nature.
+
+The commit log for this project is provided for the reader in Appendix B.
+
+### 4.1.2 Integrated Development Environment
+
+An Integrated Development Environment (IDE) enriches a developers experience when working with a framework or programming language. For example, IntelliJ bolsters Java’s toolset by providing built-in version control, a decompiler, and deep code insights using the Reflection API (JetBrains, 2019).
+
+Given the fact that JavaScript’s execution environment is either a browser or using NodeJS’ engine, there is no need for a sophisticated IDE. This allows more freedom when it comes to deciding the editing environment. The editor chosen was Neovim. Neovim is an hyper-extensible text editor, with a large library of plugins (Keyes, 2019). These plugins can provide any functionality from version control interfaces and static analysis, being added to the core program individually. Plugin architecture to add features to a basic editor means not every feature needs to be included in the program, significantly reducing its size, and improving its performance when working with large code bases.
+
+## 4.2 Code Standards
+
+### 4.2.1 Linters
+
+A “linter” is a program that enforces a set of code style rules across a project. This provides many benefits over working without this tool - such as static analysis to identify redundant code, logical errors, and (for strongly typed languages) type checking.
+
+During development, ESLint was the program of choice for ensuring style is maintained throughout, as it itself is written in JavaScript, and its rules are fully and easily configurable with predefined rulesets (JS Foundation, 2013). This means it can be used to check all elements of the CMS, Client, and Server - ensuring the same code style is used throughout the entire project.
+
+### 4.2.2 File structure
+
+An improper file structure can break the Don’t Repeat Yourself (DRY) software engineering principle. The DRY principle ensures every piece of knowledge or logic has a single, unambiguous representation within a system (Haoyu and Haili, 2012). When the same logic is required in multiple places - but is repeated in each location - and a change is required to the flow of data through it, it makes it difficult to ensure all locations are updated with the new requirements. DRY would require a separate logical module for this action, which would be included once in each location it is needed. When a requirement change needs to be actioned, only one piece of code needs to be updated.
+
+The folder structure used separates the site components (CMS & Client) from the Server components, with a shared library folder for common operations.
+
+## 4.3 Implementation Examples
+
+During development, several areas of the software artefact have been identified for further explanation. These areas required more consideration than the average component.
+
+### 4.3.1 WebSocket Request-Response
+
+Since WebSocket uses a single persistent connection between server and client, it does not have a request-response facility, and instead communicates with individual messages from client-to-server or server-to-client. It is possible, however, to use this method of communication to build a simple request-response facility.
+
+The basis for implementing this was to give a unique identifier to each request, and listening for a response containing the same ID to trigger another action.
+
+In the client, this was implemented as a library file providing a simple event-based interface to send and receive data from the server.
