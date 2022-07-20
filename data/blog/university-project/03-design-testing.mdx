@@ -50,7 +50,7 @@ For the vertical scale tests (referred to as “Vx”), the optimum configuratio
 
 ## 3.1 Metric Collection
 
-Accurate metric collection for each test provides reliable results. Many different metrics need to be recorded simultaneously with a high level of accuracy. This was provided by the metrics engine Datadog. This metrics engine attaches itself to system process events, obtaining detailed information about low-level system events. [@datadog_2019]
+Accurate metric collection for each test provides reliable results. Many different metrics need to be recorded simultaneously with a high level of accuracy. This was provided by the metrics engine Datadog. This metrics engine attaches itself to system process events, obtaining detailed information about low-level system events [@datadog_2019].
 
 ## 3.2 Artificial Load Generation
 
@@ -83,12 +83,12 @@ The test will be structured in three phases. Each phase will connect a number of
 This results in a total connection period of 70 seconds per client.
 
 | Phase #                 | Clients/Second | Approximate Number of Clients Connecting | Expected Number of Votes During Test |
-| ----------------------- | -------------- | ---------------------------------------- | ------------------------------------ |
-| 0 - “Warm Up”           | 74             | 4,440                                    | 4,440                                |
-| 1 - “Ramp Up”           | 74 - 745       | 24,800                                   | 29,240                               |
-| 2 - “Sustained Average” | 745            | 44,700                                   | 73,940                               |
-| 3 - “Peak Load”         | 1,000          | 60,000                                   | 133,940                              |
-| 4 - “Maximum”           | 1,000 - 1,490  | 75,300                                   | 209,240                              |
+| ----------------------- | -------------: | ---------------------------------------: | -----------------------------------: |
+| 0 - “Warm Up”           |             74 |                                    4,440 |                                4,440 |
+| 1 - “Ramp Up”           |       74 - 745 |                                   24,800 |                               29,240 |
+| 2 - “Sustained Average” |            745 |                                   44,700 |                               73,940 |
+| 3 - “Peak Load”         |          1,000 |                                   60,000 |                              133,940 |
+| 4 - “Maximum”           |  1,000 - 1,490 |                                   75,300 |                              209,240 |
 
 Table 1 - Load Test Phases
 

@@ -113,7 +113,7 @@ This can be easily reused into the forms required for the CRUD interface of the 
 ![Figure 2.5 - The edit form view for an election](/static/images/university-project/figure-2-5-cms-election-edit-form.png)
 Figure 2.5 - The edit form view for an election
 
-##2.4 Client
+## 2.4 Client
 
 The WebSocket protocol, instead of relying on multiple HTTP connections or long polling, reduces the overhead required when communicating bi-directionally with the client and server by keeping a single TCP connection open [@internet_engineering_task_force_2011]. This removes the overheads of HTTP headers being sent with each request and response - significantly reducing the load on servers with many clients communicating with it. Arbitrary data can be sent client-to-server or server-to-client with minimal resource use by eliminating the superfluous data sent with each message.
 

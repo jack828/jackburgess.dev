@@ -26,15 +26,15 @@ In addition to full project history, version control allows many developers to s
 
 Using these features, a team of software engineers could each create separate branches for separate tasks within a project. Reviews of each branch could be carried out to ensure appropriate software engineering practices are being followed. Once complete, these separate branches can all be easily merged back into the main development branch.
 
-The version control software that was used for this project was Git (Software Freedom Conservancy, 2019) due to its decentralised, open-source, and free to use nature.
+The version control software that was used for this project was Git [@software_freedom_conservancy_2019] due to its decentralised, open-source, and free to use nature.
 
 The commit log for this project is provided for the reader in Appendix B.
 
 ### 4.1.2 Integrated Development Environment
 
-An Integrated Development Environment (IDE) enriches a developers experience when working with a framework or programming language. For example, IntelliJ bolsters Java’s toolset by providing built-in version control, a decompiler, and deep code insights using the Reflection API (JetBrains, 2019).
+An Integrated Development Environment (IDE) enriches a developers experience when working with a framework or programming language. For example, IntelliJ bolsters Java’s toolset by providing built-in version control, a decompiler, and deep code insights using the Reflection API [@jetbrains_2019].
 
-Given the fact that JavaScript’s execution environment is either a browser or using NodeJS’ engine, there is no need for a sophisticated IDE. This allows more freedom when it comes to deciding the editing environment. The editor chosen was Neovim. Neovim is an hyper-extensible text editor, with a large library of plugins (Keyes, 2019). These plugins can provide any functionality from version control interfaces and static analysis, being added to the core program individually. Plugin architecture to add features to a basic editor means not every feature needs to be included in the program, significantly reducing its size, and improving its performance when working with large code bases.
+Given the fact that JavaScript’s execution environment is either a browser or using NodeJS’ engine, there is no need for a sophisticated IDE. This allows more freedom when it comes to deciding the editing environment. The editor chosen was Neovim. Neovim is an hyper-extensible text editor, with a large library of plugins [@keyes_j_2019]. These plugins can provide any functionality from version control interfaces and static analysis, being added to the core program individually. Plugin architecture to add features to a basic editor means not every feature needs to be included in the program, significantly reducing its size, and improving its performance when working with large code bases.
 
 ## 4.2 Code Standards
 
@@ -42,11 +42,11 @@ Given the fact that JavaScript’s execution environment is either a browser or 
 
 A “linter” is a program that enforces a set of code style rules across a project. This provides many benefits over working without this tool - such as static analysis to identify redundant code, logical errors, and (for strongly typed languages) type checking.
 
-During development, ESLint was the program of choice for ensuring style is maintained throughout, as it itself is written in JavaScript, and its rules are fully and easily configurable with predefined rulesets (JS Foundation, 2013). This means it can be used to check all elements of the CMS, Client, and Server - ensuring the same code style is used throughout the entire project.
+During development, ESLint was the program of choice for ensuring style is maintained throughout, as it itself is written in JavaScript, and its rules are fully and easily configurable with predefined rulesets [@js_foundation_2013]. This means it can be used to check all elements of the CMS, Client, and Server - ensuring the same code style is used throughout the entire project.
 
 ### 4.2.2 File structure
 
-An improper file structure can break the Don’t Repeat Yourself (DRY) software engineering principle. The DRY principle ensures every piece of knowledge or logic has a single, unambiguous representation within a system (Haoyu and Haili, 2012). When the same logic is required in multiple places - but is repeated in each location - and a change is required to the flow of data through it, it makes it difficult to ensure all locations are updated with the new requirements. DRY would require a separate logical module for this action, which would be included once in each location it is needed. When a requirement change needs to be actioned, only one piece of code needs to be updated.
+An improper file structure can break the Don’t Repeat Yourself (DRY) software engineering principle. The DRY principle ensures every piece of knowledge or logic has a single, unambiguous representation within a system [@haoyu_haili_2012]. When the same logic is required in multiple places - but is repeated in each location - and a change is required to the flow of data through it, it makes it difficult to ensure all locations are updated with the new requirements. DRY would require a separate logical module for this action, which would be included once in each location it is needed. When a requirement change needs to be actioned, only one piece of code needs to be updated.
 
 The folder structure used separates the site components (CMS & Client) from the Server components, with a shared library folder for common operations.
 
@@ -61,3 +61,157 @@ Since WebSocket uses a single persistent connection between server and client, i
 The basis for implementing this was to give a unique identifier to each request, and listening for a response containing the same ID to trigger another action.
 
 In the client, this was implemented as a library file providing a simple event-based interface to send and receive data from the server.
+
+![Figure 4.1 - Send functionality in WebSocket library file](/static/images/university-project/figure-4-1-send-functionality-in-a-websocket-library-file.png)
+
+Figure 4.1 - Send functionality in WebSocket library file
+
+Figure 4.1 shows the implementation; an “event key” is used to differentiate endpoints on the WebSocket server, allowing code to be separated out of a monolithic controller.
+
+![Figure 4.2 - The server-side handler to cast a vote.](/static/images/university-project/figure-4-2-server-side-vote-handler.png)
+
+Figure 4.2 - The server-side handler to cast a vote.
+
+Figure 4.2 depicts a handler on the server, listening for the event key `vote:cast`. This handler can be separated from any other logic within the code, enabling loosely coupled components. Figure 4.3 below shows the client side code required to send the vote cast event to the server, and action based on the response.
+
+![Figure 4.3 - Interfacing with the server on the client](/static/images/university-project/figure-4-3-interfacing-with-the-server-on-the-client.png)
+
+Figure 4.3 - Interfacing with the server on the client
+
+The request-response flow is assisted with a base controller interfacing with the main WebSocket connection. Figure 4.4 shows the conversion from a basic WebSocket request to the event interface as required by Figure 4.2.
+
+![Figure 4.4 - The main interface between WebSocket messages and the event handling components](/static/images/university-project/figure-4-4-main-connection-logic-for-the-server.png)
+
+Figure 4.4 - The main interface between WebSocket messages and the event handling components
+
+The operation of Figure 4.4 is simple - when a connection is made, it assigns a unique identifier and binds the message handling logic. This message handling logic expects data to be in a specific format - with an event key, and optional data parameters. If invalid data is sent, the Server simply ignores the request. For valid requests, it will iterate over the received data, emitting each event received and passing data to handlers.
+
+### 4.3.2 Vote Aggregation
+
+The design of the storage of votes cast by users is an important design consideration. Each time a user connects to the WebSocket Server they load the current election, their vote, and an aggregation of all the votes present in the system. Since we are dealing with up to 33 million votes, the design of the aggregation function will seriously affect performance at scale.
+
+One option for optimisation is to perform the aggregation using the database program itself. This provides the benefit of shifting logic out of the application and into the database, which could potentially be more performant than the application, dependant on load. This would, however, tightly couple the aggregation logic to the specifics of the implementation of the database, making it harder to allow for the easy swapping of databases during the testing stage.
+
+Another option would be to keep aggregation logic within the Server, and only loading the votes from the database.
+
+![Figure 4.5 - Application logic to aggregate votes](/static/images/university-project/figure-4-5-vote-aggregation-logic.png)
+
+Figure 4.5 - Application logic to aggregate votes
+
+Figure 4.5 builds an object, for each constituency that has at least one valid vote, and sums the totals for each party within that constituency. The result of this aggregation is shown in Figure 4.6. Each identifier within the constituency represents the unique identifier for each party, with the special case of `null` being used to represent spoilt ballots.
+
+![Figure 4.6 - Aggregated Votes](/static/images/university-project/figure-4-6-aggregated-votes.png)
+
+Figure 4.6 - Aggregated Votes
+
+### 4.3.3 Choropleth Election Map
+
+Creating a visualisation of election data to aid users requires careful selection of the medium used to display the data. The initial choice was to simply show a table format of each constituency, sorted by the total number of votes, with the current leader party being highlighted in each row.
+
+This, however, provides a very difficult interface for users to find their constituency and offers little interactivity.
+
+A choropleth map can resolve both these issues - by overlaying the data in constituency-sized polygons. Colour can be used to signify the leader party, and interactivity can be added through the use of hover-over functionality, and click-to-zoom.
+
+There are 632 constituencies in the United Kingdom that make up the Westminster Parliament. Each needs to be shown to the user on the interactive map, so geographical coordinates of their respective boundaries were obtained from a public data source [@office_for_national_statistics_2018].
+
+To build a choropleth map in JavaScript, multiple libraries were brought together. The first offers open source, mobile-friendly interactive mapping functionality, Leaflet [@agafonkin_v_2017]. Once combined with an open source geographic imagery and location service, MapBox [@mapbox_2010], this provides a platform for creating interactive maps within a user’s browser environment.
+
+The data provided by the ONS for constituency boundaries adheres to the GeoJSON standard, a method of sharing geospatial data in a JavaScript object notation format (JSON) [@internet_engineering_task_force_2016]. The loading and displaying of this data on a map is another reason why the Leaflet library was chosen. Only a few lines of code enabled the display of each region, along with dynamic styling and interactive event registration.
+
+![Figure 4.7 - A parliamentary constituency, “Arundel and South Downs” from ONS boundary data. ](/static/images/university-project/figure-4-7-constituency-example.png)
+
+Figure 4.7 - A parliamentary constituency, “Arundel and South Downs” from ONS boundary data.
+
+Figure 4.7 shows the final result of all libraries and data sources. A map, where when a user mouses over the boundary to a constituency, displays an information window with more (real-time) vote information, and is coloured according to the lead party.
+
+Note the boundary line excluding the rivers Arun and Adur, showing the level of detail and accuracy in the ONS GeoJSON.
+
+### 4.3.4 Vote Generation
+
+Elect provides users with a choropleth election map to view the total votes across the connected network. During testing of this map, a module was created to provide a weighted frequency to the random selection of parties - to ensure the data was not entirely random and unobservable.
+
+It builds upon the basic distribution of a random element from an array, as shown by Figure 4.8, where a random element from 0 - n would be selected.
+
+![Figure 4.8 - A function to get a random element from the provided list](/static/images/university-project/figure-4-8-random-from-list-function.png)
+
+Figure 4.8 - A function to get a random element from the provided list
+
+This code had the inherent issue wherein spoilt ballots (represented as a `null` value within the system) would be unproportionally chosen when compared to a real election - some 16.7% of the time in the case of a 5 party election. Additionally, a number of constituencies would end up with a tied number of votes.
+
+![Figure 4.9 - Result of using simple randomness to create votes](/static/images/university-project/figure-4-9-random-vote-distribution-map.png)
+
+Figure 4.9 - Result of using simple randomness to create votes
+
+To resolve this issue, a weighted system was developed to provide a proportional weight to each party within each generation of a vote.
+
+![Figure 4.10 - Weighted random selection](/static/images/university-project/figure-4-10-weighted-random-selection-function.png)
+
+Figure 4.10 - Weighted random selection
+
+Figure 4.10 shows the simple logic required to add a weight to each option. From each base weight, it creates a number of entries in a larger array relative to the weight - e.g. for a weight of 0.30, the option would have 30 entries in the final table. The total size of the table is 100 entries, with each option having the appropriate number of entries to give a weighted output when selecting randomly from the final table.
+
+![Figure 4.11 - Result of using weighted randomness in creating votes](/static/images/university-project/figure-4-11-weighted-random-vote-distribution-map.png)
+
+Figure 4.11 - Result of using weighted randomness in creating votes
+
+The result is much clearer, with a better, more realistic distribution of votes.
+
+### 4.3.5 Database Implementation
+
+One of the core requirement for the implementation is the facility to switch databases. The server components must not interface directly with database drivers. The database-specific logic can be abstracted away from the application into a module with a common Application Programming Interface (API), that the application can interact with. This enables the application design to be simplified through a consistent interface, regardless of database specifics.
+
+As NoSQL databases do not provide validation of the types and structure of the data stored, another module is required to fulfil the validation requirement.
+
+An assortment of modules was picked from the NPM registry that provides the Create/Read/Update/Delete (CRUD) interface with support for validation, and a database-agnostic persistence engine.
+
+Validation is provided through the `schemata` module. This provides the user with an interface to create objects with a particular structure and types.
+
+![Figure 4.12 - Schema definition for an object representing a “party”](/static/images/university-project/figure-4-12-party-schema-definition.png)
+
+Figure 4.12 - Schema definition for an object representing a “party”
+
+Figure 4.12 shows the definition of a “party” within the application. We have predetermined the type of fields within the object, allowing the application to be written in a way to always expect the correct data type. Each property has an interface to allow any number of validation functions to be added - utilising the NPM registry to reduce code duplication, with many types of validators already created. These validators provide pre-formatted error messages from their internal validation functions and can be shown to users as visual feedback.
+
+![Figure 4.13 - Visual feedback, provided by validator modules](/static/images/university-project/figure-4-13-visual-error-feedback.png)
+
+Figure 4.13 - Visual feedback, provided by validator modules
+
+Once the validation has been implemented, the focus moved onto the CRUD interfaces. This functionality was provided by the `crud-service` and `save` modules. These two modules, when combined with `schemata`, provide a full CRUD workflow. The `save` module, by default, uses a storage engine that operates within working memory (RAM). This can be extended through the use of modules to provide adaptors to any kind of storage interface, primarily databases.
+
+Using the existing storage engine for MongoDB, `save-mongodb`, a module was created to provide the interfaces for Couchbase and XYZ[^4].
+
+[^4]: A note from the future - I guess I had intended to pick another database to look at - but this got dropped from the final idea just for time purposes. This mistake should've been picked up, but when you've read a document 9,001 times these things slip through!
+
+![Figure 4.14 - save-mongodb’s create API function](/static/images/university-project/figure-4-14-save-mongodb-create-api.png)
+
+Figure 4.14 - `save-mongodb`’s create API function
+
+![Figure 4.15 - The Couchbase adapters create API function](/static/images/university-project/figure-4-15-save-couchbase-create-api.png)
+
+Figure 4.15 - The Couchbase adapters create API function
+
+Each database program will have a different API for its operations, and this will very tightly couple the code for any operation on the server - making switching databases a time-intensive refactor or requiring multiple versions of the final product. This approach would make any maintenance of the product require more time to complete.
+
+The adaptor interface provided by the `save` module solves this issue, by uncoupling the application logic from the database logic.
+
+We can see the minutiae of the database specific functions required for each module’s API. In Figures 4.14 and 4.15, on Line 8, we use the database specific commands to insert a document. Where MongoDB returns the inserted document in the `insertOne` command (Fig. 4.14 Line 10), Couchbase requires a subsequent read operation (Fig. 4.15 Line 10) to obtain the inserted document, and match the API set by the `save` module.
+
+Once the adapters have been created, these can then be swapped out in the application code through configuration variables.
+
+![Figure 4.16 - The loader function for the database](/static/images/university-project/figure-4-16-loader-function-for-database-swapping.png)
+
+Figure 4.16 - The loader function for the database
+
+### 4.3.6 Containerisation
+
+Containerisation is a method of packing software into easily transferable, deterministic packages. This allows one server to run many different containers at any one time, with none of the containers fighting for resources - as each container needs zero knowledge of the system, or if other containers are running.
+
+The containers used in this project utilised the method proposed by Docker. This method users a layered approach to building application images, by way of referencing other application containers [@docker_inc_2018].
+
+For example, there could be a Docker container for a base installation of Ubuntu 16.04. Developers requiring this version of Ubuntu simply need to reference the Docker image for it as a starting point, and then the developer can add further functionality. In the context of this project, a NodeJS image was used (which references Ubuntu 16.04) building the application and inserting it into the newly created container. Figure 4.17 shows the file used that builds the application container.
+
+![Figure 4.17 - Application Dockerfile](/static/images/university-project/figure-4-17-application-dockerfile.png)
+
+Figure 4.17 - Application Dockerfile
+
+These containers can be managed by automated software to produce systems that automatically scale, without the need to build new versions of the application - it is pre-built, ready for immediate use.
