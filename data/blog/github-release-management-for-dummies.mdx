@@ -1,0 +1,181 @@
+---
+title: 'GitHub Release Management for Dummies'
+date: '2023-08-24'
+tags: ['javascript', 'release management']
+draft: true
+summary: 'This is the blog template with information about what you can do. Neato.'
+lastmod: '2023-08-24'
+---
+
+## Preamble
+
+I recently saw a post on StackOverflow regarding "adding multiple features to releases". It got my mind going - how do people manage releases?
+
+At my previous place of work, we had a custom setup. It worked fantastically for us, and grew as we changed tooling and platforms.
+
+It's relatively universal - and supports a couple quality-of-life features I find hard to live without nowadays.
+
+I will caveat now: this method was designed specifically for a JavaScript project, and your mileage may vary in how you get it working for your system.
+
+_Disclaimer: I contributed to this project and used it for 7 years, which arguably makes me biased._
+
+## Workflows
+
+Several workflows exist. Infact, many hundreds probably exist - each company is going to do their work in the way that either best fits them, or one that has grown organically out of the business needs.
+
+A popular method is the "Git Feature Branch Workflow". I won't go into too much detail here - [see Atlassian's blog for detail](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow) - but it operates on the fact that `master` is a protected branch. It must only contain complete and working code. Developers do their work in separate `feature/` branches, isolated from other work, and able to progress through the review/feedback/acceptance phases in isolation from other developer's work.
+
+Another method is "Gitflow Workflow". This uses naming conventions for branches as above, but the work is branched off a `develop` branch instead of `master`. Releases are then cut from `master` as required. Again, [Atlassian has a blog about this](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). I'm not overly familiar with this, but I can clearly see some of the issues immediately - stale branches, merge conflicts galore, the sheer complexity!
+
+This release management tool focuses on the "Git Feature Branch Workflow" approach.
+
+## Release Management
+
+There's a variety of ways of handling releases. From the most basic and resource intensive like asking the project's senior engineer to stop adding ~bugs~ features and manually aggregate commits in a release branch and deploy that themselves, to an automagical setup that reads the mind and creates a release with exactly what you need in it.
+
+In my old job, we was an agency with many projects on the go at one time. We had a repository for each, and each could be at any stage of the development process. For this blog, I'll be focussing on projects in the **maintenance** stage. This means that they are considered "complete", with the bulk of new work comprised of either features, or bugfixes.
+
+Let's take an example project `FooBar` with branches like so:
+
+```
+master
+feature/add-button
+feature/remove-background-colour
+bug/fix-startup-sound
+```
+
+It's not important who worked on which of the branches - only that the names of them follow the convention. The convention is `feat/` or `feature/` for new stuff, and `bug/` or `fix/` for bugfixes (or "hotfixes").
+
+In a manual workflow, we could do the following:
+
+1. Create a new branch off master `release/new-version`
+1. Merge in the required work, e.g. `feature/add-button` and `bug/fix-startup-sound`
+1. Amend the changelog with the required changes
+1. Increment the version number of the project - in this case, `npm version {major|minor|patch}` as appropriate
+1. Git tag the new version of the project
+1. Push to GitHub, open a pull request
+1. Deploy the release to a staging environment (however complicated this could be)
+1. Manually verify the work is as expected, and the client/customer/whoever approves for production
+1. Deploy the release to a production environment (however complicated this could be again!)
+1. Merge the release branch into master, and close the associated feature branches
+
+There's a lot of issues that are present here:
+
+- You need to come up with a release branch naming convention, and then stick to it!
+- You need to manually update the changelog - you might not have any context on one of the feature branches being added.
+- You might forget to add one branch into the changelog, or the release entirely.
+
+And the biggest issue for me:
+
+- **A developer's time is required** - when they could be doing something else.
+
+## Release Management (but better this time)
+
+How can the manual process be made better? Well, for starters, it's the same thing each time. The only variable is _which_ branches get added into the release.
+
+Another thing is that we need to open up the process to anyone (in the company, obviously). This means that no Git knowledge required, no setup of the project locally, no knowledge of the naming conventions, or even how to write a changelog.
+
+Painting the ideal scenario with the tooling that I know exists - it looks something like this:
+
+1. Baz (a project manager, for example) has a number of pull requests they want to release.
+1. Baz goes to the first pull request, and says "add this to a new release".
+1. A new, uniquely named, release gets created.
+   - This includes the branch and associated pull request on GitHub.
+1. Baz goes to the other pull requests, and says "add this to the release I just made".
+1. Each pull request gets added to the release. The pull requests remain open and untouched - commits are merged in to new branches.
+   - A bonus here is that tests (CI) can run each time a new feature is added to the release - nice!
+1. When ready, Baz goes to the finished release pull request and says "deploy this to some environment"[^1].
+1. The release branch gets an automatic changelog amendment and version committed and pushed.
+1. The release branch is then marked as "ready to release", and additional automated processes can be triggered to handle the deployment.
+1. Once accepted, Baz can then hit "Merge", and the release is complete!
+
+### Goals
+
+Let's quickly recap the goals from this "better" version versus the manual one:
+
+1. Low barrier to entry - GitHub account and basic GitHub knowledge required
+1. No manual merging
+1. No manual versioning / changelogs
+1. Automatic as possible
+
+## The Tool
+
+The tool we'll reach for is called `exso` - but we'll refer to it as the "release bot". It's a GitHub bot used to manage releases.
+
+But it doesn't just do that - everything it does is incredibly valuable:
+
+- Quality Assurance (QA)
+  - The release bot will ensure every feature or bugfix pull request is reviewed and approved before allowing it to be added to a release
+- Master merges
+  - The release bot will _automatically_ merge master into all open pull requests when it updates - keeping PR's up-to-date!
+  - The release bot will mark master merge conflicts automatically for manual intervention
+- Semver support
+  - The release bot will allow changing of versioning to major/minor/patch
+
+## Demo
+
+Pictures paint thousands of words - I'll demonstrate some of the features:
+
+![Quality Assurance](/static/images/blogs--release-management--quality-assurance.png)
+
+Here, a pull request has been created by Quinn. They've followed the branch convention, and named it `feat/increase-worker-task-resources`. Appropriate title and description aids the review process.
+
+The bot automatically added the `qa-required` label to the PR. This clearly identifies that the review process has not yet been completed. In addition, a status check is added that prevents it from being added to a release.
+
+When a reviewer approves the changes, the bot removes the `qa-required` label, and passes the status check. The feature is now ready for deployment.
+
+![Add to new release](/static/images/blogs--release-management--add-to-new-release.png)
+
+Then, Baz comes along and adds the PR to a new release. We get a lovely random name generated (since it isn't important, but needs to be unique!). We're also told the PR number of the release so we can easily reference it in the next one.
+
+![Add to existing release](/static/images/blogs--release-management--add-to-existing-release.png)
+
+If we needed to, we can then go to another PR and tell the release bot to add to the release we previously had it make.
+
+![Release](/static/images/blogs--release-management--release.png)
+
+Now the release has the body as shown - it's nice and clear, and importantly, automatically generated. Fixes and features are listed and linked for you.
+
+A set of labels are applied based on what is added - if it's only fixes, then it's `semver/patch`. If it contains at least one feature, then it's `semver/minor`.
+
+Once the release is ready to deploy, we can tell the bot to begin the process.
+
+![Deploy staging](/static/images/blogs--release-management--deploy-staging.png)
+
+This is a key stage of the process - when it receives this command, it versions the project according to the label applied.
+
+Similarly, for production:
+
+![Deploy production](/static/images/blogs--release-management--deploy-production.png)
+
+This performs an additional step - it amends the changelog automatically. It uses the pull request titles to populate the changelog.
+
+You'll notice two additional labels - `ready-for-staging` and `ready-for-production`. These are immensely useful to us - for automation! We can trigger additional actions and workflows based on these label events. You can also configure repository webhooks to kick deployments off from this if you don't use GitHub Actions.
+
+## Setup for Your Organisation
+
+If you like the look of this release process, here's how you can set it up.
+
+### A bot account
+
+You'll need a bot account on GitHub for your organisation. I recommend a new bot account instead of a particular member, since if they leave, you have to update everything! The account needs admin level permissions on repositories, so make sure you keep the credentials safe and private.
+
+Once set up, create a [Personal Access Token (PAT)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#personal-access-tokens-classic). Keep this secret and private, too!
+
+### Somewhere to put it
+
+As of the time of writing this blog, the bot is not yet serverless, and does require somewhere to run the Docker container.
+
+For cloud hosting, I recommend [Northflank](https://northflank.com). I have no affiliation with them, but I have worked extensively with them in the past. The free tier they offer is great to get started.
+
+# Published Checklist
+
+- Update `date` + `lastmod` to today
+- Modify title + sell if changed since initial writing
+- Add relevant tags
+- Make sure footnotes link correctly and add value
+- Replace dumb quotes with https://smartquotesforsmartpeople.com
+- Run through Grammarly
+- Go live with `"draft": false`!
+
+[^1]: The specific environment doesn't really matter much. But if you don't have a staging or UAT environment for your projects, you are playing a dangerous game!
