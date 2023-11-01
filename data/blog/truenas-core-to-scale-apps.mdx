@@ -1,0 +1,257 @@
+---
+title: 'TrueNAS Core to Scale App Migration'
+date: '2023-11-04'
+tags: ['TrueNAS', 'FreeBSD', 'Debian']
+summary: 'FreeBSD to Debian, data included!'
+lastmod: '2023-11-04'
+---
+
+<TOCInline toc={props.toc} exclude="Preamble" asDisclosure />
+
+# Preamble
+
+If you’ve landed here, hello! It seems that you too want to make the switch from TrueNAS Core to Scale.
+
+There are many reasons for and against it, and I won’t go into them here. At the end of the day, when all’s said and done...you know what I mean?[^1]
+
+I also won’t go into the exact migration process for the OS itself - you can do it all through the UI. But make sure you have backups of everything!
+
+I’ll primarily be going over the app migrations for my jails into Docker container versions, keeping as much data as possible.
+
+These will be a combination of semi-rough and detailed notes, so I hope they’re helpful.
+
+# But first
+
+I’d create a new dataset for your container data to live. Gradually, we’ll copy more and more data out of the old `iocage` dataset into this one. It’s good to keep a copy so we can start fresh.
+
+I went with a dataset called `apps`, so I’ll be using commands referencing that, in my pool `tank`: `/mnt/tank/apps`.
+
+# Plex
+
+The configuration can be found here:
+
+```
+/mnt/tank/iocage/jails/<jailname>/root/usr/local/plexdata/Plex\ Media\ Server/
+```
+
+Where `<jailname>` is your jail - mine was `plex`.
+
+Copy this folder into your app dataset:
+
+```sh
+mkdir -p /mnt/tank/apps/plex/config/Library/Application\ Support/
+cp -Rip /mnt/tank/iocage/jails/plex/root/usr/local/plexdata/Plex\ Media\ Server/ /mnt/tank/apps/plex/config/Library/Application\ Support/
+chown -R 1000:1000 /mnt/tank/apps/plex/config/
+```
+
+When installing the Plex app, under `Storage` -> `Config Volume`, you need to set it to the above path `/mnt/tank/apps/plex/config`
+
+I have my media setup like so:
+
+```
+/mnt/tank/movies
+/mnt/tank/tvshows
+/mnt/tank/spanish/movies
+/mnt/tank/spanish/tvshows
+```
+
+With these directories previously being mounted on the container in similar (but not identical) paths:
+
+```
+/mnt/movies
+/mnt/tvshows
+/mnt/spanish/movies
+/mnt/spanish/tvshows
+```
+
+I went this route since I didn’t particularly want Plex to have _complete_ access to the whole pool. We can achieve the same structure in the Docker version.
+
+Under the `Config Volume`, there’s a button to add `Plex Extra Host Path Volumes`. Click it, and put the corresponding paths as above to rebuild the required structure.
+
+**NOTE:** I had issues with the official TrueNAS Plex app (obviously) with SMB shares and stuff, so I had to disable the SMB share that was causing the issue.
+
+[Additional info](https://www.truenas.com/community/threads/moving-plex-from-core-to-scale.91936/)
+
+# Transmission
+
+For me, configuration and existing torrents can be found here:
+
+```
+/mnt/tank/iocage/jails/<jailname>/root/usr/local/etc/transmission/home/
+```
+
+Where `<jailname>` is your jail - mine was `transmission`.
+
+Copy this folder into your app dataset:
+
+```sh
+mkdir -p /mnt/tank/apps/transmission/
+cp -Rip /mnt/tank/iocage/jails/transmission/root/usr/local/etc/transmission/home /mnt/tank/apps/transmission/config
+chown -R 568:568 /mnt/tank/apps/transmission/config/
+```
+
+When installing the Transmission app, under `Storage Configuration` -> `Transmission Config Storage`, you need to set it to the above path `/mnt/tank/apps/transmission/config`
+
+Leave `Complete Downloads Storage` and `Incomplete Downloads Storage` as they are - we’ll be mounting our own directories to avoid having to reconfigure the torrents.
+
+Under `Additional Storage`, add a Host Path mount option for your download location. For me, it was `/mnt/tank/torrents` to be mounted as `/mnt/torrents`
+
+> The reason we’re not using the option for download location is that the internal torrent files (and resume files) reference absolute paths - we need to keep these the same so we don’t have to migrate them.
+
+The web UI port is different in this app - change it if you want the old behaviour (8081).
+
+You can start the container now and see if it works with your previous config - and that your torrents are all there. `Verify local files` on one of them to make sure everything is hunky-dory.
+
+# Grafana + InfluxDB
+
+## Grafana
+
+This is where things get a little trickier. I’ve documented how to set up both these services in the past to capture metrics from TrueNAS, both [on this blog](/blog/truenas-grafana-influxdb-metrics) and originally on the [TrueNAS forum](https://www.truenas.com/community/threads/guide-to-setting-up-grafana-influxdb-metrics.88943/)[^2].
+
+Therefore these steps assume you’re using the same setup - so if not, adjust to taste.
+
+We’ll start with Grafana - as the app is available from the official TrueNAS Chart. At the time of writing this, it’s version 10 - a huge jump from my v7 Core setup.
+
+I had the database here:
+
+```
+/mnt/tank/iocage/jails/<jailname>/root/var/db/grafana/grafana.db
+```
+
+Where `<jailname>` is your jail - mine was `transmission`.
+
+Copy this file into your app dataset:
+
+```sh
+mkdir -p /mnt/tank/apps/grafana/
+cp -Rip /mnt/tank/iocage/jails/grafana/root/var/db/grafana/grafana.db /mnt/tank/apps/grafana/
+chown -R 568:568 /mnt/tank/apps/grafana/
+```
+
+Under `Additional Environment Variables`, add the following:
+
+- `GF_DATABASE_PATH` - `/mnt/grafana/grafana.db`
+
+Under `Additional Storage`, add a Host Path mount option for your app data location. I used `/mnt/tank/apps/grafana` to be mounted as `/mnt/grafana`
+
+Now - I had problems with the SQLite database, with log messages saying "database is locked". If your googling leads you nowhere, try adding the environment variable `GF_DATABASE_WAF=true`.
+
+## InfluxDB
+
+I had an old version of InfluxDB installed from when I created the guide. Therefore, I’m just going to run with the same one - 1.8.0.
+
+Unfortunately, it’s not available in the official chart (or Truecharts)[^3], so we’ll have to go with Docker Compose.
+
+1. Prepare your InfluxDB data:
+
+```sh
+mkdir -p /mnt/tank/apps/influxdb/
+cp -Rip /mnt/tank/iocage/jails/grafana/root/usr/local/etc/influxd.conf /mnt/tank/apps/influxdb/
+cp -Rip /mnt/tank/iocage/jails/grafana/root/var/db/influxdb /mnt/tank/apps/influxdb/db
+mv /mnt/tank/apps/influxdb/influxd.conf /mnt/tank/apps/influxdb/influxdb.conf
+chown -R 568:568 /mnt/tank/apps/influxdb/influxdb.conf /mnt/tank/apps/influxdb/db
+```
+
+**_NOTE:_** It seemed that for me, `influxd.conf` worked previously, but it now expects it to be called `influxdb.conf`.
+
+2. In the `Apps` section, click `Launch Docker Image`:
+
+- Application Name: `influxdb`
+- Image Repository: `influxdb`
+- Image Tag: `1.8`
+- Networking -> Add External Interface
+  - Select your interface (I only have one)
+  - IPAM Type: `Static IP`
+    - 192.168.1.8/24 (or your preference)
+  - Add static route
+    - Destination: `0.0.0.0/0`
+    - Gateway: `192.168.1.1` (or your gateway)
+- Storage -> Add Host Path Volumes
+  - Host Path: `/mnt/tank/apps/influxdb/db`
+  - Mount Path: `/var/db/influxdb`
+  - Host Path: `/mnt/tank/apps/influxdb/influxdb.conf`
+  - Mount Path: `/etc/influxdb/influxdb.conf`
+
+3. Restart Grafana
+
+4. You’ll need to modify the data sources to the IP above. Alternatively, I found a [post](https://www.truenas.com/community/threads/graphite-report-to-influxdb-docker-container-how-to-get-reachable-static-address.104011/) that used the internal name for the container `http://influxdb-ix-chart.ix-influxdb.svc.cluster.local.:8086` which worked for me.
+
+> Also, note that the Scale team decided to remove the graphite metric collection - see Jira tickets [NAS-123668](https://ixsystems.atlassian.net/browse/NAS-123668) and [NAS-123098](https://ixsystems.atlassian.net/browse/NAS-123098). So, yay. That’s never coming back!
+
+# Sonarr
+
+Ah, the \*arr[^5] suite of applications. Perfect for the Linux ISO power collector. I didn’t want to spend too much time here - and luckily, I found that it automatically backs up its config!
+
+You can find your backups using a command like so:
+
+```
+find /mnt/tank/iocage/jails/transmission/root/ -iname '*sonarr*'
+```
+
+I had many files in the output - most importantly, these:
+
+```
+/mnt/tank/iocage/jails/transmission/root/usr/local/sonarr/sonarr.db
+/mnt/tank/iocage/jails/transmission/root/usr/local/sonarr/Backups/scheduled/sonarr_backup_v3.0.9.1549_2023.10.18_22.07.49.zip
+/mnt/tank/iocage/jails/transmission/root/usr/local/sonarr/Backups/scheduled/sonarr_backup_v3.0.9.1549_2023.10.04_22.07.03.zip
+/mnt/tank/iocage/jails/transmission/root/usr/local/sonarr/Backups/scheduled/sonarr_backup_v3.0.9.1549_2023.10.11_22.07.23.zip
+/mnt/tank/iocage/jails/transmission/root/usr/local/sonarr/Backups/scheduled/sonarr_backup_v3.0.9.1549_2023.10.25_22.08.16.zip
+```
+
+Setup a folder for Sonarr to use:
+
+```sh
+mkdir -p /mnt/tank/apps/sonarr/
+chown -R 568:568 /mnt/tank/apps/sonarr/
+```
+
+And add the Sonarr app to your system. Under `Sonarr Config Storage`, change it to Host Path and put `/mnt/tank/apps/sonarr`.
+
+Add your relevant additional mounts here too, for access to your TV Shows.
+
+Once deployed and active, open the web portal and go to `Settings` -> `Backup` -> `Restore Backup` (in the navbar). Use the latest backup you found.
+
+Give it a moment to finish, and then make sure you have no further alerts in Sonarr. I had to amend the port used for Transmission, but otherwise, it appeared fine.
+
+This was arguably the easiest. Kudos to Sonarr developers!
+
+# Jackett
+
+I had a dedicated jail for this previously, but I couldn’t tell you why. I’ll keep it short and sweet from now on, you should know what we are doing by now.
+
+Config here:
+
+```
+/mnt/tank/iocage/jails/jackett/root/usr/local/jackett/
+```
+
+Make it a home: (and delete some logs, we don’t need them)
+
+```sh
+mkdir /mnt/tank/apps/jackett/
+cp -Rip /mnt/tank/iocage/jails/jackett/root/usr/local/jackett /mnt/tank/apps/jackett/Jackett
+rm /mnt/tank/apps/jackett/Jackett/log*.txt
+chown -R 568:568 /mnt/tank/apps/jackett
+```
+
+You’ll need to add the Truecharts Catalog to your installation - this is [easy to do](https://truecharts.org/manual/SCALE/guides/getting-started/#adding-truecharts).
+
+Select the Jackett application. Under `App Config Storage`, change to Host Path, and set it to `/mnt/tank/apps/jackett`
+
+Save and start!
+
+Thank you to Daulton for documenting [Jackett on FreeBSD](https://daulton.ca/2018/12/jackett-on-freebsd/) which helped me find the config directory.
+
+> Note: I actually had to deprecate (read: abandon) Jackett due to a recurring `System.InsufficientExecutionStackException` error. This was not unique to my system nor to the version of Jackett I was running. It’s a shame, to be honest!
+
+# End
+
+That’s all the programs I had running pre-migration. I hope this helped!
+
+---
+
+[^1]: That’s a Gavin & Stacey reference. Sorry.
+[^2]: I’m amazed at the amount of engagement that post got. I didn’t have my notifications set up correctly, so I unfortunately let it fall off my radar!
+[^3]: Probably because there are many other "better" time series databases out there. However, I like and have bought into Influx - it works on my machine™
+[^4]: And before you say it, I know that you shouldn’t use it like that / it’s not supported / blah / blah / blah - I just want it to work!
+[^5]: The pirate pun has only just hit me.
