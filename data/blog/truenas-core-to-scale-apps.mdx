@@ -3,7 +3,7 @@ title: 'TrueNAS Core to Scale App Migration'
 date: '2023-11-04'
 tags: ['TrueNAS', 'FreeBSD', 'Debian']
 summary: 'FreeBSD to Debian, data included!'
-lastmod: '2023-11-04'
+lastmod: '2023-11-22'
 ---
 
 <TOCInline toc={props.toc} exclude="Preamble" asDisclosure />
@@ -63,6 +63,8 @@ With these directories previously being mounted on the container in similar (but
 /mnt/spanish/movies
 /mnt/spanish/tvshows
 ```
+
+When mounting these directories, make sure you allow read/write access for Plex. You may have to `chown -R 1000:1000` the directories so Plex can scan them.
 
 I went this route since I didn’t particularly want Plex to have _complete_ access to the whole pool. We can achieve the same structure in the Docker version.
 
