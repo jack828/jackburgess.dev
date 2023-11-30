@@ -181,9 +181,11 @@ http:
     plex-router:
       rule: "Host(`plex.local`)"
       service: plex-service
+      entrypoints: websecure
     sonarr-router:
       rule: "Host(`sonarr.local`)"
       service: sonarr-service
+      entrypoints: websecure
 
   services:
     plex-service:
