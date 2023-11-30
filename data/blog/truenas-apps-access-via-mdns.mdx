@@ -1,0 +1,337 @@
+---
+title: 'Easy access to TrueNAS Apps via mDNS'
+date: '2023-11-30'
+tags: ['TrueNAS', 'mDNS']
+summary: 'As plug-n-play domain access to apps as we can get.'
+lastmod: '2023-11-30'
+---
+
+I feel like we've been here before...a time long long ago in FreeBSD...yes, we have! I've written about [jail access with mDNS](/blog/truenas-jails-access-via-mdns) in the past.
+
+However in the land of SCALE, with Kubernetes (or k3s or whatever), we can't set stuff up so easily.
+
+We'll try to use what we know - Avahi and Socat - and see if we can wrangle something together.
+
+Our goals are the following:
+
+- mDNS (obviously) - we want to keep our DNS-server-free setup[^1] using `.local` domains
+- Plug'n'play - minimal configuration to set up another app/domain
+- Resilient - We shouldn't worry about app specific networking
+- DRY - We should have ONE container (ideally!) dealing with it all, instead of one instance per application
+- Completely internal - no external access here![^2]
+
+There are some issues, however:
+
+- mDNS does not support ports - so how do we avoid `http://plex.local:32400`? This is just as bad.
+- Socat is one instance per redirect - we'd need as many instances as we have apps to map to domains.
+
+Looking into configuration of Avahi we can see that it supports [static host definitions](https://linux.die.net/man/5/avahi.hosts).
+
+For example:
+
+```
+192.168.1.10 plex.local
+192.168.1.10 sonarr.local
+```
+
+Running this with avahi, however, produces the following output:
+
+```
+Static host name sonarr.local: avahi_server_add_address failure: Local name collision
+Static host name plex.local: avahi_server_add_address failure: Local name collision
+```
+
+Which, thanks to some DDG-foo, shows that it is intentional part of Avahi and not possible: https://stackoverflow.com/q/775233/3054810
+
+And that sucks!
+
+We'll have to use something else instead of Avahi.
+
+# mDNS Mingler
+
+I wrote a C program that handles this for us. Specify a list of hosts, and it will respond to mDNS queries. Don't worry - it's in a Docker container.
+
+There is a caveat with this though. You'll need a reverse proxy handling the redirection of traffic - yes, this does fail our `ONE container` goal, but it _does_ make things a little easier and Google-able (duck-able?).
+
+Here's how you do it. Note that I am using TrueNAS SCALE 23.10.0.1 (Cobia), so your view may be different.
+
+## 1. Time for Traefik
+
+I've chosen Traefik only because it seems to be all the rage - and why not see how things have progressed since using Nginx?
+
+To set it up, I'll forward you onto the TrueCharts video on the matter. You don't have to configure any ingresses, if you don't want to, or don't know what that means (I don't either).
+
+See here: https://www.youtube.com/watch?v=bWNPfrKjawI
+
+## 2. Configure Traefik
+
+Create a folder in your app dataset for Traefik config:
+
+```
+mkdir -p /mnt/tank/apps/traefik
+```
+
+Create a configuration file (we'll come back and fill it later):
+
+```
+touch /mnt/tank/apps/traefik/config.yaml
+```
+
+Set access permissions:
+
+```
+chown -R apps:apps /mnt/tank/apps/traefik
+```
+
+## 3. Tricking Traefik
+
+We have a little more to do with Traefik once installed and working - we need to get static config into it!
+
+Traefik is primarily a dynamic reverse proxy - plug-n-play with Kubernetes (et al) - but it does support static routing behaviours.
+
+In TrueNAS dashboard, go to `Apps` -> Find Traefik and click it -> Edit.
+
+![Edit Traefik](/static/images/blog--truenas-apps-access-via-mdns--edit-traefik.png)
+
+Find the `Containers` -> `Main Container` -> `Extra Args` -> `Add` button.
+
+Add an extra arg with the value `--providers.file.directory=/mnt/traefik/`.
+
+![Edit Traefik Extra Args](/static/images/blog--truenas-apps-access-via-mdns--edit-traefik-extra-args.png)
+
+What this is doing is telling Traefik to set up a [file provider](https://doc.traefik.io/traefik/providers/file/), from the specified directory.
+
+Now scroll down (quite far) to `Resources and Devices` -> `Mount USB Devices`.
+
+This is most certainly not the way to do it - it feels hacky, but since there isn't a Host Path storage configuration, we'll roll with it.
+
+Add and enable a storage device. Set the `Host Device Path` to the directory created in step #2 - `/mnt/tank/apps/traefik`, and the `Container Device Path` to the directory specified in the Extra Args option `/mnt/traefik`.
+
+![Edit Traefik USB Device but its a LIE](/static/images/blog--truenas-apps-access-via-mdns--edit-traefik-usb-device.png)
+
+Save! Traefik will restart, and should become alive again.
+
+## 4. Mingling mDNS
+
+Now we can setup our mDNS Mingler[^3]. Same as we configured Traefik, create a folder for it, a hosts file, and set permissions:
+
+```
+mkdir -p /mnt/tank/apps/mdns-mingler
+touch /mnt/tank/apps/mdns-mingler/hosts
+chown -R apps:apps /mnt/tank/apps/mdns-mingler
+```
+
+We'll configure our hosts in the next step.
+
+Back in TrueNAS's Apps screen, click the `Discover Apps` button, and on the next page click `Custom App` again. This is how you launch custom Docker images.
+
+Application name: `mdns-mingler`
+
+Image repository: `jack828/mdns-mingler`
+
+![Mingler app 1](/static/images/blog--truenas-apps-access-via-mdns--mingler-app-1.png)
+
+Scroll down to networking - check `Provide access to node network namespace for the workload`
+
+Unfortunate, as it is not best practice. I know you shouldn't trust strangers with your networking stack, so you're free to review the code etc before going ahead.[^4]
+
+![Mingler app 2](/static/images/blog--truenas-apps-access-via-mdns--mingler-app-2.png)
+
+Scroll down to storage. Add a Host Path Volume:
+
+- Host Path: `/mnt/tank/apps/mdns-mingler/hosts`
+- Mount Path: `/app/hosts`
+
+You can set it to `Read Only`, if you want.
+
+![Mingler app 3](/static/images/blog--truenas-apps-access-via-mdns--mingler-app-3.png)
+
+Under `Workload Details`, make sure you enable `Configure Container User and Group ID`. Leave it as the default `568` (apps).
+
+![Mingler app 4](/static/images/blog--truenas-apps-access-via-mdns--mingler-app-4.png)
+
+Save, and wait for it to come active.
+
+## 5. Configuration
+
+Now we can configure to our heart's content.
+
+We'll start with mdns-mingler. Edit the `hosts` file in your [favourite editor](https://neovim.io/), and add some entries:
+
+```text:hosts
+192.168.1.10 plex.local
+192.168.1.10 sonarr.local
+192.168.1.10 transmission.local
+192.168.1.10 grafana.local
+192.168.1.10 influxdb.local
+... and so on ...
+```
+
+> Remember to change that IP for your TrueNAS IP!
+
+Now restart mdns-mingler, and check the logs to see if it picked them up okay:
+
+![Mingler logs](/static/images/blog--truenas-apps-access-via-mdns--mingler-logs.png)
+
+Onto Traefik. Open the `config.yaml` file again in your editor, and add some routes:
+
+```yaml:config.yaml
+http:
+  routers:
+    plex-router:
+      rule: "Host(`plex.local`)"
+      service: plex-service
+    sonarr-router:
+      rule: "Host(`sonarr.local`)"
+      service: sonarr-service
+
+  services:
+    plex-service:
+      loadBalancer:
+        servers:
+          - url: "http://plex-tcp.ix-plex.svc.cluster.local:32400"
+    sonarr-service:
+      loadBalancer:
+        servers:
+          - url: "http://sonarr-tcp.ix-sonarr.svc.cluster.local:30027"
+```
+
+You can find the internal cluster URLs and the first port the expose using the command:
+
+```
+$ sudo k3s kubectl get services --all-namespaces -o custom-columns="NAME:.metadata.name,NAMESPACE:.metadata.namespace,PORT:.spec.ports[0].port" --no-headers=true | awk '{ print $1 "." $2 ".svc.cluster.local:" $3 }'
+
+kubernetes.default.svc.cluster.local:443
+kube-dns.kube-system.svc.cluster.local:53
+plex-udp.ix-plex.svc.cluster.local:1900
+plex-tcp.ix-plex.svc.cluster.local:32400
+transmission.ix-transmission.svc.cluster.local:30096
+transmission-transmission-peer.ix-transmission.svc.cluster.local:50413
+grafana.ix-grafana.svc.cluster.local:30037
+influxdb-ix-chart.ix-influxdb.svc.cluster.local:8086
+sonarr.ix-sonarr.svc.cluster.local:30027
+...etc...
+```
+
+NOTE: The port may be incorrect, but it's certainly convenient!
+
+## 6. Committing a CRIME
+
+Now, you'll notice in the logs for our `mdns-mingler` that there's an error: `bind: address already in use`.
+
+This is because we're using the host networking stack - and something is already running on it.
+
+This is especially true if you're using TimeMachine shares - under the hood, Avahi is running and advertising various services. By default it's configured to disallow anything else to listen on the port we need - 5353.
+
+So we'll just go ahead and change that. Yes, mentioning anything that even hints at modifying the underlying OS on TrueNAS is grounds for a right bollocking from the community. However, I'd like to argue that it's _your_ machine and _you_ can do whatever _you_ want to it.[^5]
+
+In the TrueNAS UI, go to `System Settings` -> `Advanced`. Under `Init/Shutdown Scripts`, add a new one:
+
+- Description: `Avahi Allow Other Stacks`
+- Type: `Command`
+- Command: `sed -i "/disallow-other-stacks=yes/c\disallow-other-stacks=no" /etc/avahi/avahi-daemon.conf && systemctl restart avahi-daemon.service`
+- When: `Post Init`
+- Enabled: (checked, obviously)
+- Timeout: `10`
+
+![Init script](/static/images/blog--truenas-apps-access-via-mdns--init-script.png)
+
+This will ensure that our change is persisted between updates and reboots.
+
+Go ahead and run the command anyway now, and verify that Avahi has come back online:
+
+```
+moneta% sudo sed -i "/disallow-other-stacks=yes/c\disallow-other-stacks=no" /etc/avahi/avahi-daemon.conf
+
+moneta% sudo systemctl restart avahi-daemon.service
+
+moneta% sudo systemctl status avahi-daemon.service
+● avahi-daemon.service - Avahi mDNS/DNS-SD Stack
+     Loaded: loaded (/lib/systemd/system/avahi-daemon.service; enabled; preset: disabled)
+     Active: active (running) since Thu 2023-11-30 14:49:56 GMT; 9s ago
+TriggeredBy: ● avahi-daemon.socket
+   Main PID: 829499 (avahi-daemon)
+     Status: "avahi-daemon 0.8 starting up."
+      Tasks: 2 (limit: 35625)
+     Memory: 996.0K
+        CPU: 9ms
+     CGroup: /system.slice/avahi-daemon.service
+             ├─829499 "avahi-daemon: running [moneta.local]"
+             └─829514 "avahi-daemon: chroot helper"
+
+Nov 30 14:49:56 moneta avahi-daemon[829499]: Joining mDNS multicast group on interface enp37s0.IPv4 with address 192.168.1.10.
+Nov 30 14:49:56 moneta avahi-daemon[829499]: New relevant interface enp37s0.IPv4 for mDNS.
+Nov 30 14:49:56 moneta avahi-daemon[829499]: Network interface enumeration completed.
+Nov 30 14:49:56 moneta avahi-daemon[829499]: Registering new address record for fe80::2ef0:5dff:fe74:46f on enp37s0.*.
+Nov 30 14:49:56 moneta avahi-daemon[829499]: Registering new address record for 192.168.1.10 on enp37s0.IPv4.
+Nov 30 14:49:57 moneta avahi-daemon[829499]: Server startup complete. Host name is moneta.local. Local service cookie is 801567768.
+Nov 30 14:49:58 moneta avahi-daemon[829499]: Service "moneta" (/services/SMB.service) successfully established.
+Nov 30 14:49:58 moneta avahi-daemon[829499]: Service "moneta" (/services/HTTP.service) successfully established.
+Nov 30 14:49:58 moneta avahi-daemon[829499]: Service "moneta" (/services/DEV_INFO.service) successfully established.
+Nov 30 14:49:58 moneta avahi-daemon[829499]: Service "moneta" (/services/ADISK.service) successfully established.
+```
+
+Now we restart the mdns-mingler container.
+
+## 7. Everything Works!
+
+With the mdns-mingler container back online, we can verify that we can both see and resolve all our hosts correctly.
+
+You'll need Avahi on the machine you're using for this bit.
+
+Scan your entire network for HTTP services:
+
+```
+➜ avahi-browse -rpt _http._tcp
++;enp1s0f0;IPv4;moneta;Web Site;local
++;enp1s0f0;IPv4;myrouter;Web Site;local
+=;enp1s0f0;IPv4;moneta;Web Site;local;moneta.local;192.168.1.10;81;
+=;enp1s0f0;IPv4;myrouter;Web Site;local;myrouter.local;192.168.1.1;80;
++;enp1s0f0;IPv4;plex;Web Site;local
++;enp1s0f0;IPv4;traefik;Web Site;local
+=;enp1s0f0;IPv4;plex;Web Site;local;plex.local;192.168.1.10;80;"mdns=mingler"
+=;enp1s0f0;IPv4;traefik;Web Site;local;traefik.local;192.168.1.10;80;"mdns=mingler"
+...and so on...
+```
+
+Two important things here:
+
+- We see our services, hooray!!
+- We still see TrueNAS's announcement of the UI (`moneta.local` in my case)
+
+Lets resolve a single host:
+
+```
+➜ avahi-resolve -v -n 'plex.local'
+Server version: avahi 0.8; Host name: jack-laptop.local
+plex.local      192.168.1.10
+```
+
+Hooray again!
+
+Then, try and CURL the host:
+
+```
+➜ curl -k https://plex.local
+<html><head><script>window.location = window.location.href.match(/(^.+\/)[^\/]*$/)[1] + 'web/index.html';</script><title>Unauthorized</title></head><body><h1>401 Unauthorized</h1></body></html>%
+```
+
+This is expected - Plex redirects to a specific path for the application's entrypoint. Additionally, we use a self-signed certificate, so CURL needs to be explicitly allowed to connect insecurely.
+
+Finally, try it in your browser!
+
+---
+
+# The End
+
+That's it. You now have a lovely self-contained mDNS experience with your applications. Not fulfilling the "one container" goal, but certainly more usable (and resource friendly) than the previous FreeBSD jail approach.
+
+Given enough time, I'll look at another service that could listen for mDNS services advertised and automatically update Traefik for routing. That would be _cool_.
+
+---
+
+[^1]: It’s not dns. There’s no way it’s dns. It was dns.
+[^2]: I just cannot justify putting my NAS exposed to the internet. 0-day vulnerabilities exist and I have an aversion to updating stuff.
+[^3]: I like the name.
+[^4]: I tried and tried and tried to avoid this, but couldn't. Happily taking suggestions here!
+[^5]: I take no responsibility if you fuck it up, though.
