@@ -102,6 +102,8 @@ Under `Additional Storage`, add a Host Path mount option for your download locat
 
 The web UI port is different in this app - change it if you want the old behaviour (8081).
 
+I additionally had to mount additional storage to prevent the config being overwritten on each start up of the container. This means mounting the config file `/mnt/tank/apps/transmission/config/settings.json` as READONLY in the container.
+
 You can start the container now and see if it works with your previous config - and that your torrents are all there. `Verify local files` on one of them to make sure everything is hunky-dory.
 
 # Grafana + InfluxDB
