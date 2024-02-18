@@ -4,7 +4,7 @@
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; prefetch-src 'self'; img-src 'self'; script-src 'self' 'unsafe-eval' https://static.cloudflareinsights.com https://giscus.app  https://stats.jack.tf 'sha256-/v1vO6ol0ddqGAIP4Kf958OAELwvRqB7PIVLYGlIiCA='; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; prefetch-src 'self'; img-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://static.cloudflareinsights.com https://giscus.app  https://stats.jack.tf 'sha256-/v1vO6ol0ddqGAIP4Kf958OAELwvRqB7PIVLYGlIiCA='; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none'
 
 https://:project.pages.dev/*
   X-Robots-Tag: noindex
