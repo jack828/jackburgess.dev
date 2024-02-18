@@ -59,6 +59,30 @@ class MyDocument extends Document {
           <link rel="manifest" href="/static/favicons/site.webmanifest" />
           <meta name="theme-color" content="#000000" />
           <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+  var _paq = (window._paq = window._paq || [])
+  _paq.push(['disableCookies'])
+  _paq.push(['trackPageView'])
+  _paq.push(['enableLinkTracking'])
+  _paq.push(['enableHeartBeatTimer'])
+  _paq.push(['setRequestMethod', 'POST'])
+  ;(function () {
+    var u = '//stats.jack.tf/'
+    _paq.push(['setTrackerUrl', u + 'moomoo.php'])
+    _paq.push(['setSiteId', '1'])
+    var d = document,
+      g = d.createElement('script'),
+      s = d.getElementsByTagName('script')[0]
+    g.async = true
+    g.src = u + 'moomoo.js'
+    s.parentNode.insertBefore(g, s)
+  })()
+`
+            }}
+          />
         </Head>
         <body className="bg-white text-black antialiased dark:bg-gray-900 dark:text-white">
           <Main />
