@@ -1,0 +1,239 @@
+---
+title: 'Matomo Analytics with Docker & Cloudflare Tunnels'
+date: '2024-02-18'
+tags: ['matomo', 'docker', 'cloudflare']
+summary: 'Get reliable, evil-free analytics using completely free offerings from Matomo and Cloudflare.'
+lastmod: '2024-02-18'
+---
+
+# Matomo Analytics
+
+I had looked high and low for an analytics platform that wasn’t evil or sold my user’s data. There are not many options in that space - and even fewer still that offer free options.
+
+[Matomo](https://matomo.org/) fills that gap with a powerful alternative, that you can self-host for free!
+
+Without further ado, let’s jump straight into it. We’ll be setting it up on a Raspberry Pi (any server will do, in theory), and using a Cloudflare Tunnel for access via the internet.
+
+We’ll also be configuring Matomo to work around adblockers. As Matomo is privacy-first, I think this is more than acceptable to do.
+
+There are some prerequisites before we can begin.
+
+You will need:
+
+- Somewhere to host it all, e.g. Raspberry Pi, etc. with Docker and Docker Compose set up
+- A domain using Cloudflare’s DNS
+- Zero Trust set up (as in, no tutorial to complete - it’s free)
+- An idea for your analytics subdomain, e.g. `stats.example.com`
+
+And don’t worry. Everything used here is completely free!
+
+## Docker Compose
+
+My favourite addition to the developer ecosystem - Docker Compose. Now we can share configuration files that (hopefully) work straight away on other people’s machines.
+
+In our compose file we’ll have three containers - Matomo, MariaDB, and Cloudflare Tunnel.
+
+```yaml:docker-compose.yaml {18}
+version: '3.8'
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    network_mode: 'host'
+    command: tunnel --no-autoupdate run
+    env_file: ./secrets/cloudflared.env
+    restart: unless-stopped
+
+  matomo:
+    container_name: matomo
+    image: matomo
+    ports:
+      - 8080:80
+    environment:
+      - MATOMO_DATABASE_HOST=matomo_db
+      - VIRTUAL_HOST=stats.example.com
+    env_file:
+      - ./secrets/matomo.env
+    depends_on:
+      - matomo_db
+    restart: unless-stopped
+
+  matomo_db:
+    container_name: matomo_db
+    image: mariadb
+    command: --max-allowed-packet=64MB
+    volumes:
+      - /data:/var/lib/mysql
+    env_file:
+      - ./secrets/matomo.env
+    restart: unless-stopped
+```
+
+Don’t forget to create your secrets file:
+
+```sh:./secrets/matomo.db
+MYSQL_PASSWORD=something_secret_please
+MYSQL_DATABASE=matomo
+MYSQL_USER=matomo
+MYSQL_ROOT_PASSWORD=something_else_secret_please
+
+MATOMO_DATABASE_ADAPTER=mysql
+MATOMO_DATABASE_TABLES_PREFIX=matomo_
+MATOMO_DATABASE_USERNAME=matomo
+MATOMO_DATABASE_PASSWORD=
+MATOMO_DATABASE_DBNAME=matomo
+```
+
+**_Make sure you replace the MYSQL_PASSWORD variable with something secure!!_**
+
+Remember to set your `VIRTUAL_HOST` variable to your desired analytics domain.
+
+You can generate a short random string using `openssl rand -base64 16`.
+
+Now we can start up the containers with `docker compose up -d`.
+
+## Zero Trust
+
+Moving onto how we’ll access this instance from the internet - without putting our poor Pi’s IP into the wild - we’ll use Cloudflare’s Zero Trust Tunnels feature.
+
+This guide assumes you’ve got Zero Trust setup, and a domain controlled in Cloudflare - please see other guides for this if you aren’t there yet.
+
+In the Zero Trust dashboard, go to `Networks` -> `Tunnels`, and create a new tunnel.
+
+Chose `cloudflared` as the connector, and a good name for it (like `test-001`).
+
+You’ll be given installation instructions. Run back to where your `docker-compose.yaml` file is and add a new secrets file:
+
+```sh:./secrets/cloudflared.env
+TUNNEL_TOKEN=eyJhIjo.....
+```
+
+Place your token here, and bring the container up `docker compose up -d`. You should see the connector healthy in the dashboard.
+
+In the dashboard, you will be asked how to route traffic to the tunnel. Using the `Public Hostnames` option, set it up like so:
+
+Public Hostname
+
+- Subdomain: `metrics`
+- Domain: `<your CF domain>`
+- Path: (blank)
+
+Service
+
+- Type: `http`
+- URL: `localhost:8080`
+
+(Feel free to change as you need. I avoided `metrics` or `matomo` for the domain, as aggressive adblockers will intercept!)
+
+Save. You should be able to visit Matomo on your new subdomain!
+
+## Matomo
+
+The setup for Matomo is very straightforward. Make sure the system check looks good.
+
+On the Database Setup screen, set the `Password` field to the same as you set for `MYSQL_PASSWORD`. Everything else should be pre-filled.
+
+With the database initialised, pick something for the superuser’s login details. Just make sure you remember them.
+
+> These need to be secure, as this endpoint will be public!
+
+Now let’s set up our first website. Fill the fields as appropriate, and hit next. You’ll be given your Matomo tracking snippet - place it into your website, and you should start to see analytics come into Matomo!
+
+## Ublock Blocker
+
+Fairly controversial, yes, but if you get as few visitors to your site as I do, every little helps.
+
+There’s no need to do this step if you don’t want to - entirely up to you.
+
+We’ll need to do two things here:
+
+- Re-write requests to Matomo’s scripts
+- Re-write requests to Matomo’s tracker endpoint
+
+In the Cloudflare dashboard, go to your Matomo domain. You need the page with the long sidebar that includes things like "DNS" and "Rules".
+
+Go into the `Rules` -> `Transform Rules` and create a new `Rewrite URL` rule.
+
+Fill it out as follows:
+
+- Name: `Matomo`
+- If: `Custom filter expression`
+- On the section `When incoming requests match`, click the `Edit expression` link to get the builder.
+- Put the value `(starts_with(http.request.uri.path, "/moomoo.js")) or (starts_with(http.request.uri.path, "/moomoo.php"))`
+
+I’ve gone with `moomoo.js` because why not.
+
+- `Then` -> `Path` -> `Rewrite to...` - select `Dynamic` and put this monster:
+
+```
+concat("/matomo", substring(http.request.uri.path, 7))
+```
+
+What this does is the following:
+
+1. With `http.request.uri.path` equaling `/moomoo.js` (or `.php`)
+1. Give the substring starting from index 7 (the length of "/moomoo") = `.js`
+1. Concatenate with the string `"/matomo"` = `/matomo.js`
+
+It would have been ideal to use `regex_replace`, but unfortunately, that is only available on enterprise plans.
+
+Save and deploy the rule. You should be able to immediately test it by visiting `https://stats.yourdomain/moomoo.js` - you should get the Matomo tracking code!
+
+Now we can go back to our tracking snippet:
+
+```html
+<!-- Matomo -->
+<script>
+  var _paq = (window._paq = window._paq || [])
+  _paq.push(['disableCookies'])
+  _paq.push(['trackPageView'])
+  _paq.push(['enableLinkTracking'])
+  _paq.push(['enableHeartBeatTimer'])
+  ;(function () {
+    var u = '//stats.example.com/'
+    _paq.push(['setTrackerUrl', u + 'matomo.php'])
+    _paq.push(['setSiteId', 'YOUR_MATOMO_SITE_ID'])
+    var d = document,
+      g = d.createElement('script'),
+      s = d.getElementsByTagName('script')[0]
+    g.async = true
+    g.src = u + 'matomo.js'
+    s.parentNode.insertBefore(g, s)
+  })()
+</script>
+<!-- End Matomo Code -->
+```
+
+Make some changes:
+
+```html {8,11,17}
+<!-- Matomo -->
+<script>
+  var _paq = (window._paq = window._paq || [])
+  _paq.push(['disableCookies'])
+  _paq.push(['trackPageView'])
+  _paq.push(['enableLinkTracking'])
+  _paq.push(['enableHeartBeatTimer'])
+  _paq.push(['setRequestMethod', 'POST'])
+  ;(function () {
+    var u = '//stats.example.com/'
+    _paq.push(['setTrackerUrl', u + 'moomoo.php'])
+    _paq.push(['setSiteId', 'YOUR_MATOMO_SITE_ID'])
+    var d = document,
+      g = d.createElement('script'),
+      s = d.getElementsByTagName('script')[0]
+    g.async = true
+    g.src = u + 'moomoo.js'
+    s.parentNode.insertBefore(g, s)
+  })()
+</script>
+<!-- End Matomo Code -->
+```
+
+Here we set the request method to POST (apparently that works around some adblock mechanisms), and amend the PHP/JS scripts to our newly named `moomoo` version.
+
+That’s it! You’re done. You should be capturing all the metrics now.
+
+---
+
+Note: This post is not sponsored or affiliated with Matomo in any way. All opinions are my own.
