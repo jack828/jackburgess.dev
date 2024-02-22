@@ -1,0 +1,83 @@
+---
+title: 'Penny Run'
+date: '2024-02-22'
+tags: ['coins', 'numismatics']
+summary: 'A website for collecting circulating UK coins!'
+lastmod: '2024-02-22'
+---
+
+# Introducing: [Penny Run](https://pennyrun.co.uk/)
+
+![Penny Run - Homepage](/static/images/blog--penny-run--homepage.png)
+
+I've been hard at work<sup>_[citation needed]_</sup> putting together a website that I couldn't quite find out there already.
+
+I'm a member of my local coin club, and while I normally prefer banknotes (pretty colours), I thought I'd give coin collecting a go as well.
+
+I wanted to start easy - something readily available, and not expensive - and a complete date run of circulating UK coins seemed like a good idea - just pretend commemoratives don't exist for a moment!
+
+Keeping track of this isn't easy - I used [Numista](https://numista.com/) to log each coin (as well as my banknotes), but it missed a slimmed-down view of my current goal.
+
+Some apps for this kind of thing already exist:
+
+- [Check Your Change - UK Coins](https://play.google.com/store/apps/details?id=com.googlemail.krivzy_apps.Check_Your_Change)
+- [Coins UK](https://play.google.com/store/apps/details?id=uk.co.primalsoftware.coinsuk)
+
+However, they had a few problems for me:
+
+- Outdated feel: They looked like they could do with a spruce up, or felt a little busy.
+- Included non-circulating coinage: They included the round pound or other withdrawn coinage.
+- A separate database: I'll expand on this in a moment...
+
+## A Challenger Approaches
+
+With **Penny Run**, I wanted to solve as many problems as I could at once.
+
+The biggest problem I had was having a separate database of what I've collected - I primarily use [Numista](https://numista.com/) to catalogue my collection.
+I don't want to have to visit multiple places to keep my collection updated. A separate database means, if for whatever reason the site/app is removed,
+I lose all my progress and have to manually re-add to somewhere else.
+
+That's what **Penny Run** offers over the rest - it links directly with your [Numista](https://numista.com/) collection. And don't worry - only the website has access to your collection.
+It doesn't get shared directly with me!
+
+## Feature List
+
+A list of the features it offers are:
+
+- Interaction directly with Numista
+- Unique photos per coin, per year of issue - no other app has this either!
+- Filter grid view, sortable by year or mintage figures (where available)
+- Grade entry when adding/editing a coin
+- Private comment box for quick notes
+- High-level stats about your collection and progress
+- Clean, modern, and minimal
+
+![Penny Run - One Penny](/static/images/blog--penny-run--one-penny.png)
+
+![Penny Run - One Penny Edit](/static/images/blog--penny-run--one-penny-edit.png)
+
+## Technologies Used
+
+As this is a programming blog, I've also got to expand on the tech used.
+
+It's a NextJS 14 site, using the app router. I have to say that I am very impressed with this router over the pages router. It feels a lot more intuitive and well-thought-out.
+The special files are also very handy for generating the required [metadata](https://nextjs.org/docs/app/building-your-application/optimizing/metadata#file-based-metadata).
+
+It's hosted on [Cloudflare Pages](https://pages.cloudflare.com/). I get incredibly fast builds and deployments, with DDoS protection as standard, all wrapped up in a completely free package.
+I doubt (but do hope) that I'll ever exceed the free tier limits.
+
+This NextJS on the edge is made possible by Cloudflare's [@cloudflare/next-on-pages](https://github.com/cloudflare/next-on-pages) package. It compiles the application (including API routes!!) into Pages and Workers compatible formats.
+
+Some other bits worth mentioning:
+
+- Images are optimised and generated via [next-image-export-optimizer](https://github.com/Niels-IO/next-image-export-optimizer/)
+- UI is made with [Material UI](https://mui.com/material-ui/)
+- Authentication is using [Auth.js](https://authjs.dev/) (formerly and somewhat still next-auth)
+- Authorization and collection editing using the [Numista API](https://en.numista.com/api/doc/index.php)
+- Cookie-free analytics powered by [Matomo](https://matomo.org/)
+
+## See For Yourself
+
+Now that you're interested, why don't you have a look at [Penny Run](https://pennyrun.co.uk/)?
+
+More features are planned and coming each week :) - including commemoratives (soon™)
