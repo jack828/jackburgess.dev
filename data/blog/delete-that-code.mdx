@@ -1,0 +1,67 @@
+---
+title: 'Delete That Code'
+date: '2024-03-12'
+tags: ['programming']
+draft: true
+summary: 'Much like that phone box from 2011, you really don’t need to keep that code around. Delete it.'
+lastmod: '2024-03-12'
+---
+
+## What’s the problem?
+
+I’m sure we’ve all been there somewhere in our career - _oh, I’ll just comment this out for now. If we end up never needing it again, it won’t do any harm if it isn’t running! We’ve saved it for later!_
+
+Well, I’m not sure you’re right there.
+
+### 1. Leaving code in makes it messy, and increases cognitive load.
+
+TODO an example of a snippet of code from somewhere, with a bunch of stuff commented out
+
+Now imagine the pull request that commented that out...while introducing the feature designed to replace it. How much more thinking time is the reviewer to waste on the pull request just because of a "just in case"? It’s making the commit diff considerably more messy - it’s _changing_ unrelated lines. Some diff viewers might not be able to show that lines were only prepended with `//`, and now someone has to figure out each time what changed. A deletion is much easier to understand - it’s [gone](https://http.cat/status/410).
+
+### 2. Wait, you commented how much?
+
+It’s not very often you can toggle off an entire feature with just a few `//` or a lovely `/* */`. Linters, tests, and much more supporting stuff need to be modified to be happy again. This means that a feature "temporarily turned off", ends up having a ton of changes in files, perhaps littered with comments `// this is for blah feature`. Great - what was blah for again?
+The sheer volume of context you’ll need to put into a comment to make it useful to a future developer means _it does not belong in a comment_. Remember: code describes _what_ changed, and commit messages describe _why_. Further context is deferred for outside the version control system itself[^1].
+
+### 3. Do you still need to maintain the commented code?
+
+Commented code is a weird thing to see in a project (for me, at least). If it’s outlived its usefulness - bin it - has always been my ethos. When you’re modifying a function’s behaviour, you shouldn’t need to consider what would happen if this block that hasn’t run in 5 years happens to be re-added.
+
+But if you keep seeing it around, and you’re asked to do things like this, then are you _meant_ to ~~waste~~ spend time fixing it?
+
+### 4. I want blah feature back, how?
+
+So how _do_ you get a feature you’ve deleted back? Well, if you’re doing things right, it should be as simple as:
+
+1. Find the commit(s) associated with the removal of the feature.
+
+Ideally, your commits should be isolated like this - one commit removes feature blah, and another adds feature foo. Usually easier said than done, but ticket hunting should be second nature by now.
+
+2. `git revert <githash>`
+
+As in, `git revert a225392`.
+
+3. Fix conflicts, and make sure the feature still works as it originally did.
+
+It’s quite simple.
+
+Okay, maybe not always easy going like that. Revert merge conflicts, or messy commits, make it more difficult to simply revert a set of changes. But, you can just copy and paste from a diff into the relevant files. Or, if you’re super fancy, maybe there’s an interactive diff applicator using [Neovim](https://neovim.io/)?
+
+## How can I fix it?
+
+It’s simple. Delete the code you no longer need. Don’t feature flag it - unless it benefits your existing infrastructure (as in, you already heavily support and use feature flagging[^2]).
+
+Yes - you can argue against this - "but, if it’s not in the codebase, and we _do_ need it in future, we have to figure it all out again!". Well, friend, this is what a good **Project Owner** is designed to overcome. Proper practices including accurately referencing tickets to commits and pull requests mean that there’s _always_ a reference to some work, somewhere. From that, you need only inspect the project history to find out how to re-implement it.
+
+What else could you do?
+
+- Delete the code - again, code that doesn’t exist is, by design, bug-free. Either encourage safe housekeeping as other features are implemented by deleting commented code as you come across it or create a ticket for it. Add it to the backlog, and make the time for it.
+- Enforce a commit/pull request style guide - require context, information, comments, discussion, or whatever ticket system you use to be linked in both commit messages and pull requests.
+
+How can you enforce these practices? Well, if you’re a senior or technical lead of a project, then you should be able to implement the changes needed. If you’re not, and you’re a junior member, I’d recommend talking to your other team members about the future maintainability of the project and what could be done to resolve it.
+
+Technical debt, whilst it has its uses, is a monster you can fight.
+
+[^1]: Like everyone’s favourite: Jira.
+[^2]: A topic for another time, perhaps.
