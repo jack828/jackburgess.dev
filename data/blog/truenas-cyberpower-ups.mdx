@@ -1,0 +1,100 @@
+---
+title: 'TrueNAS Scale and CyberPower UPS'
+date: '2024-12-21'
+tags: ['truenas', 'debian', 'ups']
+draft: false
+summary: 'Configuration settings for a CyberPower BR700ELCD-UK UPS & TrueNAS.'
+lastmod: '2024-12-21'
+---
+
+A pretty short one this time.
+
+I've owned (and used) a [CyberPower BR700ELCD-UK](https://www.cyberpower.com/uk/en/product/sku/br700elcd-uk) for a long time - but never managed to get the connection to TrueNAS working.
+
+Until I actually sat down and tried again! So this is just a (hopefully) [google-able](https://duckduckgo.com) guide to get it working for others.
+
+It was pretty straightforward, although I had to find the right teeny tiny fragments of information over the years to finally get it in place.
+
+One key piece of information was that TrueNAS uses Network UPS Tools (NUT), which does support the UPS[^1]!
+
+These instructions will be for TrueNAS SCALE 23.10 - future versions may look different!
+
+1. Edit the settings for UPS under `System Settings` -> `Services` -> `UPS`
+
+![Edit UPS settings 1](/static/images/blog--truenas-cyberpower-ups--settings-1.png)
+
+2. Set it up as shown
+
+The main changes from defaults are:
+
+- Monitor User: `ups` (previously, this was `upsmon`)
+- Driver: `Cyber Power Systems ups 2 CP900AVR (usbhid-ups)`
+  - Allegedly[^2], any `ups 2` version using `usbhid-ups` should work. I tried to find the exact model, but couldn't, so I went with the one shown.
+- Port or Hostname: `auto`
+  - Set it to `auto` to prevent having to faff around when it inevitably changes.
+- The shutdown options are completely up to you. Although, I would err on the side of caution with timings, to account for degredation of the battery.
+- Auxiliary Parameters (ups.conf): Add `pollinterval = 15`
+  - Allegedly[^3], the UPS requires interaction more frequently then the default, or you'll continually see disconnection loops.
+
+![Edit UPS settings 2](/static/images/blog--truenas-cyberpower-ups--settings-2.png)
+
+![Edit UPS settings 3](/static/images/blog--truenas-cyberpower-ups--settings-3.png)
+
+Don't forget to save.
+
+3. Enable the UPS service
+
+4. Check that it is recognised ok
+
+SSH in to your server, and run `upsc ups@localhost`. You should see UPS statistics.
+
+```
+moneta% upsc ups@localhost
+
+Init SSL without certificate database
+battery.charge: 100
+battery.charge.low: 10
+battery.charge.warning: 20
+battery.mfr.date: CPS
+battery.runtime: 2736
+battery.runtime.low: 300
+battery.type: PbAcid
+battery.voltage: 13.1
+battery.voltage.nominal: 12
+device.mfr: CPS
+device.model: BR700ELCD
+device.type: ups
+driver.name: usbhid-ups
+driver.parameter.pollfreq: 30
+driver.parameter.pollinterval: 15
+driver.parameter.port: auto
+driver.parameter.synchronous: auto
+driver.version: 2.8.0
+driver.version.data: CyberPower HID 0.6
+driver.version.internal: 0.47
+driver.version.usb: libusb-1.0.26 (API: 0x1000109)
+input.transfer.high: 0
+input.transfer.low: 0
+input.voltage: 242.0
+input.voltage.nominal: 230
+output.voltage: 242.0
+ups.beeper.status: enabled
+ups.delay.shutdown: 20
+ups.delay.start: 30
+ups.load: 10
+ups.mfr: CPS
+ups.model: BR700ELCD
+ups.productid: 0501
+ups.realpower.nominal: 420
+ups.status: OL
+ups.test.result: No test initiated
+ups.timer.shutdown: -60
+ups.timer.start: -60
+ups.vendorid: 0764
+```
+
+5. Turn off the power to the UPS, and verify that it shuts down safely.
+
+[^1]: See https://github.com/networkupstools/nut/issues/552 and also https://networkupstools.org/ddl/Cyber_Power_Systems/BR1000ELCD.html
+[^2]: https://www.truenas.com/community/threads/ups-configuration-cyberpower-1325va.102299/
+[^3]: https://www.reddit.com/r/truenas/comments/10mi7ag/truenas_scale_communication_with_ups_ups_lost/j63g4n8/
